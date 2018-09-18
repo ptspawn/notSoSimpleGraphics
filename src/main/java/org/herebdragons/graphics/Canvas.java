@@ -13,9 +13,7 @@ public class Canvas extends JFrame {
     private WindowBehaviour behaviourOnExit;
 
     private Canvas() {
-
-    }
-
+   }
 
     public static Canvas init(String title, WindowBehaviour behaviourOnExit) {
 
@@ -33,7 +31,6 @@ public class Canvas extends JFrame {
 
             public void run() {
                 canvas.setVisible(true);
-                System.out.println("ola");
             }
         });
 
