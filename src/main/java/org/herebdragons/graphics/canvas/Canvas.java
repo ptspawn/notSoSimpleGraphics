@@ -19,6 +19,7 @@ import java.security.InvalidParameterException;
 public class Canvas implements notSoSimpleCanvas {
 
     private JFrame window;
+    private Canvas window2;
     private WindowBehaviour behaviorOnExit;
     private boolean isDecorated;
     private boolean isResizable;
@@ -122,6 +123,8 @@ public class Canvas implements notSoSimpleCanvas {
 
         Logger.log("creating new window");
 
+
+        //########################
         window = new JFrame();
 
         Logger.log("starting frame");
@@ -150,9 +153,10 @@ public class Canvas implements notSoSimpleCanvas {
         setVisible(true);
 
         Logger.log("Set windows visibility on");
+
         requestFocus();
 
-        window.createBufferStrategy(2);
+        window.createBufferStrategy(Config.BUFFERING);
         bs = window.getBufferStrategy();
 
         Logger.log("Created Buffer Strategy");
