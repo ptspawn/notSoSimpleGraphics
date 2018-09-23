@@ -1,30 +1,68 @@
 package org.herebdragons.utils;
 
 public class FrameRate {
-   
-   private String frameRate;
-   private long lastTime;
-   private long delta;
-   private int frameCount;
 
-   public void initialize() {
-      lastTime = System.nanoTime();
-      frameRate = "FPS 0";
-   }
-   
-   public void calculate() {
-      long current = System.nanoTime();
-      delta += current - lastTime;
-      lastTime = current;
-      frameCount++;
-      if( delta > 1000 ) {
-         delta -= 1000;
-         frameRate = String.format( "FPS %s", frameCount );
-         frameCount = 0;
-      }
-   }
-   
-   public String getFrameRate() {
-      return frameRate;
-   }
+    private int framesPerSecond;
+    private int updatesPerSecond;
+    private long lastTime;
+    private long delta;
+
+    private int targetFPS;
+    private int frameCount;
+    private int updateCount;
+
+    private boolean limited;
+
+    public FrameRate() {
+
+    }
+
+    public FrameRate(int targetFPS) {
+        this.targetFPS = targetFPS;
+        limited = true;
+    }
+
+    public void initialize() {
+        lastTime = System.nanoTime();
+        framesPerSecond = 0;
+        updatesPerSecond = 0;
+    }
+
+    public void incrementUpdate() {
+        updateCount++;
+    }
+
+
+    public void calculate() {
+        long current = System.nanoTime();
+        delta += current - lastTime;
+        lastTime = current;
+        frameCount++;
+        incrementUpdate();
+        if (delta > 1e9) {
+            delta -= 1e9;
+            framesPerSecond = frameCount;
+            updatesPerSecond = updateCount;
+            frameCount = updateCount = 0;
+        }
+    }
+
+    public long getRemainingInCyle(){
+        return 0;
+    }
+
+
+    public int getUpdatesPerSecond() {
+        return updatesPerSecond;
+    }
+
+    @Override
+    public String toString() {
+        return "notSoSimpleFrameRate { " + String.format("FPS %s", framesPerSecond)
+                + " | " + String.format("UPS %s", updatesPerSecond) + " }";
+    }
+
+    public int getFramesPerSecond() {
+        return framesPerSecond;
+    }
 }

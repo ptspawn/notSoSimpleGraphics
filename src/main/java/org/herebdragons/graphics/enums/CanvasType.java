@@ -1,6 +1,7 @@
 package org.herebdragons.graphics.enums;
 
 public enum CanvasType {
-    WINDOW,
-    FULLSCREEN
+    JAVA,
+    OPEN_GL
+
 }
