@@ -24,13 +24,13 @@ public class CanvasFactory {
         canvas.setTitle(title);
         canvas.setDimension(size);
 
-        SwingUtilities.invokeLater(new Runnable() {
+        /*SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
 
                 canvas.init();
             }
-        });
+        });*/
 
         return canvas;
 

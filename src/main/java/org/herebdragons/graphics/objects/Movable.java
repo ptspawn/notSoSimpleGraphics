@@ -4,7 +4,13 @@ import java.awt.*;
 
 public interface Movable {
 
-    public void moveTo(Point position);
+    void moveTo(Point position);
 
-    public void move(Dimension vector);
+    void move(Dimension vector);
+
+    void move(int x, int y);
+
+    void move(float x, float y);
+
+
 }

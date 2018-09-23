@@ -1,12 +1,17 @@
 package org.herebdragons.graphics.objects;
 
+import org.herebdragons.utils.UtilMath;
+
 import java.awt.*;
 
 public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable, Movable {
 
     protected Dimension dimension;
     protected Point position;
+
+
     protected float rotation;
+    private Graphics g;
 
     notSoSimpleObject(Dimension dimension, Point position) {
         this.position = position;
@@ -19,8 +24,16 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
         this.position = position;
     }
 
-    public void move(Dimension vector) {
-        position = new Point(position.x + vector.width, position.y + vector.height);
+    public void move(Dimension velocity) {
+        position.move(velocity.width, velocity.height);
+    }
+
+    public void move(int x, int y) {
+        position.setLocation(position.x + x, position.y + y);
+    }
+
+    public void move(float x, float y) {
+        position.setLocation(position.getX() + x, position.getY() + y);
     }
 
     public Dimension getDimension() {
@@ -35,12 +48,29 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
         return rotation;
     }
 
-
-    public void rotate(float radians) {
-
+    public void setRotation(float rotation) {
+        this.rotation = UtilMath.packRotation(rotation);
     }
 
-    public void scale(Dimension newDimension) {
+    public void rotate(float radians) {
+        rotation = UtilMath.packRotation(rotation += radians);
+    }
 
+    public void setDimension(Dimension newDimension) {
+        dimension = newDimension;
+    }
+
+    public void scale(float scaleFactor) {
+        dimension = UtilMath.vectorTimesScalar(dimension, scaleFactor);
+    }
+
+    @Override
+    public String toString() {
+        return "notSoSimpleObject{" +
+                "dimension=" + dimension +
+                ", position=" + position +
+                ", rotation=" + rotation +
+                ", g=" + g +
+                '}';
     }
 }

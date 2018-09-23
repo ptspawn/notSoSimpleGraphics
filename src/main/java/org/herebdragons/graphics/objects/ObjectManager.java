@@ -2,6 +2,7 @@ package org.herebdragons.graphics.objects;
 
 import org.herebdragons.graphics.canvas.notSoSimpleCanvas;
 import org.herebdragons.graphics.objects.notSoSimpleObject;
+import org.herebdragons.utils.Logger;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -23,8 +24,17 @@ public class ObjectManager implements Manager {
     }
 
     public void render(Graphics g) {
+        Logger.log("Rendering in " + this);
+
         for (notSoSimpleObject object : objects) {
             object.render(g);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ObjectManager{" +
+                "objects=" + objects.size() +
+                '}';
     }
 }

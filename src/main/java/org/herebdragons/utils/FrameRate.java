@@ -6,19 +6,24 @@ public class FrameRate {
     private int updatesPerSecond;
     private long lastTime;
     private long delta;
+    private long cycleDuration;
+    private long currentTime;
 
-    private int targetFPS;
+
     private int frameCount;
     private int updateCount;
 
+
     private boolean limited;
 
-    public FrameRate() {
+   public FrameRate(int targetFPS) {
 
-    }
+       if(targetFPS<=0){
+           limited=false;
+           return;
+       }
 
-    public FrameRate(int targetFPS) {
-        this.targetFPS = targetFPS;
+        cycleDuration = 1000000000 / targetFPS;
         limited = true;
     }
 
@@ -34,9 +39,9 @@ public class FrameRate {
 
 
     public void calculate() {
-        long current = System.nanoTime();
-        delta += current - lastTime;
-        lastTime = current;
+        currentTime = System.nanoTime();
+        delta += currentTime - lastTime;
+        lastTime = currentTime;
         frameCount++;
         incrementUpdate();
         if (delta > 1e9) {
@@ -47,8 +52,11 @@ public class FrameRate {
         }
     }
 
-    public long getRemainingInCyle(){
-        return 0;
+    public long getRemainingInCyle() {
+        if (!limited)
+            return 0;
+
+        return (lastTime + cycleDuration - currentTime) / 1000000;
     }
 
 
@@ -56,13 +64,38 @@ public class FrameRate {
         return updatesPerSecond;
     }
 
-    @Override
-    public String toString() {
+
+    public String getResult() {
         return "notSoSimpleFrameRate { " + String.format("FPS %s", framesPerSecond)
                 + " | " + String.format("UPS %s", updatesPerSecond) + " }";
     }
 
-    public int getFramesPerSecond() {
-        return framesPerSecond;
+    public void setTargetFPS(int targetFPS) {
+        cycleDuration = 1000000000 / targetFPS;
+        limited = true;
+    }
+
+    public boolean isLimited() {
+        return limited;
+    }
+
+    public void setLimited(boolean limited) {
+        this.limited = limited;
+    }
+
+    @Override
+    public String toString() {
+        return "FrameRate{" +
+                "framesPerSecond=" + framesPerSecond +
+                ", updatesPerSecond=" + updatesPerSecond +
+                ", lastTime=" + lastTime +
+                ", delta=" + delta +
+                ", cycleDuration=" + cycleDuration +
+                ", currentTime=" + currentTime +
+                ", frameCount=" + frameCount +
+                ", updateCount=" + updateCount +
+                ", limited=" + limited +
+                '}';
     }
 }
+

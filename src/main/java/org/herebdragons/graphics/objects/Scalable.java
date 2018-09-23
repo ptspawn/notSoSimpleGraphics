@@ -4,6 +4,7 @@ import java.awt.*;
 
 public interface Scalable {
 
-    void scale(Dimension newDimension);
+    void scale(float scaleFactor);
 
+    void setDimension(Dimension newDimension);
 }

@@ -5,6 +5,8 @@ import org.herebdragons.graphics.enums.WindowBehaviour;
 import org.herebdragons.graphics.objects.Manager;
 import org.herebdragons.graphics.objects.notSoSimpleObject;
 import org.herebdragons.utils.FrameRate;
+import org.herebdragons.utils.Logger;
+import org.herebdragons.utils.SystemManager;
 
 
 import javax.swing.*;
@@ -20,17 +22,16 @@ public class Canvas implements notSoSimpleCanvas {
     private WindowBehaviour behaviorOnExit;
     private boolean isDecorated;
     private boolean isResizable;
+    private volatile boolean isReady;
     private String title;
     private Dimension dimension;
     private boolean fullScreenMode = false;
-
-    private FrameRate frameRate;
+    private Color bgColor = Config.DEFAULT_BG_COLOR;
 
     private GraphicsDevice graphicsDevice;
     private DisplayMode currentDisplayMode;
     private DisplayMode gameDisplayMode;
     private BufferStrategy bs;
-
 
     private Manager objectManager;
 
@@ -40,7 +41,7 @@ public class Canvas implements notSoSimpleCanvas {
         dimension = size;
 
         if (size == null) {
-            dimension = new Dimension(Config.MIN_SIZE, Config.MIN_SIZE);
+            dimension = new Dimension(800, 600); //Config.MIN_SIZE, Config.MIN_SIZE);
             fullScreenMode = true;
         }
 
@@ -49,7 +50,6 @@ public class Canvas implements notSoSimpleCanvas {
         }
 
         getGraphicsEnvironment();
-
 
     }
 
@@ -64,6 +64,7 @@ public class Canvas implements notSoSimpleCanvas {
         if (!fullScreen) {
             setDecorated(isDecorated);
             setResizable(isResizable);
+            setLocationRelativeTo(null);
 
             graphicsDevice.setFullScreenWindow(null);
             dispMode = currentDisplayMode;
@@ -71,7 +72,7 @@ public class Canvas implements notSoSimpleCanvas {
         } else {
 
             if (!graphicsDevice.isFullScreenSupported()) {
-                System.err.println("ERROR: Not Supported!!!");
+                Logger.err("ERROR: Not Supported!!!");
             }
 
             setDecorated(false);
@@ -85,7 +86,7 @@ public class Canvas implements notSoSimpleCanvas {
             try {
                 graphicsDevice.setDisplayMode(dispMode);
             } catch (Exception ex) {
-                System.err.println("Problem setting the display mode\n" + ex.getMessage());
+                Logger.err("Problem setting the display mode\n" + ex.getMessage());
             }
         }
 
@@ -95,7 +96,7 @@ public class Canvas implements notSoSimpleCanvas {
 
         switch (behaviorOnExit) {
             case EXIT_ON_CLOSE:
-                System.err.println("Exiting notSoSimpleGraphics");
+                Logger.err("Exiting notSoSimpleGraphics");
                 System.exit(0);
                 break;
             case DO_NOTHING_ON_CLOSE:
@@ -109,34 +110,33 @@ public class Canvas implements notSoSimpleCanvas {
 
     }
 
-    private DisplayMode getDisplayMode() {
-
-        DisplayMode currentDM = graphicsDevice.getDisplayMode();
-
-        return new DisplayMode(
-                currentDM.getWidth(), currentDM.getHeight(), DisplayMode.BIT_DEPTH_MULTI, currentDM.getRefreshRate());
-    }
 
     private void getGraphicsEnvironment() {
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        graphicsDevice = ge.getDefaultScreenDevice();
-        currentDisplayMode = getDisplayMode();
+        graphicsDevice = SystemManager.getGraphicsDevice();
+        currentDisplayMode = SystemManager.getCurrentDisplayMode();
         gameDisplayMode = currentDisplayMode;
 
     }
 
     public void init() {
 
+        Logger.log("creating new window");
+
         window = new JFrame();
 
-        if (dimension == null) {
+        Logger.log("starting frame");
+
+        if (fullScreenMode) {
             setFullScreen(true);
         } else {
             setDimension(dimension);
             setDecorated(isDecorated);
+            setLocationRelativeTo(null);
         }
 
-        setBgColor(Color.black);
+        Logger.log("dimention set");
+
+        setBgColor(bgColor);
 
         window.addWindowListener(new WindowAdapter() {
             @Override
@@ -146,12 +146,19 @@ public class Canvas implements notSoSimpleCanvas {
         });
 
         setTitle(title);
-        setLocationRelativeTo(null);
+
         setVisible(true);
+
+        Logger.log("Set windows visibility on");
         requestFocus();
 
         window.createBufferStrategy(2);
         bs = window.getBufferStrategy();
+
+        Logger.log("Created Buffer Strategy");
+
+        isReady = true;
+
     }
 
     public void setIcon(Image image) {
@@ -162,13 +169,31 @@ public class Canvas implements notSoSimpleCanvas {
     }
 
     public void update() {
+
+        Logger.log("Entering Update method from Canvas");
+
+        if (!isReady) {
+            Logger.log("Window not ready yet");
+            return;
+        }
+
         do {
             do {
                 Graphics g = null;
                 try {
+
+                    Logger.log("Started Rendering");
+
                     g = bs.getDrawGraphics();
+                    g.setColor(bgColor);
                     g.clearRect(0, 0, dimension.width, dimension.height);
+                    g.fillRect(0, 0, dimension.width, dimension.height);
                     objectManager.render(g);
+
+                    Logger.log("Finished Rendering");
+
+                } catch (Exception e) {
+                    Logger.err("Exception " + e.getMessage());
                 } finally {
                     if (g != null) {
                         g.dispose();
@@ -180,10 +205,12 @@ public class Canvas implements notSoSimpleCanvas {
     }
 
     public void addObject(notSoSimpleObject object) {
+        Logger.log("Adding object to the Canvas");
         objectManager.addObject(object);
     }
 
     public void hideObject(notSoSimpleObject object) {
+        Logger.log("removing object from the Canvas");
         objectManager.hideObject(object);
     }
 
@@ -191,9 +218,8 @@ public class Canvas implements notSoSimpleCanvas {
         objectManager.hideObject(object);
     }
 
-    private void render(Graphics g) {
-        g.setColor(Color.GREEN);
-        g.drawString(frameRate.toString(), 30, 30);
+    private synchronized void render(Graphics g) {
+        update();
     }
 
     public void run() {
@@ -213,15 +239,16 @@ public class Canvas implements notSoSimpleCanvas {
     }
 
     public Color getBgColor() {
-        if (window == null)
-            return null;
 
-        return window.getBackground();
+        return bgColor;
     }
 
     public void setBgColor(Color bgColor) {
+        this.bgColor = bgColor;
+
         if (window == null)
             return;
+
         window.setBackground(bgColor);
     }
 
@@ -246,8 +273,13 @@ public class Canvas implements notSoSimpleCanvas {
 
     public void setDimension(Dimension dimension) {
 
+        if (dimension == null) {
+            fullScreenMode = true;
+            dimension = new Dimension(Config.MIN_SIZE, Config.MIN_SIZE);
+        }
+
         if (fullScreenMode)
-            throw new IllegalStateException("You can't change the window dimensions while in Fullscreen mode");
+            return;
 
         this.dimension = dimension;
         if (window == null)
@@ -311,5 +343,21 @@ public class Canvas implements notSoSimpleCanvas {
         if (window == null)
             return;
         window.setLocationRelativeTo(component);
+    }
+
+    @Override
+    public String toString() {
+        return "Canvas{" +
+                "behaviorOnExit=" + behaviorOnExit +
+                ", isDecorated=" + isDecorated +
+                ", isResizable=" + isResizable +
+                ", isReady=" + isReady +
+                ", title='" + title + '\'' +
+                ", dimension=" + dimension +
+                ", fullScreenMode=" + fullScreenMode +
+                ", bgColor=" + bgColor +
+                ", bs=" + bs +
+                ", objectManager=" + objectManager +
+                '}';
     }
 }
