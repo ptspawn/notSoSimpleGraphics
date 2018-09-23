@@ -13,15 +13,17 @@ public class FrameRate {
     private int frameCount;
     private int updateCount;
 
+    private boolean debug;
+
 
     private boolean limited;
 
-   public FrameRate(int targetFPS) {
+    public FrameRate(int targetFPS) {
 
-       if(targetFPS<=0){
-           limited=false;
-           return;
-       }
+        if (targetFPS <= 0) {
+            limited = false;
+            return;
+        }
 
         cycleDuration = 1000000000 / targetFPS;
         limited = true;
@@ -49,14 +51,23 @@ public class FrameRate {
             framesPerSecond = frameCount;
             updatesPerSecond = updateCount;
             frameCount = updateCount = 0;
+
+            if (debug)
+                System.out.println(getResult());
         }
     }
 
-    public long getRemainingInCyle() {
-        if (!limited)
-            return 0;
 
-        return (lastTime + cycleDuration - currentTime) / 1000000;
+    public long getRemainingInCyle() {
+        if (!limited) {
+            Logger.log("No FPS restrictions in place");
+            return 0;
+        }
+
+        long remaining = (lastTime + cycleDuration - currentTime) / 1000000;
+
+        Logger.log(remaining + " miliseconds free");
+        return remaining;
     }
 
 
@@ -73,6 +84,10 @@ public class FrameRate {
     public void setTargetFPS(int targetFPS) {
         cycleDuration = 1000000000 / targetFPS;
         limited = true;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 
     public boolean isLimited() {

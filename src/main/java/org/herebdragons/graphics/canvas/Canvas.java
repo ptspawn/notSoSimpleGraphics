@@ -188,6 +188,7 @@ public class Canvas implements notSoSimpleCanvas {
                     g.setColor(bgColor);
                     g.clearRect(0, 0, dimension.width, dimension.height);
                     g.fillRect(0, 0, dimension.width, dimension.height);
+
                     objectManager.render(g);
 
                     Logger.log("Finished Rendering");
@@ -206,6 +207,7 @@ public class Canvas implements notSoSimpleCanvas {
 
     public void addObject(notSoSimpleObject object) {
         Logger.log("Adding object to the Canvas");
+        System.out.println("Adding object " + object);
         objectManager.addObject(object);
     }
 

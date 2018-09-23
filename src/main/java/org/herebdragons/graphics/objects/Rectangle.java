@@ -15,6 +15,10 @@ public class Rectangle extends notSoSimpleObject implements Fillable, Strokable 
         super(dimension, position);
     }
 
+    public Rectangle(int xPos, int yPos, int height, int width) {
+        super(new Dimension(width, height), new Point(xPos, yPos));
+    }
+
     public void render(Graphics g) {
         Logger.log("Rendering rectangle" + this);
         g.setColor(fillColor);
@@ -29,7 +33,7 @@ public class Rectangle extends notSoSimpleObject implements Fillable, Strokable 
     }
 
     public void stroke(Color color, int thickness) {
-        Logger.log("Stroke color of " + this + " to " + color + " and thinkness "+ thickness);
+        Logger.log("Stroke color of " + this + " to " + color + " and thinkness " + thickness);
         strokeColor = color;
         strokeThickness = thickness;
     }

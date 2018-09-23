@@ -62,6 +62,7 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
 
     public void scale(float scaleFactor) {
         dimension = UtilMath.vectorTimesScalar(dimension, scaleFactor);
+
     }
 
     @Override

@@ -10,4 +10,6 @@ public class Config {
     public static final Color DEFAULT_BG_COLOR = Color.BLACK;
     public static final Color DEFAULT_STROKE_COLOR = Color.BLUE;
     public static final int DEFAULT_STROKE_THINKNESS = 5;
+    public static final String LIBRARY_NAME = "notSoSimpleGraphics";
+    public static Dimension DEFAULT_DIMENSION = new Dimension(1280, 800);
 }
