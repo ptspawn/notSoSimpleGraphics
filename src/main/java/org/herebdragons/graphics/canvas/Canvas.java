@@ -1,18 +1,20 @@
 package org.herebdragons.graphics.canvas;
 
-import javafx.scene.canvas.GraphicsContext;
-
 import org.herebdragons.Config;
 import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.WindowBehaviour;
 import org.herebdragons.graphics.objects.Manager;
 import org.herebdragons.graphics.objects.notSoSimpleObject;
+import org.herebdragons.input.notSoSimpleKeyboardListener;
+import org.herebdragons.input.notSoSimpleMouseListener;
 import org.herebdragons.utils.Logger;
 import org.herebdragons.utils.SystemManager;
 
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
@@ -33,6 +35,9 @@ public class Canvas implements notSoSimpleCanvas {
     private Dimension dimension;
     private boolean fullScreenMode = false;
     private Color bgColor = Config.DEFAULT_BG_COLOR;
+
+    private KeyListener keyInput;
+    private MouseListener mouseInput;
 
     private GraphicsDevice graphicsDevice;
     private DisplayMode currentDisplayMode;
@@ -132,6 +137,16 @@ public class Canvas implements notSoSimpleCanvas {
         canvas = new java.awt.Canvas();
         window.add(canvas);
 
+        //Input
+
+        if (mouseInput!=null)
+            window.addMouseListener(mouseInput);
+
+        System.out.println("Adding " + keyInput);
+
+        if (keyInput!=null)
+            window.addKeyListener(keyInput);
+
         Logger.log("starting frame");
 
         if (fullScreenMode) {
@@ -147,12 +162,7 @@ public class Canvas implements notSoSimpleCanvas {
 
         canvas.setBackground(bgColor);
 
-        window.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent windowEvent) {
-                close();
-            }
-        });
+
 
         window.setTitle(title);
 
@@ -169,10 +179,6 @@ public class Canvas implements notSoSimpleCanvas {
                 close();
             }
         });
-
-        setTitle(title);
-
-        setVisible(true);
 
         Logger.log("Set windows visibility on");
 
@@ -253,6 +259,32 @@ public class Canvas implements notSoSimpleCanvas {
 
     public void destroyObject(notSoSimpleObject object) {
         objectManager.hideObject(object);
+    }
+
+    public void addKeyListener(notSoSimpleKeyboardListener keyInput) {
+
+        if (this.keyInput != null)
+            throw new IllegalStateException("There is already a KeyListener");
+
+        System.out.println("adding keyListener to frame");
+
+        this.keyInput = keyInput;
+
+        if (window != null) {
+            window.addKeyListener(keyInput);
+        }
+    }
+
+    public void addMouseListener(MouseListener mouseInput) {
+
+        if (this.mouseInput != null)
+            throw new IllegalStateException("There is already a mouseListener");
+
+        this.mouseInput = mouseInput;
+
+        if (window != null) {
+            window.addMouseListener(mouseInput);
+        }
     }
 
     private synchronized void render(Graphics g) {

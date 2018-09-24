@@ -6,11 +6,14 @@ import org.herebdragons.graphics.enums.WindowBehaviour;
 import org.herebdragons.graphics.objects.ObjectManager;
 import org.herebdragons.graphics.objects.Rectangle;
 import org.herebdragons.graphics.objects.Text;
+import org.herebdragons.input.notSoSimpleKeyboardListener;
+import org.herebdragons.input.notSoSimpleMouseListener;
 import org.herebdragons.utils.FrameRate;
 import org.herebdragons.utils.Logger;
 import org.herebdragons.utils.SystemManager;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +25,9 @@ public class BenchmarkTest {
     private static Text text;
     private static Rectangle rectangle;
     private static final FrameRate frameRate = new impFrameRate(-1);
+    private static notSoSimpleKeyboardListener keyInput;
+    private static notSoSimpleMouseListener mouseInput;
+
 
     public static void main(String[] args) {
 
@@ -31,7 +37,7 @@ public class BenchmarkTest {
 
         boolean fullScreen = false;
 
-        Logger.setLogging(true);
+        Logger.setLogging(false);
         frameRate.setDebug(true);
 
         //Alternating FullScreen
@@ -63,7 +69,7 @@ public class BenchmarkTest {
                         }
 
                     } else {
-                        runTest(fullScreen,results,SystemManager.getCurrentDisplayMode());
+                        runTest(fullScreen, results, SystemManager.getCurrentDisplayMode());
                     }
                 }
             }
@@ -102,6 +108,10 @@ public class BenchmarkTest {
             canvas = CanvasFactory.createCanvas(Config.LIBRARY_NAME, Config.DEFAULT_DIMENSION, WindowBehaviour.EXIT_ON_CLOSE, false);
         }
 
+        keyInput=new notSoSimpleKeyboardListener();
+
+        canvas.addKeyListener(keyInput);
+
         canvas.setObjectManager(new ObjectManager());
 
         text = new Text(new Dimension(100, 30), new Point(30, 30), Config.LIBRARY_NAME);
@@ -126,6 +136,9 @@ public class BenchmarkTest {
 
                 while (running) {
 
+                    //Input Phase
+                    getuserInput(canvas);
+
                     //update Cycle
                     rectangle.move(1, 0);
                     if (rectangle.getPosition().x > canvas.getDimension().width) {
@@ -146,6 +159,23 @@ public class BenchmarkTest {
         });
 
         return gameThread;
+    }
+
+    private static void getuserInput(Canvas canvas) {
+
+        if (keyInput != null) {
+
+            keyInput.poll();
+
+            if (keyInput.keyDown(KeyEvent.VK_ESCAPE)) {
+                canvas.close();
+            }
+        }
+
+        if (mouseInput != null) {
+            //
+        }
+
     }
 
     private static void runBenchmark(Map<String, Integer> results, DisplayMode dm) {
