@@ -1,12 +1,10 @@
 import org.herebdragons.config.Config;
-import org.herebdragons.gConfig;
 import org.herebdragons.graphics.canvas.Canvas;
 import org.herebdragons.graphics.canvas.CanvasFactory;
 import org.herebdragons.graphics.enums.WindowBehaviour;
 import org.herebdragons.graphics.objects.ObjectManager;
 import org.herebdragons.graphics.objects.Rectangle;
 import org.herebdragons.graphics.objects.Text;
-import org.herebdragons.util.Strings;
 import org.herebdragons.utils.FrameRate;
 import org.herebdragons.utils.Logger;
 
