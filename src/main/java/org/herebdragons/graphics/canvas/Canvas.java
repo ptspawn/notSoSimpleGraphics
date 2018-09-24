@@ -46,6 +46,8 @@ public class Canvas implements notSoSimpleCanvas {
 
     private Manager objectManager;
 
+    //JVM parameters:
+    // -Dsun.java2d.opengl=True  - Enable openGL accelaration for swing components
 
     Canvas(Dimension size, RendererType type) {
 

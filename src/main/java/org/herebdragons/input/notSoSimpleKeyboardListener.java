@@ -15,7 +15,6 @@ public class notSoSimpleKeyboardListener implements KeyListener {
     }
 
     public boolean keyDown(int keyCode) {
-        System.out.println("Polling " + keyCode);
         return polled[keyCode] > 0;
     }
 

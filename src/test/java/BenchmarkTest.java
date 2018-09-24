@@ -20,10 +20,16 @@ import java.util.Map;
 public class BenchmarkTest {
 
     private static volatile boolean running;
+
     private static final int PASSES = 5;
     private static final int PASSES_TO_IGNORE = 2;
+
+
     private static Text text;
-    private static Rectangle rectangle;
+    private static Rectangle slidingRectangle;
+    private static Rectangle rotatingRectangle;
+
+
     private static final FrameRate frameRate = new impFrameRate(-1);
     private static notSoSimpleKeyboardListener keyInput;
     private static notSoSimpleMouseListener mouseInput;
@@ -69,7 +75,9 @@ public class BenchmarkTest {
                         }
 
                     } else {
+
                         runTest(fullScreen, results, SystemManager.getCurrentDisplayMode());
+
                     }
                 }
             }
@@ -115,10 +123,10 @@ public class BenchmarkTest {
         canvas.setObjectManager(new ObjectManager());
 
         text = new Text(new Dimension(100, 30), new Point(30, 30), Config.LIBRARY_NAME);
-        rectangle = new Rectangle(new Dimension(100, 100), new Point(100, 100));
+        slidingRectangle = new Rectangle(new Dimension(100, 100), new Point(100, 100));
 
         canvas.addObject(text);
-        canvas.addObject(rectangle);
+        canvas.addObject(slidingRectangle);
 
         return canvas;
 
@@ -140,9 +148,9 @@ public class BenchmarkTest {
                     getuserInput(canvas);
 
                     //update Cycle
-                    rectangle.move(1, 0);
-                    if (rectangle.getPosition().x > canvas.getDimension().width) {
-                        rectangle.moveTo(rectangle.getDimension().width * -1, rectangle.getPosition().y);
+                    slidingRectangle.move(1, 0);
+                    if (slidingRectangle.getPosition().x > canvas.getDimension().width) {
+                        slidingRectangle.moveTo(slidingRectangle.getDimension().width * -1, slidingRectangle.getPosition().y);
                     }
 
                     canvas.update();
