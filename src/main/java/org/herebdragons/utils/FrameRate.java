@@ -81,6 +81,10 @@ public class FrameRate {
                 + " | " + String.format("UPS %s", updatesPerSecond) + " }";
     }
 
+    public int getFramePerSecond(){
+        return framesPerSecond;
+    }
+
     public void setTargetFPS(int targetFPS) {
         cycleDuration = 1000000000 / targetFPS;
         limited = true;

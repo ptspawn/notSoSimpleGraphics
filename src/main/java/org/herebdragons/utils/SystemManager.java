@@ -42,6 +42,12 @@ public class SystemManager {
                 dm.getWidth(), dm.getHeight(), DisplayMode.BIT_DEPTH_MULTI, dm.getRefreshRate());
     }
 
+    public static DisplayMode convertDisplayMode(DisplayMode dm) {
+
+        return new DisplayMode(
+                dm.getWidth(), dm.getHeight(), DisplayMode.BIT_DEPTH_MULTI, dm.getRefreshRate());
+    }
+
     public static GraphicsDevice getGraphicsDevice() {
         if (graphicsDevice == null)
             getDevices();

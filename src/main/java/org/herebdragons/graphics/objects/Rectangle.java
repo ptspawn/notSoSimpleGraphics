@@ -1,6 +1,7 @@
 package org.herebdragons.graphics.objects;
 
-import org.herebdragons.config.Config;
+
+import org.herebdragons.Config;
 import org.herebdragons.utils.Logger;
 
 import java.awt.*;

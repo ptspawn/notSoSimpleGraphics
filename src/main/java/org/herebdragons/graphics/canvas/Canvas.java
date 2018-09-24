@@ -1,10 +1,10 @@
 package org.herebdragons.graphics.canvas;
 
-import org.herebdragons.config.Config;
+import org.herebdragons.Config;
+import org.herebdragons.graphics.enums.CanvasType;
 import org.herebdragons.graphics.enums.WindowBehaviour;
 import org.herebdragons.graphics.objects.Manager;
 import org.herebdragons.graphics.objects.notSoSimpleObject;
-import org.herebdragons.utils.FrameRate;
 import org.herebdragons.utils.Logger;
 import org.herebdragons.utils.SystemManager;
 
@@ -19,7 +19,7 @@ import java.security.InvalidParameterException;
 public class Canvas implements notSoSimpleCanvas {
 
     private JFrame window;
-    private Canvas window2;
+    private java.awt.Canvas canvas;
     private WindowBehaviour behaviorOnExit;
     private boolean isDecorated;
     private boolean isResizable;
@@ -37,7 +37,7 @@ public class Canvas implements notSoSimpleCanvas {
     private Manager objectManager;
 
 
-    Canvas(Dimension size) {
+    Canvas(Dimension size, CanvasType type) {
 
         dimension = size;
 
@@ -123,9 +123,9 @@ public class Canvas implements notSoSimpleCanvas {
 
         Logger.log("creating new window");
 
-
-        //########################
         window = new JFrame();
+        canvas = new java.awt.Canvas();
+        window.add(canvas);
 
         Logger.log("starting frame");
 
@@ -133,13 +133,30 @@ public class Canvas implements notSoSimpleCanvas {
             setFullScreen(true);
         } else {
             setDimension(dimension);
+            canvas.setSize(dimension);
             setDecorated(isDecorated);
             setLocationRelativeTo(null);
         }
 
-        Logger.log("dimention set");
+        Logger.log("dimension set");
 
-        setBgColor(bgColor);
+        canvas.setBackground(bgColor);
+
+        window.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                close();
+            }
+        });
+
+        window.setTitle(title);
+
+        setVisible(true);
+
+        Logger.log("Set windows visibility on");
+
+        requestFocus();
+
 
         window.addWindowListener(new WindowAdapter() {
             @Override
@@ -156,8 +173,8 @@ public class Canvas implements notSoSimpleCanvas {
 
         requestFocus();
 
-        window.createBufferStrategy(Config.BUFFERING);
-        bs = window.getBufferStrategy();
+        canvas.createBufferStrategy(Config.BUFFERING);
+        bs = canvas.getBufferStrategy();
 
         Logger.log("Created Buffer Strategy");
 
@@ -204,8 +221,11 @@ public class Canvas implements notSoSimpleCanvas {
                         g.dispose();
                     }
                 }
+
             } while (bs.contentsRestored());
+
             bs.show();
+
         } while (bs.contentsLost());
     }
 
@@ -256,6 +276,11 @@ public class Canvas implements notSoSimpleCanvas {
             return;
 
         window.setBackground(bgColor);
+
+        if (canvas == null)
+            return;
+
+        canvas.setBackground(bgColor);
     }
 
     public String getTitle() {
@@ -291,6 +316,9 @@ public class Canvas implements notSoSimpleCanvas {
         if (window == null)
             return;
         window.setSize(dimension);
+        if (canvas == null)
+            return;
+        canvas.setSize(dimension);
     }
 
     public Point getLocation() {
