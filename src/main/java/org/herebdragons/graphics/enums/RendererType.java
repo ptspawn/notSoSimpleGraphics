@@ -1,8 +1,9 @@
 package org.herebdragons.graphics.enums;
 
-public enum CanvasType {
+public enum RendererType {
     JAVA,
-    CANVAS,
+    SWIFT,
+    JAVA_FX,
     OPEN_GL
 
 }

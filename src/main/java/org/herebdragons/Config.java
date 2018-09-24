@@ -1,5 +1,7 @@
 package org.herebdragons;
 
+import org.herebdragons.graphics.enums.RendererType;
+
 import java.awt.*;
 
 public class Config {
@@ -11,4 +13,5 @@ public class Config {
     public static final int DEFAULT_STROKE_THINKNESS = 5;
     public static final String LIBRARY_NAME = "notSoSimpleGraphics";
     public static Dimension DEFAULT_DIMENSION = new Dimension(1280, 800);
+    public static RendererType DEFAULT_RENDERER = RendererType.JAVA;
 }

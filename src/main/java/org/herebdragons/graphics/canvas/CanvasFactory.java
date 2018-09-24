@@ -1,11 +1,14 @@
 package org.herebdragons.graphics.canvas;
 
+import org.herebdragons.Config;
+import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.WindowBehaviour;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class CanvasFactory {
+
+    private static RendererType renderer = Config.DEFAULT_RENDERER;
 
     public static Canvas createCanvas(String Title, Dimension size) {
         return createCanvas(Title, size, WindowBehaviour.EXIT_ON_CLOSE, true);
@@ -18,7 +21,7 @@ public class CanvasFactory {
 
     public static Canvas createCanvas(final String title, final Dimension size, final WindowBehaviour behaviourOnExit, final boolean isDecorated) {
 
-        final Canvas canvas = new Canvas(size);
+        final Canvas canvas = new Canvas(size, renderer);
         canvas.setBehaviorOnExit(behaviourOnExit);
         canvas.setDecorated(isDecorated);
         canvas.setTitle(title);
@@ -34,5 +37,13 @@ public class CanvasFactory {
 
         return canvas;
 
+    }
+
+    public static RendererType getRenderer() {
+        return renderer;
+    }
+
+   public static void setRenderer(RendererType renderer) {
+        CanvasFactory.renderer = renderer;
     }
 }

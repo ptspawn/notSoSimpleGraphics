@@ -1,7 +1,7 @@
 package org.herebdragons.graphics.canvas;
 
 import org.herebdragons.Config;
-import org.herebdragons.graphics.enums.CanvasType;
+import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.WindowBehaviour;
 import org.herebdragons.graphics.objects.Manager;
 import org.herebdragons.graphics.objects.notSoSimpleObject;
@@ -37,7 +37,7 @@ public class Canvas implements notSoSimpleCanvas {
     private Manager objectManager;
 
 
-    Canvas(Dimension size, CanvasType type) {
+    Canvas(Dimension size, RendererType type) {
 
         dimension = size;
 

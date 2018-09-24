@@ -2,21 +2,21 @@ package org.herebdragons.utils;
 
 public class FrameRate {
 
-    private int framesPerSecond;
-    private int updatesPerSecond;
-    private long lastTime;
-    private long delta;
-    private long cycleDuration;
-    private long currentTime;
+    protected int framesPerSecond;
+    protected int updatesPerSecond;
+    protected long lastTime;
+    protected long delta;
+    protected long cycleDuration;
+    protected long currentTime;
 
 
-    private int frameCount;
-    private int updateCount;
+    protected int frameCount;
+    protected int updateCount;
 
-    private boolean debug;
+    protected boolean debug;
 
 
-    private boolean limited;
+    protected boolean limited;
 
     public FrameRate(int targetFPS) {
 
@@ -81,7 +81,7 @@ public class FrameRate {
                 + " | " + String.format("UPS %s", updatesPerSecond) + " }";
     }
 
-    public int getFramePerSecond(){
+    public int getFramesPerSecond(){
         return framesPerSecond;
     }
 
