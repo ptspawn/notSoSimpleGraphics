@@ -2,18 +2,18 @@ package org.herebdragons.utils;
 
 public class FrameRate {
 
-    private int framesPerSecond;
-    private int updatesPerSecond;
-    private long lastTime;
-    private long delta;
+    protected int framesPerSecond;
+    protected int updatesPerSecond;
+    protected long lastTime;
+    protected long delta;
     private long cycleDuration;
-    private long currentTime;
+    protected long currentTime;
 
 
-    private int frameCount;
-    private int updateCount;
+    protected int frameCount;
+    protected int updateCount;
 
-    private boolean debug;
+    protected boolean debug;
 
 
     private boolean limited;
@@ -60,7 +60,6 @@ public class FrameRate {
 
     public long getRemainingInCyle() {
         if (!limited) {
-            Logger.log("No FPS restrictions in place");
             return 0;
         }
 

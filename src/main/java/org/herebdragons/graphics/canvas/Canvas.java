@@ -18,6 +18,8 @@ import java.security.InvalidParameterException;
 
 public class Canvas implements notSoSimpleCanvas {
 
+    private CanvasType type;
+
     private JFrame window;
     private java.awt.Canvas canvas;
     private WindowBehaviour behaviorOnExit;
@@ -37,17 +39,17 @@ public class Canvas implements notSoSimpleCanvas {
     private Manager objectManager;
 
 
-    Canvas(Dimension size, CanvasType type) {
+    Canvas(Dimension size) {
 
         dimension = size;
 
         if (size == null) {
-            dimension = new Dimension(800, 600); //Config.MIN_SIZE, Config.MIN_SIZE);
+            dimension = Config.DEFAULT_DIMENSION;
             fullScreenMode = true;
         }
 
-        if (dimension.height <= 0 || dimension.width <= 0) {
-            throw new InvalidParameterException("Invalid Dimensions");
+        if (size.height <= 0 || size.width <= 0) {
+            throw new InvalidParameterException("Invalid Window Dimensions");
         }
 
         getGraphicsEnvironment();
@@ -124,8 +126,11 @@ public class Canvas implements notSoSimpleCanvas {
         Logger.log("creating new window");
 
         window = new JFrame();
-        canvas = new java.awt.Canvas();
-        window.add(canvas);
+
+        if (type == CanvasType.CANVAS) {
+            canvas = new java.awt.Canvas();
+            window.add(canvas);
+        }
 
         Logger.log("starting frame");
 
@@ -133,30 +138,19 @@ public class Canvas implements notSoSimpleCanvas {
             setFullScreen(true);
         } else {
             setDimension(dimension);
-            canvas.setSize(dimension);
+            if (type == CanvasType.CANVAS)
+                canvas.setSize(dimension);
             setDecorated(isDecorated);
             setLocationRelativeTo(null);
         }
 
-        Logger.log("dimension set");
-
-        canvas.setBackground(bgColor);
-
-        window.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent windowEvent) {
-                close();
-            }
-        });
+        Logger.log("dimension set")
+        ;
+        if (type == CanvasType.CANVAS)
+            canvas.setBackground(bgColor);
 
         window.setTitle(title);
 
-        setVisible(true);
-
-        Logger.log("Set windows visibility on");
-
-        requestFocus();
-
 
         window.addWindowListener(new WindowAdapter() {
             @Override
@@ -165,16 +159,27 @@ public class Canvas implements notSoSimpleCanvas {
             }
         });
 
-        setTitle(title);
-
         setVisible(true);
 
         Logger.log("Set windows visibility on");
 
         requestFocus();
 
-        canvas.createBufferStrategy(Config.BUFFERING);
-        bs = canvas.getBufferStrategy();
+        switch (type) {
+            case JAVA:
+                window.createBufferStrategy(Config.BUFFERING);
+                bs = window.getBufferStrategy();
+                break;
+            case CANVAS:
+                canvas.createBufferStrategy(Config.BUFFERING);
+                bs = canvas.getBufferStrategy();
+                break;
+            case OPEN_GL:
+                System.out.println("Mode not supported");
+                close();
+                break;
+
+        }
 
         Logger.log("Created Buffer Strategy");
 
@@ -393,5 +398,9 @@ public class Canvas implements notSoSimpleCanvas {
                 ", bs=" + bs +
                 ", objectManager=" + objectManager +
                 '}';
+    }
+
+    public void setType(CanvasType type) {
+        this.type = type;
     }
 }
