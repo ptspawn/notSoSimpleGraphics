@@ -1,5 +1,7 @@
 package org.herebdragons.graphics.canvas;
 
+import javafx.scene.canvas.GraphicsContext;
+
 import org.herebdragons.Config;
 import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.WindowBehaviour;
@@ -19,6 +21,9 @@ import java.security.InvalidParameterException;
 public class Canvas implements notSoSimpleCanvas {
 
     private JFrame window;
+    //private javafx.embed.swing.JFXPanel canvas;
+    //private javafx.scene.canvas.Canvas canvas;
+
     private java.awt.Canvas canvas;
     private WindowBehaviour behaviorOnExit;
     private boolean isDecorated;
@@ -133,7 +138,7 @@ public class Canvas implements notSoSimpleCanvas {
             setFullScreen(true);
         } else {
             setDimension(dimension);
-            canvas.setSize(dimension);
+            //canvas.setSize(dimension);
             setDecorated(isDecorated);
             setLocationRelativeTo(null);
         }
@@ -172,6 +177,12 @@ public class Canvas implements notSoSimpleCanvas {
         Logger.log("Set windows visibility on");
 
         requestFocus();
+
+        //JUST FOR JAVAFX
+
+        //final GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        //
 
         canvas.createBufferStrategy(Config.BUFFERING);
         bs = canvas.getBufferStrategy();
