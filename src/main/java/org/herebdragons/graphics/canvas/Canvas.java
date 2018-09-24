@@ -1,16 +1,20 @@
 package org.herebdragons.graphics.canvas;
 
 import org.herebdragons.Config;
-import org.herebdragons.graphics.enums.CanvasType;
+import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.WindowBehaviour;
 import org.herebdragons.graphics.objects.Manager;
 import org.herebdragons.graphics.objects.notSoSimpleObject;
+import org.herebdragons.input.notSoSimpleKeyboardListener;
+import org.herebdragons.input.notSoSimpleMouseListener;
 import org.herebdragons.utils.Logger;
 import org.herebdragons.utils.SystemManager;
 
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
@@ -18,9 +22,10 @@ import java.security.InvalidParameterException;
 
 public class Canvas implements notSoSimpleCanvas {
 
-    private CanvasType type;
-
     private JFrame window;
+    //private javafx.embed.swing.JFXPanel canvas;
+    //private javafx.scene.canvas.Canvas canvas;
+
     private java.awt.Canvas canvas;
     private WindowBehaviour behaviorOnExit;
     private boolean isDecorated;
@@ -31,6 +36,9 @@ public class Canvas implements notSoSimpleCanvas {
     private boolean fullScreenMode = false;
     private Color bgColor = Config.DEFAULT_BG_COLOR;
 
+    private KeyListener keyInput;
+    private MouseListener mouseInput;
+
     private GraphicsDevice graphicsDevice;
     private DisplayMode currentDisplayMode;
     private DisplayMode gameDisplayMode;
@@ -38,18 +46,20 @@ public class Canvas implements notSoSimpleCanvas {
 
     private Manager objectManager;
 
+    //JVM parameters:
+    // -Dsun.java2d.opengl=True  - Enable openGL accelaration for swing components
 
-    Canvas(Dimension size) {
+    Canvas(Dimension size, RendererType type) {
 
         dimension = size;
 
         if (size == null) {
-            dimension = Config.DEFAULT_DIMENSION;
+            dimension = new Dimension(800, 600); //Config.MIN_SIZE, Config.MIN_SIZE);
             fullScreenMode = true;
         }
 
-        if (size.height <= 0 || size.width <= 0) {
-            throw new InvalidParameterException("Invalid Window Dimensions");
+        if (dimension.height <= 0 || dimension.width <= 0) {
+            throw new InvalidParameterException("Invalid Dimensions");
         }
 
         getGraphicsEnvironment();
@@ -126,11 +136,18 @@ public class Canvas implements notSoSimpleCanvas {
         Logger.log("creating new window");
 
         window = new JFrame();
+        canvas = new java.awt.Canvas();
+        window.add(canvas);
 
-        if (type == CanvasType.CANVAS) {
-            canvas = new java.awt.Canvas();
-            window.add(canvas);
-        }
+        //Input
+
+        if (mouseInput!=null)
+            window.addMouseListener(mouseInput);
+
+        System.out.println("Adding " + keyInput);
+
+        if (keyInput!=null)
+            window.addKeyListener(keyInput);
 
         Logger.log("starting frame");
 
@@ -138,18 +155,24 @@ public class Canvas implements notSoSimpleCanvas {
             setFullScreen(true);
         } else {
             setDimension(dimension);
-            if (type == CanvasType.CANVAS)
-                canvas.setSize(dimension);
+            //canvas.setSize(dimension);
             setDecorated(isDecorated);
             setLocationRelativeTo(null);
         }
 
-        Logger.log("dimension set")
-        ;
-        if (type == CanvasType.CANVAS)
-            canvas.setBackground(bgColor);
+        Logger.log("dimension set");
+
+        canvas.setBackground(bgColor);
+
+
 
         window.setTitle(title);
+
+        setVisible(true);
+
+        Logger.log("Set windows visibility on");
+
+        requestFocus();
 
 
         window.addWindowListener(new WindowAdapter() {
@@ -159,27 +182,18 @@ public class Canvas implements notSoSimpleCanvas {
             }
         });
 
-        setVisible(true);
-
         Logger.log("Set windows visibility on");
 
         requestFocus();
 
-        switch (type) {
-            case JAVA:
-                window.createBufferStrategy(Config.BUFFERING);
-                bs = window.getBufferStrategy();
-                break;
-            case CANVAS:
-                canvas.createBufferStrategy(Config.BUFFERING);
-                bs = canvas.getBufferStrategy();
-                break;
-            case OPEN_GL:
-                System.out.println("Mode not supported");
-                close();
-                break;
+        //JUST FOR JAVAFX
 
-        }
+        //final GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        //
+
+        canvas.createBufferStrategy(Config.BUFFERING);
+        bs = canvas.getBufferStrategy();
 
         Logger.log("Created Buffer Strategy");
 
@@ -247,6 +261,32 @@ public class Canvas implements notSoSimpleCanvas {
 
     public void destroyObject(notSoSimpleObject object) {
         objectManager.hideObject(object);
+    }
+
+    public void addKeyListener(notSoSimpleKeyboardListener keyInput) {
+
+        if (this.keyInput != null)
+            throw new IllegalStateException("There is already a KeyListener");
+
+        System.out.println("adding keyListener to frame");
+
+        this.keyInput = keyInput;
+
+        if (window != null) {
+            window.addKeyListener(keyInput);
+        }
+    }
+
+    public void addMouseListener(MouseListener mouseInput) {
+
+        if (this.mouseInput != null)
+            throw new IllegalStateException("There is already a mouseListener");
+
+        this.mouseInput = mouseInput;
+
+        if (window != null) {
+            window.addMouseListener(mouseInput);
+        }
     }
 
     private synchronized void render(Graphics g) {
@@ -398,9 +438,5 @@ public class Canvas implements notSoSimpleCanvas {
                 ", bs=" + bs +
                 ", objectManager=" + objectManager +
                 '}';
-    }
-
-    public void setType(CanvasType type) {
-        this.type = type;
     }
 }

@@ -1,27 +1,39 @@
 import org.herebdragons.Config;
 import org.herebdragons.graphics.canvas.Canvas;
 import org.herebdragons.graphics.canvas.CanvasFactory;
-import org.herebdragons.graphics.enums.CanvasType;
+import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.WindowBehaviour;
 import org.herebdragons.graphics.objects.ObjectManager;
 import org.herebdragons.graphics.objects.Rectangle;
 import org.herebdragons.graphics.objects.Text;
-import org.herebdragons.graphics.objects.notSoSimpleObject;
+import org.herebdragons.input.notSoSimpleKeyboardListener;
+import org.herebdragons.input.notSoSimpleMouseListener;
 import org.herebdragons.utils.FrameRate;
 import org.herebdragons.utils.Logger;
 import org.herebdragons.utils.SystemManager;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BenchmarkTest {
 
     private static volatile boolean running;
+
     private static final int PASSES = 5;
     private static final int PASSES_TO_IGNORE = 2;
-    private static notSoSimpleObject text;
-    private static notSoSimpleObject square;
+
+
+    private static Text text;
+    private static Rectangle slidingRectangle;
+    private static Rectangle rotatingRectangle;
+
+
+    private static final FrameRate frameRate = new impFrameRate(-1);
+    private static notSoSimpleKeyboardListener keyInput;
+    private static notSoSimpleMouseListener mouseInput;
+
 
     public static void main(String[] args) {
 
@@ -31,10 +43,12 @@ public class BenchmarkTest {
 
         boolean fullScreen = false;
 
-        Logger.setLogging(true);
+        Logger.setLogging(false);
+        frameRate.setDebug(true);
 
-        for (int i = 0; i < 2; i++) {
-            switch (i) {
+        //Alternating FullScreen
+        for (int j = 0; j < 2; j++) {
+            switch (j) {
                 case 0:
                     fullScreen = false;
                     break;
@@ -43,117 +57,177 @@ public class BenchmarkTest {
                     break;
             }
 
-            for (int e = 0; e < CanvasType.values().length - 1; e++) {  //Minus one to skip openGL for now
+            //Alternating DisplayModes for when in fullscreen mode
 
-                CanvasFactory.setRenderingMethod(CanvasType.values()[e]);
+            if (fullScreen) {
+                for (int i = 0; i < RendererType.values().length - 2; i++) {  //Minus two to skip JavaFX and openGL for now
 
-                for (DisplayMode dm : dl) {
+                    CanvasFactory.setRenderer(RendererType.values()[i]);
 
-                    dm = SystemManager.convertDisplayMode(dm);
+                    if (!fullScreen) {
 
-                    final FrameRate frameRate = new impFrameRate(-1);
-                    frameRate.setDebug(true);
+                        for (DisplayMode dm : dl) {
 
-                    final Canvas canvas;
+                            dm = SystemManager.convertDisplayMode(dm);
 
-                    if (fullScreen) {
-                        canvas = CanvasFactory.createCanvas(Config.LIBRARY_NAME);
+                            runTest(fullScreen, results, dm);
+
+                        }
+
                     } else {
-                        canvas = CanvasFactory.createCanvas(Config.LIBRARY_NAME, Config.DEFAULT_DIMENSION, WindowBehaviour.EXIT_ON_CLOSE, false);
+
+                        runTest(fullScreen, results, SystemManager.getCurrentDisplayMode());
+
+                    }
+                }
+            }
+        }
+    }
+
+    private static void runTest(boolean fullScreen, Map<String, Integer> results, DisplayMode dm) {
+
+        Logger.log("Benchmark test started for\n" +
+                "Renderer: " + CanvasFactory.getRenderer().name() + "\n" +
+                "Display Mode: " + dm.toString() + "\n" +
+                (fullScreen ? "Fullscreen" : "Windowed") +
+                "\n");
+
+        Canvas canvas = createTestObjects(fullScreen);
+
+        Thread threadCanvas = new Thread(canvas);
+        threadCanvas.run();
+
+        Thread gameThread = launchGameThread(canvas);
+
+        gameThread.start();
+
+        runBenchmark(results, dm);
+
+        close(gameThread, threadCanvas);
+    }
+
+    private static Canvas createTestObjects(boolean fullScreen) {
+
+        Canvas canvas;
+
+        if (fullScreen) {
+            canvas = CanvasFactory.createCanvas(Config.LIBRARY_NAME);
+        } else {
+            canvas = CanvasFactory.createCanvas(Config.LIBRARY_NAME, Config.DEFAULT_DIMENSION, WindowBehaviour.EXIT_ON_CLOSE, false);
+        }
+
+        keyInput=new notSoSimpleKeyboardListener();
+
+        canvas.addKeyListener(keyInput);
+
+        canvas.setObjectManager(new ObjectManager());
+
+        text = new Text(new Dimension(100, 30), new Point(30, 30), Config.LIBRARY_NAME);
+        slidingRectangle = new Rectangle(new Dimension(100, 100), new Point(100, 100));
+
+        canvas.addObject(text);
+        canvas.addObject(slidingRectangle);
+
+        return canvas;
+
+    }
+
+    private static Thread launchGameThread(final Canvas canvas) {
+        Thread gameThread = new Thread(new Runnable() {
+            public void run() {
+
+                frameRate.initialize();
+
+                Logger.log("Starting game loop");
+
+                running = true;
+
+                while (running) {
+
+                    //Input Phase
+                    getuserInput(canvas);
+
+                    //update Cycle
+                    slidingRectangle.move(1, 0);
+                    if (slidingRectangle.getPosition().x > canvas.getDimension().width) {
+                        slidingRectangle.moveTo(slidingRectangle.getDimension().width * -1, slidingRectangle.getPosition().y);
                     }
 
-                    canvas.setObjectManager(new ObjectManager());
-
-                    text = new Text(new Dimension(100, 30), new Point(30, 30), Config.LIBRARY_NAME);
-                    square = new Rectangle(new Dimension(100, 100), new Point(100, 100));
-
-                    canvas.addObject(text);
-                    canvas.addObject(square);
-
-                    Thread gameThread = new Thread(new Runnable() {
-                        public void run() {
-
-                            frameRate.initialize();
-                            canvas.run();
-
-                            Logger.log("Starting game loop");
-
-                            running = true;
-
-                            while (running) {
-
-                                //update
-                                square.move(1, 0);
-
-                                if (square.getPosition().x >= canvas.getDimension().width) {
-                                    square.moveTo(-square.getDimension().width, square.getPosition().y);
-                                }
-
-                                //render
-                                canvas.update();
-                                frameRate.calculate();
-
-                                try {
-                                    Thread.sleep(frameRate.getRemainingInCyle());
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        }
-                    });
-
-                    gameThread.start();
-
-                    boolean benckMark = true;
-                    int correctedValue;
-
-                    for (int j = 0; j < PASSES; j++) {
-
-                        try {
-                            Thread.sleep(1000);
-                            if (j >= PASSES_TO_IGNORE - 1) {
-                                correctedValue = frameRate.getFramePerSecond();
-                                results.put(dm.toString(),
-                                        (correctedValue + results.get(dm.toString())));
-                                continue;
-                            }
-
-                            //puts the PASSES_TO_IGNORE in the map for reference
-                            results.put(dm.toString(), frameRate.getFramePerSecond());
-
-                        } catch (InterruptedException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-
-                    //Math
-                    results.put(dm.toString(), results.get(dm.toString()) / (PASSES - PASSES_TO_IGNORE));
-
+                    canvas.update();
+                    frameRate.calculate();
 
                     try {
-                        gameThread.join();
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
+                        Thread.sleep(frameRate.getRemainingInCyle());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
 
                 }
             }
+        });
+
+        return gameThread;
+    }
+
+    private static void getuserInput(Canvas canvas) {
+
+        if (keyInput != null) {
+
+            keyInput.poll();
+
+            if (keyInput.keyDown(KeyEvent.VK_ESCAPE)) {
+                canvas.close();
+            }
+        }
+
+        if (mouseInput != null) {
+            //
         }
 
     }
 
+    private static void runBenchmark(Map<String, Integer> results, DisplayMode dm) {
+        int correctedValue;
+
+        for (int i = 0; i < PASSES; i++) {
+
+            try {
+                Thread.sleep(1000);
+                if (i >= PASSES_TO_IGNORE - 1) {
+                    correctedValue = frameRate.getFramesPerSecond();
+                    results.put(dm.toString(),
+                            (correctedValue + results.get(dm.toString())));
+                    continue;
+                }
+
+                //puts the PASSES_TO_IGNORE in the map for reference
+                results.put(dm.toString(), frameRate.getFramesPerSecond());
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //Averaging
+        results.put(dm.toString(), results.get(dm.toString()) / (PASSES - PASSES_TO_IGNORE));
+    }
+
+    private static void close(Thread gameThread, Thread threadCanvas) {
+        try {
+            gameThread.join();
+            threadCanvas.join();
+        } catch (InterruptedException e) {
+            Logger.err("Caught Interrupted Exception " + e.getMessage());
+        }
+    }
+
     private static void tick(int fps) {
-
-        ((Text)text).setText("FPS: " + fps);
-
+        text.setText("FPS: " + fps);
     }
 
     private static class impFrameRate extends FrameRate {
-
-        private impFrameRate(int frameCap) {
-            super(frameCap);
-
+        private impFrameRate(int targetFPS) {
+            super(targetFPS);
         }
 
         @Override
@@ -171,10 +245,9 @@ public class BenchmarkTest {
 
                 if (debug) {
                     System.out.println(getResult());
-                    BenchmarkTest.tick(getFramePerSecond());
+                    tick(getFramesPerSecond());
                 }
             }
-
         }
     }
 

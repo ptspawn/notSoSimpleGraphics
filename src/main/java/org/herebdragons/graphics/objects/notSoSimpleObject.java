@@ -24,9 +24,9 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
         this.position = position;
     }
 
-    public void moveTo(int x, int y){
-        position.x=x;
-        position.y=y;
+    public void moveTo(int x, int y) {
+        this.position.x = x;
+        this.position.y = y;
     }
 
     public void move(Dimension velocity) {

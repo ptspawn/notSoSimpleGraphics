@@ -6,7 +6,7 @@ public class FrameRate {
     protected int updatesPerSecond;
     protected long lastTime;
     protected long delta;
-    private long cycleDuration;
+    protected long cycleDuration;
     protected long currentTime;
 
 
@@ -16,7 +16,7 @@ public class FrameRate {
     protected boolean debug;
 
 
-    private boolean limited;
+    protected boolean limited;
 
     public FrameRate(int targetFPS) {
 
@@ -60,6 +60,7 @@ public class FrameRate {
 
     public long getRemainingInCyle() {
         if (!limited) {
+            Logger.log("No FPS restrictions in place");
             return 0;
         }
 
@@ -80,7 +81,7 @@ public class FrameRate {
                 + " | " + String.format("UPS %s", updatesPerSecond) + " }";
     }
 
-    public int getFramePerSecond(){
+    public int getFramesPerSecond(){
         return framesPerSecond;
     }
 
