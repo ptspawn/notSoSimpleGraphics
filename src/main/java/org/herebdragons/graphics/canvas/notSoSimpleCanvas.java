@@ -6,7 +6,7 @@ import org.herebdragons.graphics.objects.notSoSimpleObject;
 import java.awt.*;
 
 /**
- * <center><h1><strong>Renderer interface</strong></h1></center><br>
+ * <center><h1><strong>notSoSimpleCanvas interface</strong></h1></center><br>
  *
  * <center>@author Tiago Venceslau &lt;ptspawn@gmail.com&gt;</center><br>
  *
@@ -18,7 +18,7 @@ import java.awt.*;
  *
  * <h2>Description:</h2><br>
  * <p>Represents the <code>notSoSimpleCanvas interface</code>.
- * The base of notSoSimpleGrapics
+ * The base of notSoSimpleGraphics
  * And where all the graphics will be displayed</p>
  */
 public interface notSoSimpleCanvas extends Runnable {

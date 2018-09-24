@@ -12,6 +12,6 @@ public abstract class AbstractRenderer implements Renderer{
     public abstract void render(Graphics g);
 
     public void close() {
-
+        //testing
     }
 }
