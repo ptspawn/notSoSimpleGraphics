@@ -1,9 +1,13 @@
 package org.herebdragons.graphics.canvas;
 
 import org.herebdragons.graphics.enums.WindowBehaviour;
+import org.herebdragons.graphics.objects.Manager;
 import org.herebdragons.graphics.objects.notSoSimpleObject;
+import org.herebdragons.input.notSoSimpleKeyboardListener;
+import org.herebdragons.input.notSoSimpleMouseListener;
 
 import java.awt.*;
+import java.awt.event.MouseListener;
 
 /**
  * <center><h1><strong>notSoSimpleCanvas interface</strong></h1></center><br>
@@ -23,50 +27,68 @@ import java.awt.*;
  */
 public interface notSoSimpleCanvas extends Runnable {
 
-    public void setVisible(boolean visibility);
+    void setVisible(boolean visibility);
 
-    public void setFullScreen(boolean fullScreen);
+    void setFullScreen(boolean fullScreen);
 
-    public void setDecorated(boolean isDecorated);
+    void setDecorated(boolean isDecorated);
 
-    public Color getBgColor();
+    boolean isDecorated();
 
-    public void setBgColor(Color bgColor);
+    boolean isFullscreen();
 
-    public String getTitle();
+    void setFullscreen(boolean fullscreen);
 
-    public void setTitle(String title);
+    boolean isReady();
 
-    public Dimension getDimension();
+    Color getBgColor();
 
-    public void setDimension(Dimension dimension);
+    void setBgColor(Color bgColor);
 
-    public Point getLocation();
+    String getTitle();
 
-    public void setLocation(Point location);
+    void setTitle(String title);
 
-    public WindowBehaviour getBehaviorOnExit();
+    Dimension getDimension();
 
-    public void setBehaviorOnExit(WindowBehaviour behaviorOnExit);
+    void setDimension(Dimension dimension);
 
-    public void setResizable(boolean resizable);
+    Point getLocation();
 
-    public boolean isResizable();
+    void setLocation(Point location);
 
-    public void requestFocus();
+    WindowBehaviour getBehaviorOnExit();
 
-    public void close();
+    void setBehaviorOnExit(WindowBehaviour behaviorOnExit);
 
-    public void init();
+    void setResizable(boolean resizable);
 
-    public void setIcon(Image image);
+    boolean isResizable();
 
-    public void update();
+    void setLocationRelativeTo(Component component);
 
-    public void addObject(notSoSimpleObject object);
+    void requestFocus();
 
-    public void hideObject(notSoSimpleObject object);
+    void close();
 
-    public void destroyObject(notSoSimpleObject object);
+    void setIcon(Image image);
+
+    void update();
+
+    void addObject(notSoSimpleObject object);
+
+    void hideObject(notSoSimpleObject object);
+
+    void destroyObject(notSoSimpleObject object);
+
+    void addKeyListener(notSoSimpleKeyboardListener keyInput);
+
+    void addMouseListener(notSoSimpleMouseListener mouseInput);
+
+    void setObjectManager(Manager objectManager);
+
+    notSoSimpleRenderer getRenderer();
+
+    void setRenderer(notSoSimpleRenderer renderer);
 
 }

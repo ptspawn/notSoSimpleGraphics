@@ -1,6 +1,9 @@
 package org.herebdragons.graphics.canvas;
 
+import org.herebdragons.graphics.objects.ObjectManager;
+
 import java.awt.*;
+
 /**
  * <center><h1><strong>Renderer interface</strong></h1></center><br>
  *
@@ -18,8 +21,20 @@ import java.awt.*;
  * And where all the graphics will be rendered
  * regardless of the implementation</p>
  */
-public interface Renderer {
-    public void init();
-    public void render(Graphics g);
-    public void close();
+interface notSoSimpleRenderer {
+
+    void init();
+
+    void setObjectManager(ObjectManager objManager);
+
+    void setFullscreen(boolean fullscreen);
+
+    void render();
+
+    void resize(Dimension dimension);
+
+    void close();
+
+    GraphicsConfiguration getGraphicsConfig();
+
 }

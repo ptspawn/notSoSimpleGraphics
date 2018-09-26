@@ -5,6 +5,8 @@ import org.herebdragons.graphics.enums.RendererType;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.Color;
+
+import org.herebdragons.graphics.enums.ThreadBehaviour;
 import org.herebdragons.graphics.objects.*;
 import org.herebdragons.graphics.canvas.*;
 
@@ -24,8 +26,22 @@ import org.herebdragons.graphics.canvas.*;
  * <p>A Utility class containing all the configurations required</p>
  */
 public class Config {
-
     private Config(){}
+
+    /**
+     * The {@link int} represents the minimum possible size of the window (in square form)
+     * @see
+     * @see
+     */
+    public static final ThreadBehaviour DEFAULT_THREAD_BEHAVIOUR = ThreadBehaviour.AUTO;
+
+    /**
+     * The {@link int} represents the minimum possible size of the window (in square form)
+     * @see
+     * @see
+     */
+    public static final int DEFAULT_THREADS = 2;   //UPDATE JAVADOCS
+
     /**
      * The {@link int} represents the minimum possible size of the window (in square form)
      * @see AbstractCanvas#setDimension(Dimension)
@@ -36,7 +52,7 @@ public class Config {
     /**
      * The {@link int} represents how many buffers should be user in the @link BufferStrategy
      * @see BufferStrategy#BufferStrategy()
-     * @see Renderer#render(Graphics)
+     * @see notSoSimpleRenderer#render
      */
     public static final int BUFFERING = 3;
 
@@ -77,9 +93,9 @@ public class Config {
     public static Dimension DEFAULT_DIMENSION = new Dimension(1280, 800);
 
     /**
-     * The {@link RendererType} represents the default {@link Renderer}
+     * The {@link RendererType} represents the default {@link RendererType}
      * @see RendererType
-     * @see Renderer
+     * @see notSoSimpleRenderer
      */
-    public static RendererType DEFAULT_RENDERER = RendererType.JAVA;
+    public static RendererType DEFAULT_RENDERER = RendererType.SWING;
 }

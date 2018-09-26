@@ -2,48 +2,73 @@ package org.herebdragons.graphics.canvas;
 
 import org.herebdragons.Config;
 import org.herebdragons.graphics.enums.RendererType;
+import org.herebdragons.graphics.enums.ThreadBehaviour;
 import org.herebdragons.graphics.enums.WindowBehaviour;
+import org.herebdragons.graphics.objects.ObjectManager;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class CanvasFactory {
 
-    private static RendererType renderer = Config.DEFAULT_RENDERER;
+    private static ThreadBehaviour defaultThreading = Config.DEFAULT_THREAD_BEHAVIOUR;
+    private static int numThreads = Config.DEFAULT_THREADS;
+    private static RendererType rendererType = Config.DEFAULT_RENDERER;
 
-    public static Canvas createCanvas(String Title, Dimension size) {
-        return createCanvas(Title, size, WindowBehaviour.EXIT_ON_CLOSE, true);
+
+    public static notSoSimpleCanvas createCanvas(String Title, Dimension size, RendererType rendererType) {
+        return createCanvas(Title, size, WindowBehaviour.EXIT_ON_CLOSE, true, rendererType);
     }
 
-    public static Canvas createCanvas(String title) {
+    public static notSoSimpleCanvas createCanvas(String title, RendererType rendererType) {
 
-        return createCanvas(title, null, WindowBehaviour.EXIT_ON_CLOSE, false);
+        return createCanvas(title, null, WindowBehaviour.EXIT_ON_CLOSE, false, rendererType);
     }
 
-    public static Canvas createCanvas(final String title, final Dimension size, final WindowBehaviour behaviourOnExit, final boolean isDecorated) {
+    private static notSoSimpleCanvas createCanvas(final String title, final Dimension size, final WindowBehaviour behaviourOnExit, boolean isDecorated, RendererType rendererType) {
+        notSoSimpleCanvas canvas = null;
+        notSoSimpleRenderer renderer = null;
+        ObjectManager objectManager = new ObjectManager();
 
-        final Canvas canvas = new Canvas(size, renderer);
+        switch (rendererType) {
+            case SWING:
+                renderer = new JframeRenderer();
+                canvas = new JFrameCanvas(size, renderer.getGraphicsConfig());
+                canvas.setObjectManager(objectManager);
+                canvas.setRenderer(renderer);
+                canvas.setObjectManager(objectManager);
+                break;
+            case JAVA_FX:
+                break;
+            case OPEN_GL:
+                break;
+        }
+
         canvas.setBehaviorOnExit(behaviourOnExit);
         canvas.setDecorated(isDecorated);
         canvas.setTitle(title);
         canvas.setDimension(size);
 
-        /*SwingUtilities.invokeLater(new Runnable() {
+        final notSoSimpleCanvas nssCanvas = canvas;
 
-            public void run() {
+        if (defaultThreading != ThreadBehaviour.USER_CONTROLED) {
+            SwingUtilities.invokeLater(new Runnable() {
 
-                canvas.init();
-            }
-        });*/
+                public void run() {
 
+                    nssCanvas.run();
+                }
+            });
+        }
         return canvas;
 
     }
 
     public static RendererType getRenderer() {
-        return renderer;
+        return rendererType;
     }
 
-   public static void setRenderer(RendererType renderer) {
-        CanvasFactory.renderer = renderer;
+    public static void setRenderer(RendererType renderer) {
+        rendererType = renderer;
     }
 }

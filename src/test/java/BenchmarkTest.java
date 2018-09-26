@@ -1,5 +1,4 @@
 import org.herebdragons.Config;
-import org.herebdragons.graphics.canvas.Canvas;
 import org.herebdragons.graphics.canvas.CanvasFactory;
 import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.WindowBehaviour;
@@ -30,14 +29,14 @@ public class BenchmarkTest {
     private static Rectangle rotatingRectangle;
 
 
-    private static final FrameRate frameRate = new impFrameRate(-1);
+    //private static final FrameRate frameRate = new impFrameRate(-1);
     private static notSoSimpleKeyboardListener keyInput;
     private static notSoSimpleMouseListener mouseInput;
 
 
     public static void main(String[] args) {
 
-        DisplayMode[] dl = SystemManager.getAvailableGraphicsMode();
+       DisplayMode[] dl = SystemManager.getAvailableGraphicsMode();
 
         Map<String, Integer> results = new HashMap<String, Integer>();
 
@@ -250,6 +249,5 @@ public class BenchmarkTest {
             }
         }
     }
-
 
 }

@@ -1,6 +1,11 @@
 package org.herebdragons.graphics.canvas;
 
+import org.herebdragons.graphics.objects.ObjectManager;
+import org.herebdragons.utils.SystemManager;
+
 import java.awt.*;
+import java.awt.image.BufferStrategy;
+
 /**
  * <center><h1><strong>AbstractRenderer class</strong></h1></center><br>
  *
@@ -19,16 +24,51 @@ import java.awt.*;
  *     will be owned by the @link AbstractCanvas implementation
  *     and will provide the skeleton for each of the renderers implemented</p>
  */
-public abstract class AbstractRenderer implements Renderer{
+abstract class AbstractRenderer implements notSoSimpleRenderer {
 
+    private boolean isReady;
+    protected GraphicsDevice graphicsDevice;
+    protected DisplayMode currentDisplayMode;
+    protected DisplayMode gameDisplayMode;
+    protected BufferStrategy bs;
+    protected Color bgColor;
+    protected Dimension dimension;
+    protected ObjectManager objectManager;
+
+    public AbstractRenderer(){
+        getGraphicsEnvironment();
+    }
+
+    private void getGraphicsEnvironment() {
+        graphicsDevice = SystemManager.getGraphicsDevice();
+        currentDisplayMode = SystemManager.getCurrentDisplayMode();
+        gameDisplayMode = currentDisplayMode;
+
+    }
+
+    public GraphicsConfiguration getGraphicsConfig(){
+        return SystemManager.getGraphicsConfiguration();
+    }
 
     public void init() {
 
     }
 
-    public abstract void render(Graphics g);
+    public abstract void render();
 
     public void close() {
         //testing
+    }
+
+
+    public void setObjectManager(ObjectManager objManager) {
+        this.objectManager=objManager;
+    }
+
+    public void setFullScreen(boolean fullScreen) {
+
+    }
+    public void resize(Dimension dimension) {
+        this.dimension=dimension;
     }
 }

@@ -1,8 +1,7 @@
 package org.herebdragons.graphics.enums;
 
 public enum RendererType {
-    JAVA,
-    SWIFT,
+    SWING,
     JAVA_FX,
     OPEN_GL
 
