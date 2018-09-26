@@ -35,22 +35,20 @@ abstract class AbstractRenderer implements notSoSimpleRenderer {
     protected Dimension dimension;
     protected ObjectManager objectManager;
 
-    public AbstractRenderer(){
-        getGraphicsEnvironment();
+    protected AbstractRenderer(){
+
     }
 
     private void getGraphicsEnvironment() {
         graphicsDevice = SystemManager.getGraphicsDevice();
         currentDisplayMode = SystemManager.getCurrentDisplayMode();
         gameDisplayMode = currentDisplayMode;
-
-    }
-
-    public GraphicsConfiguration getGraphicsConfig(){
-        return SystemManager.getGraphicsConfiguration();
     }
 
     public void init() {
+
+        getGraphicsEnvironment();
+
 
     }
 

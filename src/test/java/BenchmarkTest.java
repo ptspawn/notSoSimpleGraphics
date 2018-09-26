@@ -1,5 +1,6 @@
 import org.herebdragons.Config;
 import org.herebdragons.graphics.canvas.CanvasFactory;
+import org.herebdragons.graphics.canvas.notSoSimpleCanvas;
 import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.WindowBehaviour;
 import org.herebdragons.graphics.objects.ObjectManager;
@@ -29,14 +30,14 @@ public class BenchmarkTest {
     private static Rectangle rotatingRectangle;
 
 
-    //private static final FrameRate frameRate = new impFrameRate(-1);
+    private static final FrameRate frameRate = new impFrameRate(-1);
     private static notSoSimpleKeyboardListener keyInput;
     private static notSoSimpleMouseListener mouseInput;
 
 
     public static void main(String[] args) {
 
-       DisplayMode[] dl = SystemManager.getAvailableGraphicsMode();
+        //DisplayMode[] dl = SystemManager.getAvailableGraphicsMode();
 
         Map<String, Integer> results = new HashMap<String, Integer>();
 
@@ -45,7 +46,18 @@ public class BenchmarkTest {
         Logger.setLogging(false);
         frameRate.setDebug(true);
 
-        //Alternating FullScreen
+        ObjectManager objectManager = new ObjectManager();
+
+        notSoSimpleCanvas canvas = CanvasFactory.createCanvas(Config.LIBRARY_NAME +
+                " - Benchmark test", new Dimension(2000, 1000), RendererType.JAVA_2D);
+
+        canvas.setObjectManager(objectManager);
+
+        canvas.setBgColor(Color.BLUE);
+
+        canvas.update();
+
+        /*//Alternating FullScreen
         for (int j = 0; j < 2; j++) {
             switch (j) {
                 case 0:
@@ -80,7 +92,7 @@ public class BenchmarkTest {
                     }
                 }
             }
-        }
+        }*/
     }
 
     private static void runTest(boolean fullScreen, Map<String, Integer> results, DisplayMode dm) {
@@ -91,31 +103,25 @@ public class BenchmarkTest {
                 (fullScreen ? "Fullscreen" : "Windowed") +
                 "\n");
 
-        Canvas canvas = createTestObjects(fullScreen);
+        notSoSimpleCanvas canvas = createTestObjects(fullScreen);
 
-        Thread threadCanvas = new Thread(canvas);
-        threadCanvas.run();
-
-        Thread gameThread = launchGameThread(canvas);
-
-        gameThread.start();
 
         runBenchmark(results, dm);
 
-        close(gameThread, threadCanvas);
+        //close(gameThread, threadCanvas);
     }
 
-    private static Canvas createTestObjects(boolean fullScreen) {
+    private static notSoSimpleCanvas createTestObjects(boolean fullScreen) {
 
-        Canvas canvas;
+        notSoSimpleCanvas canvas;
 
         if (fullScreen) {
-            canvas = CanvasFactory.createCanvas(Config.LIBRARY_NAME);
+            canvas = CanvasFactory.createCanvas(Config.LIBRARY_NAME, RendererType.JAVA_2D);
         } else {
-            canvas = CanvasFactory.createCanvas(Config.LIBRARY_NAME, Config.DEFAULT_DIMENSION, WindowBehaviour.EXIT_ON_CLOSE, false);
+            canvas = CanvasFactory.createCanvas(Config.LIBRARY_NAME, Config.DEFAULT_DIMENSION, RendererType.JAVA_2D);
         }
 
-        keyInput=new notSoSimpleKeyboardListener();
+        keyInput = new notSoSimpleKeyboardListener();
 
         canvas.addKeyListener(keyInput);
 
@@ -131,7 +137,7 @@ public class BenchmarkTest {
 
     }
 
-    private static Thread launchGameThread(final Canvas canvas) {
+    private static Thread launchGameThread(final notSoSimpleCanvas canvas) {
         Thread gameThread = new Thread(new Runnable() {
             public void run() {
 
@@ -168,7 +174,7 @@ public class BenchmarkTest {
         return gameThread;
     }
 
-    private static void getuserInput(Canvas canvas) {
+    private static void getuserInput(notSoSimpleCanvas canvas) {
 
         if (keyInput != null) {
 

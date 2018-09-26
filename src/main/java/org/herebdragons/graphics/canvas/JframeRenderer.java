@@ -21,6 +21,10 @@ import java.awt.*;
 class JframeRenderer extends AbstractRenderer {
 
 
+    JframeRenderer() {
+        super();
+    }
+
     public void setFullscreen(boolean fullscreen) {
         DisplayMode dispMode = null;
 
@@ -71,7 +75,6 @@ class JframeRenderer extends AbstractRenderer {
 
                     g = bs.getDrawGraphics();
                     g.setColor(bgColor);
-                    g.clearRect(0, 0, dimension.width, dimension.height);
                     g.fillRect(0, 0, dimension.width, dimension.height);
 
                     objectManager.render(g);
@@ -88,10 +91,14 @@ class JframeRenderer extends AbstractRenderer {
 
             } while (bs.contentsRestored());
 
-            bs.show();
+            bs.show();  //
 
         } while (bs.contentsLost());
 
+    }
+
+    public GraphicsConfiguration getGraphicsConfig() {
+        return null;
     }
 
 

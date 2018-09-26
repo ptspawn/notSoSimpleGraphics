@@ -6,6 +6,7 @@ import org.herebdragons.graphics.objects.notSoSimpleObject;
 import org.herebdragons.input.notSoSimpleKeyboardListener;
 import org.herebdragons.input.notSoSimpleMouseListener;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
 
@@ -90,5 +91,7 @@ public interface notSoSimpleCanvas extends Runnable {
     notSoSimpleRenderer getRenderer();
 
     void setRenderer(notSoSimpleRenderer renderer);
+
+    notSoSimpleWindow getWindow();
 
 }

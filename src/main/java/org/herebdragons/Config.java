@@ -54,7 +54,7 @@ public class Config {
      * @see BufferStrategy#BufferStrategy()
      * @see notSoSimpleRenderer#render
      */
-    public static final int BUFFERING = 3;
+    public static final int BUFFERING = 1;
 
     /**
      * The {@link Color} represents the default fill color for {@link Fillable}.
@@ -97,5 +97,5 @@ public class Config {
      * @see RendererType
      * @see notSoSimpleRenderer
      */
-    public static RendererType DEFAULT_RENDERER = RendererType.SWING;
+    public static RendererType DEFAULT_RENDERER = RendererType.JAVA_2D;
 }

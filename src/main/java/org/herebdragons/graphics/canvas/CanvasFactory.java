@@ -31,9 +31,9 @@ public class CanvasFactory {
         ObjectManager objectManager = new ObjectManager();
 
         switch (rendererType) {
-            case SWING:
+            case JAVA_2D:
+                canvas = new JFrameCanvas(size);
                 renderer = new JframeRenderer();
-                canvas = new JFrameCanvas(size, renderer.getGraphicsConfig());
                 canvas.setObjectManager(objectManager);
                 canvas.setRenderer(renderer);
                 canvas.setObjectManager(objectManager);

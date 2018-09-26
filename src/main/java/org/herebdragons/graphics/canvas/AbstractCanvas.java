@@ -37,7 +37,9 @@ import java.security.InvalidParameterException;
  */
 public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
-    protected JFrame window;
+
+
+    private notSoSimpleWindow window;
     private WindowBehaviour behaviorOnExit;
     private boolean isDecorated;
     private boolean isResizable;
@@ -104,8 +106,6 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         });
 
         Logger.log("Set windows visibility on");
-
-        requestFocus();
 
         //JUST FOR JAVAFX
 
@@ -342,6 +342,12 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         return objectManager;
     }
 
+    protected void setWindow(notSoSimpleWindow window) {
+        this.window = window;
+    }
+    public notSoSimpleWindow getWindow() {
+         return window;
+    }
     @Override
     public String toString() {
         return "Canvas{" +
