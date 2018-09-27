@@ -1,5 +1,6 @@
 package org.herebdragons.graphics.canvas;
 
+import org.herebdragons.graphics.objects.Manager;
 import org.herebdragons.graphics.objects.ObjectManager;
 
 import java.awt.*;
@@ -21,20 +22,14 @@ import java.awt.*;
  * And where all the graphics will be rendered
  * regardless of the implementation</p>
  */
-interface notSoSimpleRenderer {
+public interface notSoSimpleRenderer {
 
-    void init();
+    void init(notSoSimpleWindow windows);
 
-    void setObjectManager(ObjectManager objManager);
-
-    void setFullscreen(boolean fullscreen);
+    void setObjectManager(Manager objManager);
 
     void render();
 
-    void resize(Dimension dimension);
-
     void close();
 
-    GraphicsConfiguration getGraphicsConfig();
-
-}
+   }

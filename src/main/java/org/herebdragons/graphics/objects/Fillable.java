@@ -4,6 +4,9 @@ import java.awt.*;
 
 public interface Fillable {
 
-    void fill(Color color);
+    void setFill(Paint paint);
+
+    Paint getFill();
+
 
 }

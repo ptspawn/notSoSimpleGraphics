@@ -4,6 +4,7 @@ import org.herebdragons.utils.Logger;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Canvas;
 import java.awt.image.BufferedImage;
 
 /**
@@ -22,9 +23,9 @@ import java.awt.image.BufferedImage;
  */
 class JFrameCanvas extends AbstractCanvas {
 
+    private Canvas canvas = new Canvas();
 
-
-    JFrameCanvas(Dimension size ) {
+    JFrameCanvas(Dimension size) {
         super(size);
         //Graphics2D g2g = ((Graphics2D)new BufferedImage(10,10).getGraphics())
     }
@@ -32,8 +33,8 @@ class JFrameCanvas extends AbstractCanvas {
     @Override
     public void run() {
         Logger.log("creating new window");
-
-        super.setWindow(new Jwindow());
+        Jwindow window = new Jwindow();
+        super.setWindow(window);
         super.run();
     }
 }

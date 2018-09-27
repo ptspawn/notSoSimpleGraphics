@@ -33,7 +33,7 @@ public class Config {
      * @see
      * @see
      */
-    public static final ThreadBehaviour DEFAULT_THREAD_BEHAVIOUR = ThreadBehaviour.AUTO;
+    public static final ThreadBehaviour DEFAULT_THREAD_BEHAVIOUR = ThreadBehaviour.USER_CONTROLED;
 
     /**
      * The {@link int} represents the minimum possible size of the window (in square form)
@@ -54,7 +54,7 @@ public class Config {
      * @see BufferStrategy#BufferStrategy()
      * @see notSoSimpleRenderer#render
      */
-    public static final int BUFFERING = 1;
+    public static final int BUFFERING = 2;
 
     /**
      * The {@link Color} represents the default fill color for {@link Fillable}.
@@ -80,6 +80,8 @@ public class Config {
      */
     public static final int DEFAULT_STROKE_THINKNESS = 5;
 
+
+    public static final BasicStroke DEFAULT_STROKE_TYPE = new BasicStroke(DEFAULT_STROKE_THINKNESS);
     /**
      * The {@link String} is self explanatory
      */

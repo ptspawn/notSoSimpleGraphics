@@ -18,7 +18,7 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
         this.dimension = dimension;
     }
 
-    public abstract void render(Graphics g);
+    public abstract void render(Graphics2D g);
 
     public void moveTo(Point position) {
         this.position = position;

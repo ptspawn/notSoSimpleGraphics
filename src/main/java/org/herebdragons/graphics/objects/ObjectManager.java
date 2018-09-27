@@ -23,12 +23,14 @@ public class ObjectManager implements Manager {
         objects.remove(object);
     }
 
-    public void render(Graphics g) {
+    public void render(Graphics2D g) {
         Logger.log("Rendering in " + this);
 
         for (notSoSimpleObject object : objects) {
             object.render(g);
         }
+
+        System.out.println(objects.size());
     }
 
     @Override

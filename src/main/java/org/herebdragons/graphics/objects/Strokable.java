@@ -4,5 +4,15 @@ import java.awt.*;
 
 public interface Strokable {
 
-    void stroke(Color color, int thickness);
+    BasicStroke getStroke();
+
+
+    void setStroke(BasicStroke stroke);
+
+    Color getStrokeColor();
+
+    void setStroke(Color color, BasicStroke stroke);
+
+    void setStrokeColor(Color strokeColor);
+
 }

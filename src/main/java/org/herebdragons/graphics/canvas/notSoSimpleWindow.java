@@ -2,6 +2,7 @@ package org.herebdragons.graphics.canvas;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferStrategy;
 
 /**
  * <center><h1><strong>notSoSimpleWindow interface</strong></h1></center><br>
@@ -35,6 +36,8 @@ interface notSoSimpleWindow {
     Point getLocation();
 
     void setIconImage(Image image);
+
+    BufferStrategy getBufferStrategy();
 
     void setSize(Dimension dimension);
 

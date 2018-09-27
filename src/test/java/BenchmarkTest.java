@@ -1,6 +1,7 @@
 import org.herebdragons.Config;
 import org.herebdragons.graphics.canvas.CanvasFactory;
 import org.herebdragons.graphics.canvas.notSoSimpleCanvas;
+import org.herebdragons.graphics.canvas.notSoSimpleRenderer;
 import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.WindowBehaviour;
 import org.herebdragons.graphics.objects.ObjectManager;
@@ -54,6 +55,11 @@ public class BenchmarkTest {
         canvas.setObjectManager(objectManager);
 
         canvas.setBgColor(Color.BLUE);
+
+        Rectangle rect = new Rectangle(50, 50, 300, 300);
+        //rect.fill(new Color(253, 34, 21, 1));
+
+        //canvas.run();
 
         canvas.update();
 

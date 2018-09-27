@@ -4,10 +4,30 @@ import java.awt.*;
 
 public class SystemManager {
 
-    private static GraphicsDevice graphicsDevice;
-    private static GraphicsConfiguration graphicsConfig;
+    private static GraphicsDevice gd;
+    private static GraphicsConfiguration gc;
     private static GraphicsEnvironment ge;
     private static DisplayMode dm;
+
+    private static int screenWidth, screenHeight;
+
+    private static void getDevices() {
+        if (ge == null)
+            ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+        if (gd == null)
+            gd = ge.getDefaultScreenDevice();
+
+        if (gc == null)
+            gc = gd.getDefaultConfiguration();
+
+        if (dm == null)
+            dm = gd.getDisplayMode();
+
+        screenWidth = gc.getBounds().width;
+        screenHeight = gc.getBounds().height;
+
+    }
 
     public static String[] getFonts() {
         if (ge == null)
@@ -16,16 +36,10 @@ public class SystemManager {
         return ge.getAvailableFontFamilyNames();
     }
 
-    public static GraphicsConfiguration getGraphicsConfiguration() {
-        ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        graphicsDevice = ge.getDefaultScreenDevice();
-        return graphicsDevice.getDefaultConfiguration();
-    }
-
     public static GraphicsConfiguration getBestGraphicsConfiguration() {
         ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        graphicsDevice = ge.getDefaultScreenDevice();
-        return graphicsDevice.getBestConfiguration(new GraphicsConfigTemplate() {
+        gd = ge.getDefaultScreenDevice();
+        return gd.getBestConfiguration(new GraphicsConfigTemplate() {
             @Override
             public GraphicsConfiguration getBestConfiguration(GraphicsConfiguration[] graphicsConfigurations) {
                 for (GraphicsConfiguration gc : graphicsConfigurations) {
@@ -76,18 +90,8 @@ public class SystemManager {
         return true; ///////////
     }
 
-    private static void getDevices() {
-        if (ge == null)
-            ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 
-        if (graphicsDevice == null)
-            graphicsDevice = ge.getDefaultScreenDevice();
-
-        if (dm == null)
-            dm = graphicsDevice.getDisplayMode();
-    }
-
-    public static DisplayMode[] getAvailableGraphicsMode() {
+    public static DisplayMode[] getAvailableGraphicsModes() {
         if (ge == null)
             getDevices();
 
@@ -100,18 +104,36 @@ public class SystemManager {
             getDevices();
 
         return new DisplayMode(
-                dm.getWidth(), dm.getHeight(), DisplayMode.BIT_DEPTH_MULTI, dm.getRefreshRate());
+                dm.getWidth(), dm.getHeight(), dm.getBitDepth() == -1 ? DisplayMode.BIT_DEPTH_MULTI : dm.getBitDepth(), dm.getRefreshRate());
     }
 
     public static DisplayMode convertDisplayMode(DisplayMode dm) {
 
         return new DisplayMode(
-                dm.getWidth(), dm.getHeight(), DisplayMode.BIT_DEPTH_MULTI, dm.getRefreshRate());
+                dm.getWidth(), dm.getHeight(), dm.getBitDepth() == -1 ? DisplayMode.BIT_DEPTH_MULTI : dm.getBitDepth(), dm.getRefreshRate());
     }
 
-    public static GraphicsDevice getGraphicsDevice() {
-        if (graphicsDevice == null)
+    public static GraphicsDevice getGd() {
+        if (gd == null)
             getDevices();
-        return graphicsDevice;
+        return gd;
+    }
+
+    public static Dimension getScreenDim() {
+        if (screenWidth == 0 || screenHeight == 0)
+            throw new IllegalStateException("Your graphics are not set up yet");
+        return new Dimension(screenWidth, screenHeight);
+    }
+
+    public static GraphicsConfiguration getGc() {
+        return gc;
+    }
+
+    public static GraphicsEnvironment getGe() {
+        return ge;
+    }
+
+    public static DisplayMode getDm() {
+        return dm;
     }
 }

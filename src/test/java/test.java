@@ -1,3 +1,8 @@
+import org.herebdragons.graphics.canvas.CanvasFactory;
+import org.herebdragons.graphics.canvas.notSoSimpleCanvas;
+import org.herebdragons.graphics.enums.RendererType;
+import org.herebdragons.graphics.objects.Rectangle;
+import org.herebdragons.utils.Logger;
 import org.herebdragons.utils.SystemManager;
 
 import java.awt.*;
@@ -19,6 +24,22 @@ import java.awt.*;
 public class test {
 
     public static void main(String[] args) {
-        SystemManager.checkCfg(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration());
+
+        Logger.setLogging(true);
+
+        notSoSimpleCanvas canvas = CanvasFactory.createCanvas("teste", new Dimension(2000, 1000),
+                RendererType.JAVA_2D);
+
+        Rectangle rect = new Rectangle(400,300,200,200);
+        rect.setFill(Color.RED);
+
+        canvas.addObject(rect);
+
+        canvas.run();
+
+        canvas.update();
+
+        System.out.println("this is the end");
+
     }
 }

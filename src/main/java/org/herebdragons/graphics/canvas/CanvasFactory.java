@@ -4,6 +4,7 @@ import org.herebdragons.Config;
 import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.ThreadBehaviour;
 import org.herebdragons.graphics.enums.WindowBehaviour;
+import org.herebdragons.graphics.objects.Manager;
 import org.herebdragons.graphics.objects.ObjectManager;
 
 import javax.swing.*;
@@ -15,28 +16,32 @@ public class CanvasFactory {
     private static int numThreads = Config.DEFAULT_THREADS;
     private static RendererType rendererType = Config.DEFAULT_RENDERER;
 
+    private static Manager objectManager;
+
 
     public static notSoSimpleCanvas createCanvas(String Title, Dimension size, RendererType rendererType) {
-        return createCanvas(Title, size, WindowBehaviour.EXIT_ON_CLOSE, true, rendererType);
+        return createCanvas(Title, size, true, rendererType);
     }
 
     public static notSoSimpleCanvas createCanvas(String title, RendererType rendererType) {
 
-        return createCanvas(title, null, WindowBehaviour.EXIT_ON_CLOSE, false, rendererType);
+        return createCanvas(title, null, false, rendererType);
     }
 
-    private static notSoSimpleCanvas createCanvas(final String title, final Dimension size, final WindowBehaviour behaviourOnExit, boolean isDecorated, RendererType rendererType) {
+    private static notSoSimpleCanvas createCanvas(final String title, final Dimension size, boolean isDecorated, RendererType rendererType) {
         notSoSimpleCanvas canvas = null;
         notSoSimpleRenderer renderer = null;
-        ObjectManager objectManager = new ObjectManager();
+
+        if (objectManager == null)
+            objectManager = new ObjectManager();
 
         switch (rendererType) {
             case JAVA_2D:
                 canvas = new JFrameCanvas(size);
-                renderer = new JframeRenderer();
                 canvas.setObjectManager(objectManager);
+                renderer = new JframeRenderer(canvas);
+                renderer.setObjectManager(objectManager);
                 canvas.setRenderer(renderer);
-                canvas.setObjectManager(objectManager);
                 break;
             case JAVA_FX:
                 break;
@@ -44,24 +49,29 @@ public class CanvasFactory {
                 break;
         }
 
-        canvas.setBehaviorOnExit(behaviourOnExit);
-        canvas.setDecorated(isDecorated);
-        canvas.setTitle(title);
-        canvas.setDimension(size);
+        return canvas;
 
-        final notSoSimpleCanvas nssCanvas = canvas;
+    }
 
+    private static void startCanvas(final notSoSimpleCanvas nssCanvas) {
         if (defaultThreading != ThreadBehaviour.USER_CONTROLED) {
+
             SwingUtilities.invokeLater(new Runnable() {
 
                 public void run() {
-
                     nssCanvas.run();
+
                 }
             });
-        }
-        return canvas;
 
+        } else {
+
+            throw new IllegalStateException("Thread behaviour is set to Manual...\nYou invoke run! .|.");
+        }
+    }
+
+    public static void setObjectManager(Manager objManager) {
+        objectManager = objManager;
     }
 
     public static RendererType getRenderer() {

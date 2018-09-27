@@ -38,13 +38,9 @@ public interface notSoSimpleCanvas extends Runnable {
 
     boolean isFullscreen();
 
-    void setFullscreen(boolean fullscreen);
+    Paint getBgColor();
 
-    boolean isReady();
-
-    Color getBgColor();
-
-    void setBgColor(Color bgColor);
+    void setBgColor(Paint bgColor);
 
     String getTitle();
 
@@ -61,10 +57,6 @@ public interface notSoSimpleCanvas extends Runnable {
     WindowBehaviour getBehaviorOnExit();
 
     void setBehaviorOnExit(WindowBehaviour behaviorOnExit);
-
-    void setResizable(boolean resizable);
-
-    boolean isResizable();
 
     void setLocationRelativeTo(Component component);
 

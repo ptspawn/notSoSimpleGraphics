@@ -1,8 +1,10 @@
 package org.herebdragons.graphics.canvas;
 
+import org.herebdragons.Config;
 import org.herebdragons.utils.Logger;
 
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 
 /**
  * <center><h1><strong>JframeRenderer class</strong></h1></center><br>
@@ -20,13 +22,50 @@ import java.awt.*;
  */
 class JframeRenderer extends AbstractRenderer {
 
+    private notSoSimpleCanvas jcanvas;
+    private Jwindow window;
+    private Canvas canvas;
+    private BufferStrategy bs;
+    private Graphics2D g2d;
 
-    JframeRenderer() {
-        super();
+    public JframeRenderer(notSoSimpleCanvas jcanvas) {
+        this.jcanvas = jcanvas;
+    }
+
+    @Override
+    public void init(notSoSimpleWindow window) {
+
+        if (!(window instanceof Jwindow))
+            throw new IllegalArgumentException("Window not instance of Jwindow");
+
+        this.window = (Jwindow) window;
+
+        this.window.setLocationRelativeTo(null);
+
+        this.canvas = new Canvas();
+
+        this.window.add(canvas);
+
+        canvas.setSize(this.window.getSize());
+
+        this.window.setUndecorated(false);
+        this.window.setIgnoreRepaint(true);
+
+        this.window.setVisible(true);
+
+        canvas.createBufferStrategy(Config.BUFFERING);
+
+        do {
+            bs = canvas.getBufferStrategy();
+        } while (bs == null);
+
+
+
+    //g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
 
     public void setFullscreen(boolean fullscreen) {
-        DisplayMode dispMode = null;
+      /*  DisplayMode dispMode = null;
 
         if (!fullscreen) {
             //setDecorated(isDecorated);
@@ -55,51 +94,47 @@ class JframeRenderer extends AbstractRenderer {
             } catch (Exception ex) {
                 Logger.err("Problem setting the display mode\n" + ex.getMessage());
             }
-        }
+        }*/
     }
 
     public void render() {
         Logger.log("Entering Update method from Canvas");
 
-        /*if (!isReady) {
-            Logger.log("Window not ready yet");
-            return;
-        }*/
-
-        do {
-            do {
-                Graphics g = null;
+      //  do {
+            //do {
+                Graphics2D g2d = null;
                 try {
 
                     Logger.log("Started Rendering");
 
-                    g = bs.getDrawGraphics();
-                    g.setColor(bgColor);
-                    g.fillRect(0, 0, dimension.width, dimension.height);
+                    g2d = (Graphics2D) canvas.getGraphics();
+                    g2d.setPaint(jcanvas.getBgColor());
+                    g2d.fill(canvas.getBounds());
 
-                    objectManager.render(g);
+                    objectManager.render(g2d);
 
                     Logger.log("Finished Rendering");
 
                 } catch (Exception e) {
                     Logger.err("Exception " + e.getMessage());
                 } finally {
-                    if (g != null) {
-                        g.dispose();
+                    if (g2d != null) {
+                        g2d.dispose();
                     }
                 }
 
-            } while (bs.contentsRestored());
+            //} while (!bs.contentsRestored());
 
-            bs.show();  //
+            //bs.show();  //
 
-        } while (bs.contentsLost());
+       // } while (bs.contentsLost());
 
     }
 
-    public GraphicsConfiguration getGraphicsConfig() {
-        return null;
+    @Override
+    public void close() {
+
+        //Finish up
+        super.close();
     }
-
-
 }

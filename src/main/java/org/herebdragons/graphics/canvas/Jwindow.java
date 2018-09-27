@@ -1,8 +1,7 @@
 package org.herebdragons.graphics.canvas;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+
 
 /**
  * <center><h1><strong>Jwindow class</strong></h1></center><br>

@@ -14,10 +14,10 @@ public class Text extends notSoSimpleObject {
         Logger.log("created this");
     }
 
-    public void render(Graphics g) {
+    public void render(Graphics2D g2d) {
         Logger.log("Rendering " + this);
-        g.setColor(Color.GREEN);
-        g.drawString(text, position.x, position.y);
+        g2d.setColor(Color.GREEN);
+        g2d.drawString(text, position.x, position.y);
     }
 
 

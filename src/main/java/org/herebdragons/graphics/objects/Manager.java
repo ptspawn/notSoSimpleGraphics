@@ -8,6 +8,6 @@ public interface Manager {
 
     void hideObject(notSoSimpleObject object);
 
-    void render(Graphics g);
+    void render(Graphics2D g);
 
 }

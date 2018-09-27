@@ -1,8 +1,11 @@
 package org.herebdragons.graphics.canvas;
 
+import org.herebdragons.Config;
+import org.herebdragons.graphics.objects.Manager;
 import org.herebdragons.graphics.objects.ObjectManager;
 import org.herebdragons.utils.SystemManager;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
@@ -21,33 +24,22 @@ import java.awt.image.BufferStrategy;
  * <p>Represents the <code>AbstractRenderer Renderer</code>.
  * The base of notSoSimpleGraphics<br>
  * And where all the graphics will be rendered.<br>
- *     will be owned by the @link AbstractCanvas implementation
- *     and will provide the skeleton for each of the renderers implemented</p>
+ * will be owned by the @link AbstractCanvas implementation
+ * and will provide the skeleton for each of the renderers implemented</p>
  */
 abstract class AbstractRenderer implements notSoSimpleRenderer {
 
-    private boolean isReady;
-    protected GraphicsDevice graphicsDevice;
-    protected DisplayMode currentDisplayMode;
-    protected DisplayMode gameDisplayMode;
-    protected BufferStrategy bs;
     protected Color bgColor;
     protected Dimension dimension;
-    protected ObjectManager objectManager;
+    protected Manager objectManager;
 
-    protected AbstractRenderer(){
+
+    protected AbstractRenderer() {
 
     }
 
-    private void getGraphicsEnvironment() {
-        graphicsDevice = SystemManager.getGraphicsDevice();
-        currentDisplayMode = SystemManager.getCurrentDisplayMode();
-        gameDisplayMode = currentDisplayMode;
-    }
+    public void init(notSoSimpleWindow window) {
 
-    public void init() {
-
-        getGraphicsEnvironment();
 
 
     }
@@ -58,15 +50,15 @@ abstract class AbstractRenderer implements notSoSimpleRenderer {
         //testing
     }
 
-
-    public void setObjectManager(ObjectManager objManager) {
-        this.objectManager=objManager;
+    public void setObjectManager(Manager objManager) {
+        this.objectManager = objManager;
     }
 
     public void setFullScreen(boolean fullScreen) {
 
     }
+
     public void resize(Dimension dimension) {
-        this.dimension=dimension;
+        this.dimension = dimension;
     }
 }

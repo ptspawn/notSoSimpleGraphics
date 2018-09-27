@@ -6,7 +6,7 @@ import org.herebdragons.utils.Logger;
 
 import java.awt.*;
 
-class Canvas extends AbstractCanvas implements notSoSimpleCanvas {
+class OtherName {
 
 
     //private javafx.embed.swing.JFXPanel canvas;
@@ -18,12 +18,9 @@ class Canvas extends AbstractCanvas implements notSoSimpleCanvas {
     // -Dsun.java2d.opengl=True  - Enable openGL accelaration for swing components
 
 
-    Canvas(Dimension size) {
-        super(size);
-        System.setProperty("sun.java2d.opengl", "true");
+//        System.setProperty("sun.java2d.opengl", "true");
 
 
-    }
 
 
 /*
