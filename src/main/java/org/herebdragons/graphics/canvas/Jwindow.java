@@ -1,6 +1,7 @@
 package org.herebdragons.graphics.canvas;
 
 import javax.swing.*;
+import java.awt.*;
 
 
 /**
@@ -18,6 +19,9 @@ import javax.swing.*;
  * <p>Represents the <code>Jwindow class</code><br>.
  */
 class Jwindow extends JFrame implements notSoSimpleWindow {
-
+    @Override
+    public void paintComponents(Graphics graphics) {
+        super.paintComponents(graphics);
+    }
 }
 
