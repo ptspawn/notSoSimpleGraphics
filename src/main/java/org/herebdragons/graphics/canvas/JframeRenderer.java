@@ -26,7 +26,6 @@ class JframeRenderer extends AbstractRenderer {
     private Jwindow window;
     private Canvas canvas;
     private BufferStrategy bs;
-    private Graphics2D g2d;
 
     public JframeRenderer(notSoSimpleCanvas jcanvas) {
         this.jcanvas = jcanvas;
@@ -42,13 +41,11 @@ class JframeRenderer extends AbstractRenderer {
 
         this.canvas = new Canvas();
 
+        canvas.setIgnoreRepaint(true);
+
         this.window.add(canvas);
 
         canvas.setSize(this.window.getSize());
-
-        this.window.setIgnoreRepaint(true);
-
-        this.window.setVisible(true);
 
         canvas.createBufferStrategy(Config.BUFFERING);
 
@@ -56,11 +53,6 @@ class JframeRenderer extends AbstractRenderer {
             bs = canvas.getBufferStrategy();
         } while (bs == null);
 
-        canvas.setIgnoreRepaint(true);
-
-
-
-        //g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
 
     public void setFullscreen(boolean fullscreen) {
@@ -99,35 +91,35 @@ class JframeRenderer extends AbstractRenderer {
     public void render() {
         Logger.log("Entering Update method from Canvas");
 
-        //  do {
-        //do {
-        Graphics2D g2d = null;
-        try {
+        do {
+            do {
+                Graphics2D g2d = null;
+                try {
 
-            Logger.log("Started Rendering");
+                    Logger.log("Started Rendering");
+                    g2d = (Graphics2D) bs.getDrawGraphics();
+                    //g2d = (Graphics2D) canvas.getGraphics();
+                    g2d.setPaint(jcanvas.getBgColor());
+                    g2d.fill(canvas.getBounds());
 
-            g2d = (Graphics2D) canvas.getGraphics();
-            g2d.setPaint(jcanvas.getBgColor());
-            g2d.fill(canvas.getBounds());
+                    objectManager.render(g2d);
 
-            objectManager.render(g2d);
+                    Logger.log("Finished Rendering");
 
-            Logger.log("Finished Rendering");
+                } catch (Exception e) {
+                    Logger.err("Exception in Rendering" + e.getMessage());
+                } finally {
+                    if (g2d != null) {
+                        //Toolkit.getDefaultToolkit().sync();
+                        g2d.dispose();
+                    }
+                }
 
-        } catch (Exception e) {
-            Logger.err("Exception " + e.getMessage());
-        } finally {
-            if (g2d != null) {
-                Toolkit.getDefaultToolkit().sync();
-                g2d.dispose();
-            }
-        }
+            } while (!bs.contentsRestored());
 
-        //} while (!bs.contentsRestored());
+            bs.show();  //
 
-        //bs.show();  //
-
-        // } while (bs.contentsLost());
+        } while (bs.contentsLost());
 
     }
 

@@ -30,6 +30,8 @@ public class Config {
     private Config() {
     }
 
+    public static final boolean DEFAULT_WINDOW_DECORATION = true;
+
     public static final WindowBehaviour DEFAULT_BEHAVIOUR_ON_EXIT = WindowBehaviour.EXIT_ON_CLOSE;
 
     /**
@@ -92,7 +94,7 @@ public class Config {
      */
     public static final int DEFAULT_STROKE_THINKNESS = 5;
 
-    public static final BasicStroke DEFAULT_STROKE_TYPE = new BasicStroke(DEFAULT_STROKE_THINKNESS,BasicStroke.CAP_BUTT,BasicStroke.JOIN_ROUND);
+    public static final BasicStroke DEFAULT_STROKE_TYPE = new BasicStroke(DEFAULT_STROKE_THINKNESS, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
     /**
      * The {@link String} is self explanatory
      */

@@ -19,23 +19,28 @@ import java.awt.*;
  * <p>Represents the <code>Jwindow class</code><br>.
  */
 class Jwindow extends JFrame implements notSoSimpleWindow {
+
+    private boolean isReady = false;
+
     @Override
     public void repaint(long l, int i, int i1, int i2, int i3) {
-        System.err.println("Called Repaint");
+        //super.repaint();
+        System.err.println("Called complex Repaint");
     }
 
     @Override
     public void repaint() {
-        System.err.println("Called Repaint");
+        System.err.println("Called simple Repaint");
     }
 
     @Override
     public void repaint(long l) {
-        System.err.println("Called Repaint");
+        System.err.println("Called long Repaint");
     }
 
     @Override
     public void paint(Graphics graphics) {
+        //super.paint(graphics);
         System.err.println("Called Paint");
     }
 
@@ -43,11 +48,16 @@ class Jwindow extends JFrame implements notSoSimpleWindow {
     public void addNotify() {
         super.addNotify();
         System.err.println("Called Notify");
+        isReady = true;
     }
 
     @Override
     public void paintAll(Graphics graphics) {
         System.err.println("Called PaintAll");
+    }
+
+    public boolean isReady() {
+        return isReady;
     }
 }
 

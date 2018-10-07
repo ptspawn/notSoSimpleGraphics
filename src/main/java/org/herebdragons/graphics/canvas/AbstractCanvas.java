@@ -75,30 +75,36 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         if (keyInput != null)
             window.addKeyListener(keyInput);
 
-        setLocationRelativeTo(null);
-
         Logger.log("starting frame");
 
         setDimension(dimension);
         setDecorated(isDecorated);
+        window.setIgnoreRepaint(true);
 
         Logger.log("dimension set");
 
         window.setTitle(title);
         window.setResizable(false);
-        window.setIgnoreRepaint(true);
-        window.setBackground(Color.RED);
-
-        Logger.log("Set windows visibility on");
 
         window.addWindowListener(new WindowAdapter() {
 
             @Override
+            public void windowActivated(WindowEvent windowEvent) {
+                super.windowActivated(windowEvent);
+                if (!isReady) {
+                    renderer.init(window);
+                    Logger.log("Window Activated for the first Time " + windowEvent.paramString());
+                    isReady = true;
+                    update();
+                }
+            }
+
+            @Override
             public void windowOpened(WindowEvent windowEvent) {
                 super.windowOpened(windowEvent);
-                renderer.init(window);
                 Logger.log("Window Ready" + windowEvent.paramString());
-                isReady = true;
+                //update();
+                //isReady = true;
             }
 
             @Override
@@ -107,8 +113,6 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
             }
         });
 
-
-        Logger.log("Set windows visibility on");
 
         //JUST FOR JAVAFX
 
@@ -150,6 +154,10 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
     public void setVisible(boolean visibility) {
         window.setVisible(visibility);
+        if (visibility) {
+            window.requestFocus();
+            Logger.log("Set window visibility on");
+        }
     }
 
     public void setDecorated(boolean isDecorated) {
@@ -289,9 +297,12 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
     public void update() {
 
-        //if (renderer != null) {
+        if (!window.isVisible())
+            return;
+
+        if (renderer != null) {
             renderer.render();
-        //}
+        }
     }
 
     public void addObject(notSoSimpleObject object) {
