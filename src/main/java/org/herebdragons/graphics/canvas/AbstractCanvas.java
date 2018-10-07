@@ -123,9 +123,18 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         //canvas.createBufferStrategy(Config.BUFFERING);
         //bs = canvas.getBufferStrategy();
 
+
         setVisible(true);
         requestFocus();
 
+    }
+
+    public void update() {
+
+        if (window == null || !window.isVisible())
+            return;
+
+        renderer.render();
     }
 
     public void addKeyListener(notSoSimpleKeyboardListener keyInput) {
@@ -277,15 +286,21 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
                 setVisible(false);
                 break;
             case EXIT_ON_CLOSE:
-                window.dispose();
-                Logger.err("Exiting notSoSimpleGraphics");
-                System.exit(0);
+                shutDown();
                 break;
             case DISPOSE_ON_CLOSE:
                 window.dispose();
                 break;
         }
 
+    }
+
+    private void shutDown(){
+
+
+        window.dispose();
+        Logger.err("Exiting notSoSimpleGraphics");
+        System.exit(0);
     }
 
     public void setIcon(Image image) {
@@ -295,15 +310,6 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         window.setIconImage(image);
     }
 
-    public void update() {
-
-        if (!window.isVisible())
-            return;
-
-        if (renderer != null) {
-            renderer.render();
-        }
-    }
 
     public void addObject(notSoSimpleObject object) {
         Logger.log("Adding object to the Canvas");

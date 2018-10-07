@@ -1,5 +1,7 @@
 package org.herebdragons.graphics.canvas;
 
+import org.herebdragons.utils.Logger;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -21,43 +23,83 @@ import java.awt.*;
 class Jwindow extends JFrame implements notSoSimpleWindow {
 
     private boolean isReady = false;
+    private notSoSimpleRenderer renderer;
 
     @Override
     public void repaint(long l, int i, int i1, int i2, int i3) {
-        //super.repaint();
-        System.err.println("Called complex Repaint");
+        Logger.log("Entering complex repaint");
+        //super.repaint(l,i,i1,i2,i3);
+
+        if (renderer != null) {
+            Logger.err("Calling Render from complex repaint");
+            renderer.render();
+        }
     }
 
     @Override
     public void repaint() {
-        System.err.println("Called simple Repaint");
+        Logger.log("Entering repaint");
+        super.repaint();
+        if (renderer != null) {
+            Logger.err("Calling Render from simple repaint");
+            renderer.render();
+        }
     }
 
     @Override
     public void repaint(long l) {
-        System.err.println("Called long Repaint");
+        Logger.log("Entering long Repaint");
+        super.repaint(l);
+        if (renderer != null) {
+            Logger.err("Calling Render from long repaint");
+            renderer.render();
+        }
     }
 
     @Override
     public void paint(Graphics graphics) {
-        //super.paint(graphics);
-        System.err.println("Called Paint");
+        Logger.log("Entering Paint");
+        super.paint(graphics);
+        if (renderer != null) {
+            Logger.err("Calling Render from Paint");
+            renderer.render();
+        }
     }
 
     @Override
     public void addNotify() {
         super.addNotify();
-        System.err.println("Called Notify");
+
+        Logger.log("Entering Notify");
         isReady = true;
+        if (renderer !=null){
+            Logger.err("Calling Render from Notify");
+            renderer.render();
+        }
+
     }
 
     @Override
     public void paintAll(Graphics graphics) {
-        System.err.println("Called PaintAll");
+
+        Logger.log("Entering PaintAll");
+
+        if (renderer != null) {
+            Logger.err("Calling Render from paintAll");
+            renderer.render();
+        }
     }
 
     public boolean isReady() {
         return isReady;
+    }
+
+    public notSoSimpleRenderer getRenderer() {
+        return renderer;
+    }
+
+    public void setRenderer(notSoSimpleRenderer renderer) {
+        this.renderer = renderer;
     }
 }
 

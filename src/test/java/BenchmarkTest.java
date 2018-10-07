@@ -13,12 +13,13 @@ import org.herebdragons.utils.FrameRate;
 import org.herebdragons.utils.Logger;
 import org.herebdragons.utils.SystemManager;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BenchmarkTest {
+public class BenchmarkTest implements Runnable{
 
     private static volatile boolean running;
 
@@ -35,6 +36,8 @@ public class BenchmarkTest {
     private static notSoSimpleKeyboardListener keyInput;
     private static notSoSimpleMouseListener mouseInput;
 
+    private static notSoSimpleCanvas canvas;
+
 
     public static void main(String[] args) {
 
@@ -47,21 +50,20 @@ public class BenchmarkTest {
         Logger.setLogging(false);
         frameRate.setDebug(true);
 
-        ObjectManager objectManager = new ObjectManager();
-
-        notSoSimpleCanvas canvas = CanvasFactory.createCanvas(Config.LIBRARY_NAME +
+        canvas = CanvasFactory.createCanvas(Config.LIBRARY_NAME +
                 " - Benchmark test", new Dimension(2000, 1000), RendererType.JAVA_2D);
-
-        canvas.setObjectManager(objectManager);
 
         canvas.setBgColor(Color.BLUE);
 
         Rectangle rect = new Rectangle(50, 50, 300, 300);
-        //rect.fill(new Color(253, 34, 21, 1));
 
-        //canvas.run();
+        canvas.addObject(rect);
 
-        canvas.update();
+        CanvasFactory.startCanvas(canvas);
+
+        SwingUtilities.invokeLater(new BenchmarkTest());
+
+
 
         /*//Alternating FullScreen
         for (int j = 0; j < 2; j++) {
@@ -99,6 +101,63 @@ public class BenchmarkTest {
                 }
             }
         }*/
+    }
+
+    public void run(){
+        long beforeTime, afterTime, timeDiff, sleepTime;
+        long overSleepTime = 0L;
+        int noDelays = 0;
+        long excess = 0L;
+        Graphics g;
+
+        gameStartTime = System.nanoTime();
+        prevStatsTime = gameStartTime;
+        beforeTime = gameStartTime;
+
+        running = true;
+
+        while(running) {
+            gameUpdate();
+            gameRender();   // render the game to a buffer
+            paintScreen();  // draw the buffer on-screen
+
+            afterTime = System.nanoTime();
+            timeDiff = afterTime - beforeTime;
+            sleepTime = (period - timeDiff) - overSleepTime;
+
+            if (sleepTime > 0) {   // some time left in this cycle
+                try {
+                    Thread.sleep(sleepTime/1000000L);  // nano -> ms
+                }
+                catch(InterruptedException ex){}
+                overSleepTime = (System.nanoTime()- afterTime) - sleepTime;
+            }
+            else {    // sleepTime <= 0; the frame took longer than the period
+                excess -= sleepTime;  // store excess time value
+                overSleepTime = 0L;
+
+                if (++noDelays >= NO_DELAYS_PER_YIELD) {
+                    Thread.yield();   // give another thread a chance to run
+                    noDelays = 0;
+                }
+            }
+
+            beforeTime = System.nanoTime();
+
+      /* If frame animation is taking too long, update the game state
+         without rendering it, to get the updates/sec nearer to
+         the required FPS. */
+            int skips = 0;
+            while((excess > period) && (skips < MAX_FRAME_SKIPS)) {
+                excess -= period;
+                gameUpdate();    // update state but don't render
+                skips++;
+            }
+            framesSkipped += skips;
+
+            storeStats();
+        }
+
     }
 
     private static void runTest(boolean fullScreen, Map<String, Integer> results, DisplayMode dm) {

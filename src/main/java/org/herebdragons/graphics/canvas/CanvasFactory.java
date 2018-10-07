@@ -20,7 +20,7 @@ public class CanvasFactory {
     private static int numThreads = Config.DEFAULT_THREADS;
     private static RendererType rendererType = Config.DEFAULT_RENDERER;
 
-    private static boolean isDecorated=Config.DEFAULT_WINDOW_DECORATION;
+    private static boolean isDecorated = Config.DEFAULT_WINDOW_DECORATION;
 
     private static WindowBehaviour behaviourOnExit = Config.DEFAULT_BEHAVIOUR_ON_EXIT;
 
@@ -79,9 +79,9 @@ public class CanvasFactory {
             SwingUtilities.invokeAndWait(nssCanvas);
 
         } catch (InterruptedException e) {
-            Logger.log("Problem Starting Canvas - "+ e.getMessage());
+            Logger.log("Problem Starting Canvas - " + e.getMessage());
         } catch (InvocationTargetException e) {
-            Logger.log("Problem Starting Canvas - "+ e.getMessage());
+            Logger.log("Problem Starting Canvas - " + e.getMessage());
         }
 
         System.out.println("JFDAKJBIAJDBG");
@@ -117,11 +117,11 @@ public class CanvasFactory {
         CanvasFactory.defaultThreading = defaultThreading;
     }
 
-    public static boolean isIsDecorated() {
+    public static boolean isDecorated() {
         return isDecorated;
     }
 
-    public static void setIsDecorated(boolean isDecorated) {
+    public static void setDecorated(boolean isDecorated) {
         CanvasFactory.isDecorated = isDecorated;
     }
 }

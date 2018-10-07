@@ -4,7 +4,11 @@ import org.herebdragons.Config;
 import org.herebdragons.utils.Logger;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.image.BufferStrategy;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <center><h1><strong>JframeRenderer class</strong></h1></center><br>
@@ -39,9 +43,19 @@ class JframeRenderer extends AbstractRenderer {
 
         this.window = (Jwindow) window;
 
+        this.window.setRenderer(this);
+
         this.canvas = new Canvas();
 
         canvas.setIgnoreRepaint(true);
+
+        canvas.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent componentEvent) {
+                Logger.err("Canvas Shown");
+            }
+
+        });
 
         this.window.add(canvas);
 
@@ -50,9 +64,18 @@ class JframeRenderer extends AbstractRenderer {
         canvas.createBufferStrategy(Config.BUFFERING);
 
         do {
+            Logger.log("Waiting for buffer");
             bs = canvas.getBufferStrategy();
         } while (bs == null);
 
+        Logger.log("Got a Buffering Strategy - " + bs);
+
+
+        /*try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
     }
 
     public void setFullscreen(boolean fullscreen) {

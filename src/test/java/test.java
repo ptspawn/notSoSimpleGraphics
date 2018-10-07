@@ -30,41 +30,18 @@ public class test {
 
         CanvasFactory.setDefaultThreading(ThreadBehaviour.AUTO);
 
+        CanvasFactory.setDecorated(true);
+
         notSoSimpleCanvas canvas = CanvasFactory.createCanvas("teste", new Dimension(2000, 1000),
                 RendererType.JAVA_2D);
 
-        //canvas.setDecorated(true);
-
         Rectangle rect = new Rectangle(400, 300, 200, 200);
+
         rect.setFill(Color.RED);
 
         canvas.addObject(rect);
 
         CanvasFactory.startCanvas(canvas);
-
-
-        /*while(!canvas.isReady()) {
-
-            System.out.println("wainting for canvas to be ready");
-            //canvas.update();
-        }*/
-        /*try {
-            Thread.sleep(250);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        canvas.setVisible(true);
-
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        //canvas.update();
-
-*/
 
         System.out.println("this is the end");
 

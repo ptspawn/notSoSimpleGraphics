@@ -2,6 +2,11 @@ package org.herebdragons.utils;
 
 public class FrameRate {
 
+
+    private static long recordingInterval = 1000000000L;
+    // private static long MAX_STATS_INTERVAL = 1000L;
+    // record stats every 1 second (roughly)
+
     protected int framesPerSecond;
     protected int updatesPerSecond;
     protected long lastTime;
@@ -44,10 +49,11 @@ public class FrameRate {
         currentTime = System.nanoTime();
         delta += currentTime - lastTime;
         lastTime = currentTime;
+
         frameCount++;
         incrementUpdate();
-        if (delta > 1e9) {
-            delta -= 1e9;
+        if (delta > recordingInterval) {
+            delta -= recordingInterval;
             framesPerSecond = frameCount;
             updatesPerSecond = updateCount;
             frameCount = updateCount = 0;
@@ -64,12 +70,19 @@ public class FrameRate {
             return 0;
         }
 
-        long remaining = (lastTime + cycleDuration - currentTime) / 1000000;
+        long remaining = (lastTime + cycleDuration - currentTime) / 1000000L;
 
         Logger.log(remaining + " miliseconds free");
         return remaining;
     }
 
+    public long getExcess(){
+        return -getRemainingInCyle();
+    }
+
+    public long getCycleDuration(){
+        return cycleDuration;
+    }
 
     public int getUpdatesPerSecond() {
         return updatesPerSecond;
