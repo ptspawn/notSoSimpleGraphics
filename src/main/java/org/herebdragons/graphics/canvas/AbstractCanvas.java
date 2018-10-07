@@ -37,13 +37,13 @@ import java.security.InvalidParameterException;
  */
 public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
-
     private notSoSimpleWindow window;
     private WindowBehaviour behaviorOnExit;
     protected boolean isDecorated;
     private String title;
     protected Dimension dimension;
     private boolean fullScreenMode = false;
+    private boolean isReady = false;
     private Paint bgColor = Config.DEFAULT_BG_COLOR;
 
     private KeyListener keyInput;
@@ -67,13 +67,14 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
     public void run() {
 
-        if (mouseInput != null)
+        if (mouseInput != null) {
             window.addMouseListener(mouseInput);
-
-        Logger.log("Adding " + keyInput);
+            Logger.log("Adding " + keyInput);
+        }
 
         if (keyInput != null)
             window.addKeyListener(keyInput);
+
         setLocationRelativeTo(null);
 
         Logger.log("starting frame");
@@ -85,15 +86,27 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
         window.setTitle(title);
         window.setResizable(false);
+        window.setIgnoreRepaint(true);
+        window.setBackground(Color.RED);
 
         Logger.log("Set windows visibility on");
 
         window.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowOpened(WindowEvent windowEvent) {
+                super.windowOpened(windowEvent);
+                renderer.init(window);
+                Logger.log("Window Ready" + windowEvent.paramString());
+                isReady = true;
+            }
+
             @Override
             public void windowClosing(WindowEvent windowEvent) {
                 close();
             }
         });
+
 
         Logger.log("Set windows visibility on");
 
@@ -106,7 +119,6 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         //canvas.createBufferStrategy(Config.BUFFERING);
         //bs = canvas.getBufferStrategy();
 
-        renderer.init(window);
         setVisible(true);
         requestFocus();
 
@@ -250,20 +262,19 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
     public void close() {
 
-        Logger.err("Exiting notSoSimpleGraphics");
-        System.exit(0);
-
         switch (behaviorOnExit) {
-            case EXIT_ON_CLOSE:
-                Logger.err("Exiting notSoSimpleGraphics");
-                System.exit(0);
-                break;
             case DO_NOTHING_ON_CLOSE:
                 break;
             case HIDE_ON_CLOSE:
-                window.setVisible(false);
+                setVisible(false);
+                break;
+            case EXIT_ON_CLOSE:
+                window.dispose();
+                Logger.err("Exiting notSoSimpleGraphics");
+                System.exit(0);
                 break;
             case DISPOSE_ON_CLOSE:
+                window.dispose();
                 break;
         }
 
@@ -278,9 +289,9 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
     public void update() {
 
-        if (renderer != null) {
+        //if (renderer != null) {
             renderer.render();
-        }
+        //}
     }
 
     public void addObject(notSoSimpleObject object) {
@@ -317,6 +328,11 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
     public notSoSimpleWindow getWindow() {
         return window;
+    }
+
+    public boolean isReady() {
+        System.out.println(isReady);
+        return isReady;
     }
 
     @Override

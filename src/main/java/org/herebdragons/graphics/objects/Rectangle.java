@@ -28,14 +28,15 @@ public class Rectangle extends notSoSimpleObject implements Fillable, Strokable 
                 position.x + dimension.width,
                 position.y + dimension.height);
 
-        if (stroke != null) {
-            g2d.setStroke(stroke);
-            g2d.draw(rectangle);
-        }
 
         if (fillColor != null) {
             g2d.setPaint(fillColor);
             g2d.fill(rectangle);
+        }
+        if (stroke != null) {
+            g2d.setPaint(strokeColor);
+            g2d.setStroke(stroke);
+            g2d.draw(rectangle);
         }
 
     }

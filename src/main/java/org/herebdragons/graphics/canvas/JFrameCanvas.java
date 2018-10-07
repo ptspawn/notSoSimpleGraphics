@@ -37,4 +37,6 @@ class JFrameCanvas extends AbstractCanvas {
         super.setWindow(window);
         super.run();
     }
+
+
 }

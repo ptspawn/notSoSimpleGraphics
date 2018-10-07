@@ -12,9 +12,12 @@ import java.awt.*;
 
 public class CanvasFactory {
 
+
     private static ThreadBehaviour defaultThreading = Config.DEFAULT_THREAD_BEHAVIOUR;
     private static int numThreads = Config.DEFAULT_THREADS;
     private static RendererType rendererType = Config.DEFAULT_RENDERER;
+
+    private static WindowBehaviour behaviourOnExit = Config.DEFAULT_BEHAVIOUR_ON_EXIT;
 
     private static Manager objectManager;
 
@@ -49,6 +52,13 @@ public class CanvasFactory {
                 break;
         }
 
+        canvas.setBehaviorOnExit(behaviourOnExit);
+        canvas.setTitle(title);
+
+        if (defaultThreading != ThreadBehaviour.USER_CONTROLED) {
+            startCanvas(canvas);
+        }
+
         return canvas;
 
     }
@@ -63,6 +73,7 @@ public class CanvasFactory {
 
                 }
             });
+
 
         } else {
 
@@ -80,5 +91,20 @@ public class CanvasFactory {
 
     public static void setRenderer(RendererType renderer) {
         rendererType = renderer;
+    }
+
+    public static WindowBehaviour getBehaviourOnExit() {
+        return behaviourOnExit;
+    }
+
+    public static void setBehaviourOnExit(WindowBehaviour behaviourOnExit) {
+        CanvasFactory.behaviourOnExit = behaviourOnExit;
+    }
+    public static ThreadBehaviour getDefaultThreading() {
+        return defaultThreading;
+    }
+
+    public static void setDefaultThreading(ThreadBehaviour defaultThreading) {
+        CanvasFactory.defaultThreading = defaultThreading;
     }
 }

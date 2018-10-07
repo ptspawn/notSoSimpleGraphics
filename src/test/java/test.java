@@ -1,6 +1,7 @@
 import org.herebdragons.graphics.canvas.CanvasFactory;
 import org.herebdragons.graphics.canvas.notSoSimpleCanvas;
 import org.herebdragons.graphics.enums.RendererType;
+import org.herebdragons.graphics.enums.ThreadBehaviour;
 import org.herebdragons.graphics.objects.Rectangle;
 import org.herebdragons.utils.Logger;
 import org.herebdragons.utils.SystemManager;
@@ -27,15 +28,31 @@ public class test {
 
         Logger.setLogging(true);
 
+       CanvasFactory.setDefaultThreading(ThreadBehaviour.AUTO);
+
         notSoSimpleCanvas canvas = CanvasFactory.createCanvas("teste", new Dimension(2000, 1000),
                 RendererType.JAVA_2D);
 
-        Rectangle rect = new Rectangle(400,300,200,200);
+        canvas.setDecorated(true);
+
+        Rectangle rect = new Rectangle(400, 300, 200, 200);
         rect.setFill(Color.RED);
 
         canvas.addObject(rect);
 
-        canvas.run();
+        //canvas.run();
+
+        /*while(!canvas.isReady()) {
+
+            System.out.println("wainting for canvas to be ready");
+            //canvas.update();
+        }*/
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         canvas.update();
 

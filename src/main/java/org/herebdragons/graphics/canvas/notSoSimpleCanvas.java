@@ -86,4 +86,6 @@ public interface notSoSimpleCanvas extends Runnable {
 
     notSoSimpleWindow getWindow();
 
+    boolean isReady();
+
 }

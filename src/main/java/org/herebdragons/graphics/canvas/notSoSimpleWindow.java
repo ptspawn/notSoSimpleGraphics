@@ -1,5 +1,6 @@
 package org.herebdragons.graphics.canvas;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
@@ -82,6 +83,12 @@ interface notSoSimpleWindow {
     boolean isUndecorated();
 
     void setBackground(Color color);
+
+    void setIgnoreRepaint(boolean b);
+
+    void addNotify();
+
+    void dispose();
 }
 
 

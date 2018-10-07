@@ -20,8 +20,34 @@ import java.awt.*;
  */
 class Jwindow extends JFrame implements notSoSimpleWindow {
     @Override
-    public void paintComponents(Graphics graphics) {
-        super.paintComponents(graphics);
+    public void repaint(long l, int i, int i1, int i2, int i3) {
+        System.err.println("Called Repaint");
+    }
+
+    @Override
+    public void repaint() {
+        System.err.println("Called Repaint");
+    }
+
+    @Override
+    public void repaint(long l) {
+        System.err.println("Called Repaint");
+    }
+
+    @Override
+    public void paint(Graphics graphics) {
+        System.err.println("Called Paint");
+    }
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        System.err.println("Called Notify");
+    }
+
+    @Override
+    public void paintAll(Graphics graphics) {
+        System.err.println("Called PaintAll");
     }
 }
 

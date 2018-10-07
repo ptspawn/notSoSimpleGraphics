@@ -7,6 +7,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.Color;
 
 import org.herebdragons.graphics.enums.ThreadBehaviour;
+import org.herebdragons.graphics.enums.WindowBehaviour;
 import org.herebdragons.graphics.objects.*;
 import org.herebdragons.graphics.canvas.*;
 
@@ -26,17 +27,22 @@ import org.herebdragons.graphics.canvas.*;
  * <p>A Utility class containing all the configurations required</p>
  */
 public class Config {
-    private Config(){}
+    private Config() {
+    }
+
+    public static final WindowBehaviour DEFAULT_BEHAVIOUR_ON_EXIT = WindowBehaviour.EXIT_ON_CLOSE;
 
     /**
      * The {@link int} represents the minimum possible size of the window (in square form)
+     *
      * @see
      * @see
      */
-    public static final ThreadBehaviour DEFAULT_THREAD_BEHAVIOUR = ThreadBehaviour.USER_CONTROLED;
+    public static final ThreadBehaviour DEFAULT_THREAD_BEHAVIOUR = ThreadBehaviour.AUTO;
 
     /**
      * The {@link int} represents the minimum possible size of the window (in square form)
+     *
      * @see
      * @see
      */
@@ -44,6 +50,7 @@ public class Config {
 
     /**
      * The {@link int} represents the minimum possible size of the window (in square form)
+     *
      * @see AbstractCanvas#setDimension(Dimension)
      * @see Dimension
      */
@@ -51,6 +58,7 @@ public class Config {
 
     /**
      * The {@link int} represents how many buffers should be user in the @link BufferStrategy
+     *
      * @see BufferStrategy#BufferStrategy()
      * @see notSoSimpleRenderer#render
      */
@@ -58,30 +66,33 @@ public class Config {
 
     /**
      * The {@link Color} represents the default fill color for {@link Fillable}.
+     *
      * @see Fillable#fill(Color)
      */
     public static final Color DEFAULT_FILL_COLOR = Color.RED;
 
     /**
      * The {@link Color} represents the default Fill color for the {@link Fillable}.
+     *
      * @see Fillable#fill(Color)
      */
-    public static final Color DEFAULT_BG_COLOR = Color.BLACK;
+    public static final Color DEFAULT_BG_COLOR = Color.YELLOW;
 
     /**
      * The {@link Color} represents the default stroke color for the {@link Strokable}.
+     *
      * @see Strokable#stroke(Color, int)
      */
     public static final Color DEFAULT_STROKE_COLOR = Color.BLUE;
 
     /**
      * The {@link int} represents the default stroke thickness for the {@link Strokable}.
+     *
      * @see Strokable#stroke(Color, int)
      */
     public static final int DEFAULT_STROKE_THINKNESS = 5;
 
-
-    public static final BasicStroke DEFAULT_STROKE_TYPE = new BasicStroke(DEFAULT_STROKE_THINKNESS);
+    public static final BasicStroke DEFAULT_STROKE_TYPE = new BasicStroke(DEFAULT_STROKE_THINKNESS,BasicStroke.CAP_BUTT,BasicStroke.JOIN_ROUND);
     /**
      * The {@link String} is self explanatory
      */
@@ -89,6 +100,7 @@ public class Config {
 
     /**
      * The {@link int} represents the default dimension of the window
+     *
      * @see AbstractCanvas#setDimension(Dimension)
      * @see Dimension
      */
@@ -96,6 +108,7 @@ public class Config {
 
     /**
      * The {@link RendererType} represents the default {@link RendererType}
+     *
      * @see RendererType
      * @see notSoSimpleRenderer
      */
