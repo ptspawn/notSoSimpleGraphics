@@ -13,6 +13,8 @@ public class FrameRate {
     protected long delta;
     protected long cycleDuration;
     protected long currentTime;
+    protected long overSleepTime;
+    protected long sleepTime;
 
 
     protected int frameCount;
@@ -38,6 +40,7 @@ public class FrameRate {
         lastTime = System.nanoTime();
         framesPerSecond = 0;
         updatesPerSecond = 0;
+        overSleepTime = 0;
     }
 
     public void incrementUpdate() {
@@ -47,7 +50,8 @@ public class FrameRate {
 
     public void calculate() {
         currentTime = System.nanoTime();
-        delta += currentTime - lastTime;
+        delta = currentTime - lastTime;
+        sleepTime = cycleDuration - delta - overSleepTime;
         lastTime = currentTime;
 
         frameCount++;
@@ -63,24 +67,29 @@ public class FrameRate {
         }
     }
 
-
+    public void updateOverSleepTime(){
+        overSleepTime=(System.nanoTime()-currentTime)-sleepTime;
+    }
     public long getRemainingInCyle() {
         if (!limited) {
             Logger.log("No FPS restrictions in place");
             return 0L;
         }
-
+/*
         long remaining = (lastTime + cycleDuration - currentTime) / 1000000L;
 
-        Logger.log(remaining + " miliseconds free");
-        return remaining;
+        Logger.log(remaining + " miliseconds free");*/
+        Logger.log(sleepTime + " miliseconds free");
+        return sleepTime;
     }
 
-    public long getExcess(){
-        return -getRemainingInCyle();
+    public long getExcess() {
+        if (sleepTime>0)
+            throw new IllegalStateException("The usage of this function requires remaining in cycle to be negative");
+        return getRemainingInCyle();
     }
 
-    public long getCycleDuration(){
+    public long getCycleDuration() {
         return cycleDuration;
     }
 
@@ -88,13 +97,16 @@ public class FrameRate {
         return updatesPerSecond;
     }
 
+    public void resetOverSleepTime(){
+        overSleepTime=0;
+    }
 
     public String getResult() {
         return "notSoSimpleFrameRate { " + String.format("FPS %s", framesPerSecond)
                 + " | " + String.format("UPS %s", updatesPerSecond) + " }";
     }
 
-    public int getFramesPerSecond(){
+    public int getFramesPerSecond() {
         return framesPerSecond;
     }
 

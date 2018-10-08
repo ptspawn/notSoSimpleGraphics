@@ -26,14 +26,15 @@ public class BenchmarkTest implements Runnable{
     private static final int PASSES = 5;
     private static final int PASSES_TO_IGNORE = 2;
     private static final int NO_DELAYS_PER_YIELD = 5;
-
+    private static final int MAX_FRAME_SKIPS = 5;
+    private static int framesSkipped;
 
     private static Text text;
     private static Rectangle slidingRectangle;
     private static Rectangle rotatingRectangle;
 
 
-    private static final FrameRate frameRate = new impFrameRate(-1);
+    private static final FrameRate frameRate = new FrameRate(-1);
     private static notSoSimpleKeyboardListener keyInput;
     private static notSoSimpleMouseListener mouseInput;
 
@@ -112,33 +113,51 @@ public class BenchmarkTest implements Runnable{
         Graphics g;
 
         frameRate.initialize();
-        gameStartTime = System.nanoTime();
+        /*gameStartTime = System.nanoTime();
         prevStatsTime = gameStartTime;
-        beforeTime = gameStartTime;
+        beforeTime = gameStartTime;*/
+
+        Logger.log("Starting game loop");
 
         running = true;
 
         while(running) {
-            gameUpdate();
-            gameRender();   // render the game to a buffer
-            paintScreen();  // draw the buffer on-screen
+            //gameUpdate();
+            //gameRender();   // render the game to a buffer
+            //paintScreen();  // draw the buffer on-screen
+
+            //Input Phase
+            getuserInput(canvas);
+
+            //update Cycle
+            slidingRectangle.move(1, 0);
+            if (slidingRectangle.getPosition().x > canvas.getDimension().width) {
+                slidingRectangle.moveTo(slidingRectangle.getDimension().width * -1, slidingRectangle.getPosition().y);
+            }
+
+            canvas.update();
 
             frameRate.calculate();
 
-            afterTime = System.nanoTime();
+            /*afterTime = System.nanoTime();
             timeDiff = afterTime - beforeTime;
-            sleepTime = (frameRate.getCycleDuration() - timeDiff) - overSleepTime;
+            sleepTime = (frameRate.getCycleDuration() - timeDiff) - overSleepTime;*/
 
-            if (sleepTime > 0) {   // some time left in this cycle
+            //if (sleepTime > 0) {   // some time left in this cycle
+            if (frameRate.getRemainingInCyle()>0){
                 try {
-                    Thread.sleep(sleepTime/1000000L);  // nano -> ms
+                    //Thread.sleep(sleepTime/1000000L);  // nano -> ms
+                    Thread.sleep(frameRate.getRemainingInCyle()/1000000L);  // nano -> ms
                 }
                 catch(InterruptedException ex){}
-                overSleepTime = (System.nanoTime()- afterTime) - sleepTime;
+                //overSleepTime = (System.nanoTime()- afterTime) - sleepTime;
+                frameRate.updateOverSleepTime();
             }
             else {    // sleepTime <= 0; the frame took longer than the period
-                excess -= sleepTime;  // store excess time value
-                overSleepTime = 0L;
+                //excess -= sleepTime;  // store excess time value
+                excess-=frameRate.getExcess();
+                frameRate.resetOverSleepTime();
+                //overSleepTime = 0L;
 
                 if (++noDelays >= NO_DELAYS_PER_YIELD) {
                     Thread.yield();   // give another thread a chance to run
@@ -152,14 +171,19 @@ public class BenchmarkTest implements Runnable{
          without rendering it, to get the updates/sec nearer to
          the required FPS. */
             int skips = 0;
-            while((excess > period) && (skips < MAX_FRAME_SKIPS)) {
-                excess -= period;
-                gameUpdate();    // update state but don't render
+            //while((excess > period) && (skips < MAX_FRAME_SKIPS)) {
+            while((excess > frameRate.getCycleDuration()) && (skips < MAX_FRAME_SKIPS)) {
+                excess -= frameRate.getCycleDuration();
+
+
+                //gameUpdate();    // update state but don't render
+
+
                 skips++;
             }
             framesSkipped += skips;
 
-            storeStats();
+            //storeStats();
         }
 
     }
@@ -299,7 +323,7 @@ public class BenchmarkTest implements Runnable{
         text.setText("FPS: " + fps);
     }
 
-    private static class impFrameRate extends FrameRate {
+   /* private static class impFrameRate extends FrameRate {
         private impFrameRate(int targetFPS) {
             super(targetFPS);
         }
@@ -323,6 +347,6 @@ public class BenchmarkTest implements Runnable{
                 }
             }
         }
-    }
+    }*/
 
 }
