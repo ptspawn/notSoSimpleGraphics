@@ -67,7 +67,7 @@ public class FrameRate {
     public long getRemainingInCyle() {
         if (!limited) {
             Logger.log("No FPS restrictions in place");
-            return 0;
+            return 0L;
         }
 
         long remaining = (lastTime + cycleDuration - currentTime) / 1000000L;

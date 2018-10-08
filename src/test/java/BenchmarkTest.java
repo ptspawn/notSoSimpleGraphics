@@ -25,6 +25,7 @@ public class BenchmarkTest implements Runnable{
 
     private static final int PASSES = 5;
     private static final int PASSES_TO_IGNORE = 2;
+    private static final int NO_DELAYS_PER_YIELD = 5;
 
 
     private static Text text;
@@ -110,6 +111,7 @@ public class BenchmarkTest implements Runnable{
         long excess = 0L;
         Graphics g;
 
+        frameRate.initialize();
         gameStartTime = System.nanoTime();
         prevStatsTime = gameStartTime;
         beforeTime = gameStartTime;
@@ -121,9 +123,11 @@ public class BenchmarkTest implements Runnable{
             gameRender();   // render the game to a buffer
             paintScreen();  // draw the buffer on-screen
 
+            frameRate.calculate();
+
             afterTime = System.nanoTime();
             timeDiff = afterTime - beforeTime;
-            sleepTime = (period - timeDiff) - overSleepTime;
+            sleepTime = (frameRate.getCycleDuration() - timeDiff) - overSleepTime;
 
             if (sleepTime > 0) {   // some time left in this cycle
                 try {
