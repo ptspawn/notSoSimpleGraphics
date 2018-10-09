@@ -49,7 +49,9 @@ class JframeRenderer extends AbstractRenderer {
 
         canvas.setIgnoreRepaint(true);
 
-        canvas.addComponentListener(new ComponentAdapter() {
+        canvas.addComponentListener(
+
+                new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent componentEvent) {
                 Logger.err("Canvas Shown");
@@ -70,12 +72,6 @@ class JframeRenderer extends AbstractRenderer {
 
         Logger.log("Got a Buffering Strategy - " + bs);
 
-
-        /*try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
     }
 
     public void setFullscreen(boolean fullscreen) {
