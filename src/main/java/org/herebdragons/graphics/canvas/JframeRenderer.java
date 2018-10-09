@@ -3,6 +3,7 @@ package org.herebdragons.graphics.canvas;
 import org.herebdragons.Config;
 import org.herebdragons.utils.Logger;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -49,9 +50,7 @@ class JframeRenderer extends AbstractRenderer {
 
         canvas.setIgnoreRepaint(true);
 
-        canvas.addComponentListener(
-
-                new ComponentAdapter() {
+        canvas.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent componentEvent) {
                 Logger.err("Canvas Shown");
@@ -71,6 +70,10 @@ class JframeRenderer extends AbstractRenderer {
         } while (bs == null);
 
         Logger.log("Got a Buffering Strategy - " + bs);
+
+        Logger.log("Calling CallBackFunction");
+
+        //cb.trigger();
 
     }
 

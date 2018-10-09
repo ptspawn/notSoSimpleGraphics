@@ -30,7 +30,7 @@ public class test {
 
         CanvasFactory.setDefaultThreading(ThreadBehaviour.AUTO);
 
-        CanvasFactory.setDecorated(true);
+        CanvasFactory.setDecorated(false);
 
         notSoSimpleCanvas canvas = CanvasFactory.createCanvas("teste", new Dimension(2000, 1000),
                 RendererType.JAVA_2D);
@@ -42,6 +42,8 @@ public class test {
         canvas.addObject(rect);
 
         CanvasFactory.startCanvas(canvas);
+
+        //canvas.update();
 
         System.out.println("this is the end");
 

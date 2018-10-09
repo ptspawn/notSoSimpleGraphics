@@ -47,7 +47,6 @@ public class CanvasFactory {
             case JAVA_2D:
                 canvas = new JFrameCanvas(size);
                 canvas.setDecorated(isDecorated);
-                canvas.setLocationRelativeTo(null);
                 canvas.setObjectManager(objectManager);
                 renderer = new JframeRenderer(canvas);
                 renderer.setObjectManager(objectManager);
@@ -75,6 +74,9 @@ public class CanvasFactory {
             throw new IllegalStateException("Thread behaviour is set to Manual...\nIf you know what your'te doing then you invoke run!! .|.");
 
         try {
+
+            //TODO
+            //implement a callback mechanism
 
             SwingUtilities.invokeAndWait(nssCanvas);
 

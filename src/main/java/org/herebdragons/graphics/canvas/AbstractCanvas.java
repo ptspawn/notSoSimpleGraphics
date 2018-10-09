@@ -80,6 +80,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         setDimension(dimension);
         setDecorated(isDecorated);
         window.setIgnoreRepaint(true);
+        window.setLocationRelativeTo(null);
 
         Logger.log("dimension set");
 
@@ -92,10 +93,20 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
             public void windowActivated(WindowEvent windowEvent) {
                 super.windowActivated(windowEvent);
                 if (!isReady) {
-                    renderer.init(window);
+
                     Logger.log("Window Activated for the first Time " + windowEvent.paramString());
-                    isReady = true;
+                    /*renderer.init(window, new CallBackable() {
+                        public void trigger()  {
+                            Logger.log("Call back Function triggered");
+
+                            update();
+
+                            isReady=true;
+                        }
+                    });*/
+                    renderer.init(window);
                     update();
+                    isReady = true;
                 }
             }
 

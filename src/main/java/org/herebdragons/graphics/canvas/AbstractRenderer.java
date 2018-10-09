@@ -29,7 +29,6 @@ import java.awt.image.BufferStrategy;
  */
 abstract class AbstractRenderer implements notSoSimpleRenderer {
 
-    protected Color bgColor;
     protected Dimension dimension;
     protected Manager objectManager;
 
@@ -40,7 +39,9 @@ abstract class AbstractRenderer implements notSoSimpleRenderer {
 
     public void init(notSoSimpleWindow window) {
 
+    }
 
+    public void init(notSoSimpleWindow window, CallBackable cb){
 
     }
 

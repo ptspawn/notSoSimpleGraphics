@@ -16,6 +16,6 @@ package org.herebdragons.graphics.canvas;
  */
 public interface CallBackable {
 
-    void callBack();
+    void trigger() ;
 
 }
