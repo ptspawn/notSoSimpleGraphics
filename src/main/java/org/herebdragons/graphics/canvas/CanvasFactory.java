@@ -65,7 +65,7 @@ public class CanvasFactory {
 
     }
 
-    public static void startCanvas(final notSoSimpleCanvas nssCanvas) {
+    public static void startCanvas(final notSoSimpleCanvas nssCanvas, final notSoSimpleRunnable callBack) {
 
         if (nssCanvas == null)
             throw new IllegalArgumentException("notSoSimpleCanvas can't be null!");
@@ -75,8 +75,7 @@ public class CanvasFactory {
 
         try {
 
-            //TODO
-            //implement a callback mechanism
+           nssCanvas.setReadyCallback(callBack);
 
             SwingUtilities.invokeAndWait(nssCanvas);
 
@@ -85,8 +84,6 @@ public class CanvasFactory {
         } catch (InvocationTargetException e) {
             Logger.log("Problem Starting Canvas - " + e.getMessage());
         }
-
-        System.out.println("JFDAKJBIAJDBG");
 
     }
 

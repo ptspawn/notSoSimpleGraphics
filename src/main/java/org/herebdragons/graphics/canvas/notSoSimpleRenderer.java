@@ -26,8 +26,6 @@ public interface notSoSimpleRenderer {
 
     void init(notSoSimpleWindow window);
 
-    void init(notSoSimpleWindow window, CallBackable cb);
-
     void setObjectManager(Manager objManager);
 
     void render();

@@ -95,15 +95,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
                 if (!isReady) {
 
                     Logger.log("Window Activated for the first Time " + windowEvent.paramString());
-                    /*renderer.init(window, new CallBackable() {
-                        public void trigger()  {
-                            Logger.log("Call back Function triggered");
 
-                            update();
-
-                            isReady=true;
-                        }
-                    });*/
                     renderer.init(window);
                     update();
                     isReady = true;
@@ -113,9 +105,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
             @Override
             public void windowOpened(WindowEvent windowEvent) {
                 super.windowOpened(windowEvent);
-                Logger.log("Window Ready" + windowEvent.paramString());
-                //update();
-                //isReady = true;
+                Logger.log("Window " + window.getTitle() + " Ready" + windowEvent.paramString());
             }
 
             @Override
@@ -152,7 +142,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         if (this.keyInput != null)
             throw new IllegalStateException("There is already a KeyListener");
 
-        System.out.println("adding keyListener to frame");
+        Logger.log("Adding keyListener to frame");
 
         this.keyInput = keyInput;
 
@@ -170,6 +160,10 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         if (window != null) {
             window.addMouseListener(mouseInput);
         }
+    }
+
+    public void setReadyCallback(notSoSimpleRunnable callBack){
+        SwingUtilities.invokeLater(callBack);
     }
 
     public void setVisible(boolean visibility) {
@@ -308,7 +302,6 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
     private void shutDown(){
 
-
         window.dispose();
         Logger.err("Exiting notSoSimpleGraphics");
         System.exit(0);
@@ -323,8 +316,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
 
     public void addObject(notSoSimpleObject object) {
-        Logger.log("Adding object to the Canvas");
-        System.out.println("Adding object " + object);
+        Logger.log("Adding object to the Canvas " + object);
         objectManager.addObject(object);
     }
 
@@ -359,7 +351,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
     }
 
     public boolean isReady() {
-        System.out.println(isReady);
+        Logger.log(String.valueOf(isReady));
         return isReady;
     }
 

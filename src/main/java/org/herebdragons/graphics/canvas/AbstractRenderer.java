@@ -41,10 +41,6 @@ abstract class AbstractRenderer implements notSoSimpleRenderer {
 
     }
 
-    public void init(notSoSimpleWindow window, CallBackable cb){
-
-    }
-
     public abstract void render();
 
     public void close() {

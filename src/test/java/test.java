@@ -1,5 +1,6 @@
 import org.herebdragons.graphics.canvas.CanvasFactory;
 import org.herebdragons.graphics.canvas.notSoSimpleCanvas;
+import org.herebdragons.graphics.canvas.notSoSimpleRunnable;
 import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.ThreadBehaviour;
 import org.herebdragons.graphics.objects.Rectangle;
@@ -22,7 +23,9 @@ import java.awt.*;
  * <h2>Description:</h2><br>
  * <p>Represents the <code>test class</code><br>.
  */
-public class test {
+public class test implements notSoSimpleRunnable {
+
+    private static notSoSimpleCanvas canvas;
 
     public static void main(String[] args) {
 
@@ -30,22 +33,32 @@ public class test {
 
         CanvasFactory.setDefaultThreading(ThreadBehaviour.AUTO);
 
-        CanvasFactory.setDecorated(false);
+        CanvasFactory.setDecorated(true);
 
-        notSoSimpleCanvas canvas = CanvasFactory.createCanvas("teste", new Dimension(2000, 1000),
+        canvas = CanvasFactory.createCanvas("teste", new Dimension(1280, 720),
                 RendererType.JAVA_2D);
 
-        Rectangle rect = new Rectangle(400, 300, 200, 200);
+        Rectangle rect = new Rectangle(50, 50, 720-150, 1280 - 150);
 
         rect.setFill(Color.RED);
 
         canvas.addObject(rect);
 
-        CanvasFactory.startCanvas(canvas);
+        CanvasFactory.startCanvas(canvas, new test());
 
-        //canvas.update();
+    }
 
-        System.out.println("this is the end");
+
+    @Override
+    public void run() {
+
+        Rectangle rectangle = new Rectangle(200,200,100,100);
+        rectangle.setStroke(Color.BLACK, new BasicStroke(2));
+        rectangle.setFill(Color.BLUE);
+
+        canvas.addObject(rectangle);
+
+        canvas.update();
 
     }
 }

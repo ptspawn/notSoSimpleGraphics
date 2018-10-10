@@ -71,10 +71,6 @@ class JframeRenderer extends AbstractRenderer {
 
         Logger.log("Got a Buffering Strategy - " + bs);
 
-        Logger.log("Calling CallBackFunction");
-
-        //cb.trigger();
-
     }
 
     public void setFullscreen(boolean fullscreen) {

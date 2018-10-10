@@ -30,7 +30,6 @@ public class ObjectManager implements Manager {
             object.render(g);
         }
 
-        System.out.println(objects.size());
     }
 
     @Override

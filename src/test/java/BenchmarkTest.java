@@ -2,6 +2,7 @@ import org.herebdragons.Config;
 import org.herebdragons.graphics.canvas.CanvasFactory;
 import org.herebdragons.graphics.canvas.notSoSimpleCanvas;
 import org.herebdragons.graphics.canvas.notSoSimpleRenderer;
+import org.herebdragons.graphics.canvas.notSoSimpleRunnable;
 import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.WindowBehaviour;
 import org.herebdragons.graphics.objects.ObjectManager;
@@ -19,7 +20,7 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BenchmarkTest implements Runnable{
+public class BenchmarkTest implements notSoSimpleRunnable {
 
     private static volatile boolean running;
 
@@ -61,9 +62,8 @@ public class BenchmarkTest implements Runnable{
 
         canvas.addObject(rect);
 
-        CanvasFactory.startCanvas(canvas);
+        CanvasFactory.startCanvas(canvas, new BenchmarkTest());
 
-        SwingUtilities.invokeLater(new BenchmarkTest());
 
 
 

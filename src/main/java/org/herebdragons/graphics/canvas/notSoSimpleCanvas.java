@@ -88,4 +88,6 @@ public interface notSoSimpleCanvas extends Runnable {
 
     boolean isReady();
 
+    void setReadyCallback(notSoSimpleRunnable callBack);
+
 }
