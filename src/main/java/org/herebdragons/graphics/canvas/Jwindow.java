@@ -20,10 +20,11 @@ import java.awt.*;
  * <h2>Description:</h2><br>
  * <p>Represents the <code>Jwindow class</code><br>.
  */
-class Jwindow extends JFrame implements notSoSimpleWindow {
+public class Jwindow extends JFrame implements notSoSimpleWindow {
 
     private boolean isReady = false;
     private notSoSimpleRenderer renderer;
+    private boolean isFullscreen;
 
     @Override
     public void repaint(long l, int i, int i1, int i2, int i3) {
@@ -77,6 +78,14 @@ class Jwindow extends JFrame implements notSoSimpleWindow {
             renderer.render();
         }
 
+    }
+
+    public boolean isFullscreen() {
+        return isFullscreen;
+    }
+
+    public void setFullscreen(boolean isFullscreen){
+        this.isFullscreen=isFullscreen;
     }
 
     @Override

@@ -106,7 +106,7 @@ public class Config {
      * @see AbstractCanvas#setDimension(Dimension)
      * @see Dimension
      */
-    public static Dimension DEFAULT_DIMENSION = new Dimension(1280, 800);
+    public static Dimension DEFAULT_DIMENSION = new Dimension(1280, 720);
 
     /**
      * The {@link RendererType} represents the default {@link RendererType}

@@ -1,5 +1,9 @@
 package org.herebdragons.utils;
 
+import org.herebdragons.graphics.canvas.Jwindow;
+import org.herebdragons.graphics.canvas.notSoSimpleWindow;
+
+import javax.swing.*;
 import java.awt.*;
 
 public class SystemManager {
@@ -10,6 +14,8 @@ public class SystemManager {
     private static DisplayMode dm;
 
     private static int screenWidth, screenHeight;
+
+    private SystemManager(){}
 
     private static void getDevices() {
         if (ge == null)
@@ -70,10 +76,9 @@ public class SystemManager {
         });
     }
 
-    public static boolean checkCfg(GraphicsConfiguration gc) {
-        System.setProperty("Dsun.java2d.opengl", "True");
+    public static void printGraphicsCfg(GraphicsConfiguration gc) {
+
         Logger.setLogging(true);
-        Logger.err(System.getProperty("Dsun.java2d.opengl"));
         Logger.log("Backbuffer accel: " + gc.getBufferCapabilities().getBackBufferCapabilities().isAccelerated());
         Logger.log("Backbuffer volat: " + gc.getBufferCapabilities().getBackBufferCapabilities().isTrueVolatile());
         Logger.log("Frontbuffer accel: " + gc.getBufferCapabilities().getFrontBufferCapabilities().isAccelerated());
@@ -83,11 +88,23 @@ public class SystemManager {
         Logger.log("Requires Full Screen: " + gc.getBufferCapabilities().isFullScreenRequired());
 
         Logger.log("Img Volatile: " + gc.getImageCapabilities().isTrueVolatile());
-        Logger.log("Img Accelarated: " + gc.getImageCapabilities().isAccelerated());
+        Logger.log("Img Accelerated: " + gc.getImageCapabilities().isAccelerated());
 
         Logger.log("Available Accel Mem: " + gc.getDevice().getAvailableAcceleratedMemory());
         Logger.setLogging(false);
-        return true; ///////////
+
+    }
+
+    public static void goFullScreen(notSoSimpleWindow window) throws IllegalStateException{
+        if (gd==null)
+            getDevices();
+
+        if(!gd.isFullScreenSupported())
+            throw new IllegalStateException("Full-screen exclusive mode not supported by the current Graphics Device");
+
+        if (window instanceof Jwindow)
+            gd.setFullScreenWindow(((Jwindow)window));
+
     }
 
 

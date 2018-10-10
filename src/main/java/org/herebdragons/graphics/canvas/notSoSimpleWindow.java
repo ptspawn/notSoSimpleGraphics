@@ -20,7 +20,7 @@ import java.awt.image.BufferStrategy;
  * <p>Represents the <code>notSoSimpleWindow interface</code><br>.
  */
 
-interface notSoSimpleWindow {
+public interface notSoSimpleWindow {
 
     String getName();
 
@@ -89,6 +89,7 @@ interface notSoSimpleWindow {
     void addNotify();
 
     void dispose();
+
 }
 
 

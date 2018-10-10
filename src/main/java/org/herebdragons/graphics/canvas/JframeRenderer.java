@@ -46,23 +46,32 @@ class JframeRenderer extends AbstractRenderer {
 
         this.window.setRenderer(this);
 
+        if (jcanvas.isFullscreen()){
+
+        }
+
         this.canvas = new Canvas();
 
         canvas.setIgnoreRepaint(true);
-
-        canvas.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent componentEvent) {
-                Logger.err("Canvas Shown");
-            }
-
-        });
 
         this.window.add(canvas);
 
         canvas.setSize(this.window.getSize());
 
-        canvas.createBufferStrategy(Config.BUFFERING);
+        try {
+
+            EventQueue.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    canvas.createBufferStrategy(Config.BUFFERING);
+                }
+            });
+
+        } catch (InterruptedException e) {
+            Logger.err("Error creating Buffer Strategy " + e.getMessage());
+        } catch (InvocationTargetException e) {
+            Logger.err("Error creating Buffer Strategy " + e.getMessage());
+        }
 
         do {
             Logger.log("Waiting for buffer");
@@ -74,6 +83,9 @@ class JframeRenderer extends AbstractRenderer {
     }
 
     public void setFullscreen(boolean fullscreen) {
+
+
+
       /*  DisplayMode dispMode = null;
 
         if (!fullscreen) {

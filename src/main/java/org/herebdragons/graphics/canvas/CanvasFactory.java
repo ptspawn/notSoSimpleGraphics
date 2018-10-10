@@ -75,7 +75,7 @@ public class CanvasFactory {
 
         try {
 
-           nssCanvas.setReadyCallback(callBack);
+            nssCanvas.setReadyCallback(callBack);
 
             SwingUtilities.invokeAndWait(nssCanvas);
 

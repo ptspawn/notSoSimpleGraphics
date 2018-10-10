@@ -65,44 +65,6 @@ public class BenchmarkTest implements notSoSimpleRunnable {
         CanvasFactory.startCanvas(canvas, new BenchmarkTest());
 
 
-
-
-        /*//Alternating FullScreen
-        for (int j = 0; j < 2; j++) {
-            switch (j) {
-                case 0:
-                    fullScreen = false;
-                    break;
-                case 1:
-                    fullScreen = true;
-                    break;
-            }
-
-            //Alternating DisplayModes for when in fullscreen mode
-
-            if (fullScreen) {
-                for (int i = 0; i < RendererType.values().length - 2; i++) {  //Minus two to skip JavaFX and openGL for now
-
-                    CanvasFactory.setRenderer(RendererType.values()[i]);
-
-                    if (!fullScreen) {
-
-                        for (DisplayMode dm : dl) {
-
-                            dm = SystemManager.convertDisplayMode(dm);
-
-                            runTest(fullScreen, results, dm);
-
-                        }
-
-                    } else {
-
-                        runTest(fullScreen, results, SystemManager.getCurrentDisplayMode());
-
-                    }
-                }
-            }
-        }*/
     }
 
     public void run(){

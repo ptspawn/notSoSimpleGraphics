@@ -56,7 +56,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         dimension = size;
 
         if (size == null) {
-            dimension = new Dimension(800, 600); //Config.MIN_SIZE, Config.MIN_SIZE);
+            dimension = Config.DEFAULT_DIMENSION;
             fullScreenMode = true;
         }
 
