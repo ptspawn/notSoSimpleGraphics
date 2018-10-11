@@ -97,23 +97,20 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
                     Logger.log("Window Activated for the first Time " + windowEvent.paramString());
 
-                    Thread renderInitThread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            renderer.init(window);
-                        }
-                    });
 
-                    renderInitThread.start();
+                    renderer.init(window);
 
-                    synchronized (renderInitThread) {
+                    while(!renderer.isReady()){
                         try {
-                            renderInitThread.wait();
+                            Logger.log("Renderer is ready");
+                            wait();
                         } catch (InterruptedException e) {
-                            Logger.log("Error waiting for the renderer  - " + e.getMessage());
+                            Logger.err("Problem waiting for renderer start");
                         }
+
                     }
-                    Logger.log("Waiting for renderer  initialize");
+
+                    Logger.log("Going for canvas update");
 
                     update();
 

@@ -32,12 +32,14 @@ class JframeRenderer extends AbstractRenderer {
     private Canvas canvas;
     private BufferStrategy bs;
 
+    private boolean ready;
+
     public JframeRenderer(notSoSimpleCanvas jcanvas) {
         this.jcanvas = jcanvas;
     }
 
     @Override
-    public void init(notSoSimpleWindow window) {
+    public synchronized void init(notSoSimpleWindow window) {
 
         if (!(window instanceof Jwindow))
             throw new IllegalArgumentException("Window not instance of Jwindow");
@@ -69,20 +71,21 @@ class JframeRenderer extends AbstractRenderer {
         do {
             Logger.log("Waiting for buffer");
 
-            bs= jcanvas.isFullscreen()?this.window.getBufferStrategy():canvas.getBufferStrategy();
+            bs = jcanvas.isFullscreen() ? this.window.getBufferStrategy() : canvas.getBufferStrategy();
 
         } while (bs == null);
 
         Logger.log("Got a Buffering Strategy - " + bs);
 
-        synchronized (this) {
-            this.notifyAll();
-            Logger.log("Notify triggered");
-        }
+        ready = true;
+
+        notifyAll();
     }
 
     public void render() {
         Logger.log("Entering Update method from Canvas");
+
+        final int MAX_DRAW_ATTEMPTS;
 
         do {
             do {
@@ -107,6 +110,8 @@ class JframeRenderer extends AbstractRenderer {
                     }
                 }
 
+                Logger.log("BufferStrategy contents Restored " + bs.contentsRestored());
+
             } while (!bs.contentsRestored());
 
             bs.show();  //
@@ -120,5 +125,9 @@ class JframeRenderer extends AbstractRenderer {
         Logger.log("Called JFrame Renderer Close");
         //Finish up
         super.close();
+    }
+
+    public boolean isReady(){
+        return ready;
     }
 }
