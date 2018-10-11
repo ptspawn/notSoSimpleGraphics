@@ -77,42 +77,6 @@ class JframeRenderer extends AbstractRenderer {
 
     }
 
-    public void setFullscreen(boolean fullscreen) {
-
-
-
-      /*  DisplayMode dispMode = null;
-
-        if (!fullscreen) {
-            //setDecorated(isDecorated);
-            //setResizable(isResizable);
-            //setLocationRelativeTo(null);
-
-            graphicsDevice.setFullScreenWindow(null);
-            dispMode = currentDisplayMode;
-
-        } else {
-
-            if (!graphicsDevice.isFullScreenSupported()) {
-                Logger.err("ERROR: Not Supported!!!");
-            }
-
-            //setDecorated(false);
-            //setResizable(false);
-            //graphicsDevice.setFullScreenWindow(window);
-            dispMode = gameDisplayMode;
-        }
-
-
-        if (graphicsDevice != null && graphicsDevice.isDisplayChangeSupported()) {
-            try {
-                graphicsDevice.setDisplayMode(dispMode);
-            } catch (Exception ex) {
-                Logger.err("Problem setting the display mode\n" + ex.getMessage());
-            }
-        }*/
-    }
-
     public void render() {
         Logger.log("Entering Update method from Canvas");
 
@@ -123,9 +87,8 @@ class JframeRenderer extends AbstractRenderer {
 
                     Logger.log("Started Rendering");
                     g2d = (Graphics2D) bs.getDrawGraphics();
-                    //g2d = (Graphics2D) canvas.getGraphics();
                     g2d.setPaint(jcanvas.getBgColor());
-                    g2d.fill(canvas.getBounds());
+                    //g2d.fill(canvas.getBounds());
 
                     objectManager.render(g2d);
 

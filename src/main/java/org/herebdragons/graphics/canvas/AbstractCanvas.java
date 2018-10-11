@@ -51,6 +51,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
     private Manager objectManager;
     protected notSoSimpleRenderer renderer;
+    private notSoSimpleRunnable callBack;
 
     AbstractCanvas(Dimension size) {
         dimension = size;
@@ -99,6 +100,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
                     renderer.init(window);
                     update();
                     isReady = true;
+                    SwingUtilities.invokeLater(callBack);
                 }
             }
 
@@ -114,16 +116,9 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
             }
         });
 
-
         //JUST FOR JAVAFX
 
         //final GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        //
-
-        //canvas.createBufferStrategy(Config.BUFFERING);
-        //bs = canvas.getBufferStrategy();
-
 
         setVisible(true);
         requestFocus();
@@ -162,8 +157,8 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         }
     }
 
-    public void setReadyCallback(notSoSimpleRunnable callBack){
-        SwingUtilities.invokeLater(callBack);
+    public void setReadyCallback(notSoSimpleRunnable callBack) {
+        this.callBack = callBack;
     }
 
     public void setVisible(boolean visibility) {
@@ -300,7 +295,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
     }
 
-    private void shutDown(){
+    private void shutDown() {
 
         window.dispose();
         Logger.err("Exiting notSoSimpleGraphics");
