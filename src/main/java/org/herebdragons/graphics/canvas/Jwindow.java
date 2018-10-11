@@ -31,10 +31,10 @@ public class Jwindow extends JFrame implements notSoSimpleWindow {
         Logger.log("Entering complex repaint");
         //super.repaint(l,i,i1,i2,i3);
 
-        if (renderer != null) {
+        /*if (renderer != null) {
             Logger.err("Calling Render from complex repaint");
             renderer.render();
-        }
+        }*/
     }
 
     @Override

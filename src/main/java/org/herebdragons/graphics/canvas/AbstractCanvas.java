@@ -100,7 +100,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
                     renderer.init(window);
                     update();
                     isReady = true;
-                    SwingUtilities.invokeLater(callBack);
+                    callBack.run();
                 }
             }
 
