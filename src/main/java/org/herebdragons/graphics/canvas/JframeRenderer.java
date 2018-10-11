@@ -75,6 +75,10 @@ class JframeRenderer extends AbstractRenderer {
 
         Logger.log("Got a Buffering Strategy - " + bs);
 
+        synchronized (this) {
+            this.notifyAll();
+            Logger.log("Notify triggered");
+        }
     }
 
     public void render() {
