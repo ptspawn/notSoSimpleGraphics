@@ -48,15 +48,19 @@ class JframeRenderer extends AbstractRenderer {
 
         if (jcanvas.isFullscreen()) {
 
+            SystemManager.goFullScreen(window);
+
+        } else {
+
+            this.canvas = new Canvas();
+
+            canvas.setIgnoreRepaint(true);
+
+            this.window.add(canvas);
+
+            canvas.setSize(this.window.getSize());
+
         }
-
-        this.canvas = new Canvas();
-
-        canvas.setIgnoreRepaint(true);
-
-        this.window.add(canvas);
-
-        canvas.setSize(this.window.getSize());
 
         canvas.createBufferStrategy(Config.BUFFERING);
 
