@@ -90,6 +90,8 @@ public interface notSoSimpleWindow {
 
     void dispose();
 
+    void setFullScreen(boolean isFullScreen);
+
 }
 
 

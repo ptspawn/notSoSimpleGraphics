@@ -105,7 +105,7 @@ class SystemManager {
 
         if (window instanceof Jwindow) {
             gd.setFullScreenWindow(((Jwindow) window));
-            window.setFullscreen(true);
+            window.setFullScreen(true);
         }
     }
 

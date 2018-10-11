@@ -80,11 +80,7 @@ public class Jwindow extends JFrame implements notSoSimpleWindow {
 
     }
 
-    public boolean isFullscreen() {
-        return isFullscreen;
-    }
-
-    public void setFullscreen(boolean isFullscreen){
+    public void setFullScreen(boolean isFullscreen){
         this.isFullscreen=isFullscreen;
     }
 
