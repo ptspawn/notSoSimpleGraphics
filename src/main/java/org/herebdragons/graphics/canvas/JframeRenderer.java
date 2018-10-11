@@ -46,7 +46,7 @@ class JframeRenderer extends AbstractRenderer {
 
         this.window.setRenderer(this);
 
-        if (jcanvas.isFullscreen()){
+        if (jcanvas.isFullscreen()) {
 
         }
 
@@ -58,20 +58,7 @@ class JframeRenderer extends AbstractRenderer {
 
         canvas.setSize(this.window.getSize());
 
-        try {
-
-            EventQueue.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    canvas.createBufferStrategy(Config.BUFFERING);
-                }
-            });
-
-        } catch (InterruptedException e) {
-            Logger.err("Error creating Buffer Strategy " + e.getMessage());
-        } catch (InvocationTargetException e) {
-            Logger.err("Error creating Buffer Strategy " + e.getMessage());
-        }
+        canvas.createBufferStrategy(Config.BUFFERING);
 
         do {
             Logger.log("Waiting for buffer");
