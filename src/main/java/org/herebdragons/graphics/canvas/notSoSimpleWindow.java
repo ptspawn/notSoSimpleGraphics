@@ -56,6 +56,8 @@ public interface notSoSimpleWindow {
 
     void setVisible(boolean b);
 
+    boolean isFullscreen();
+
     void addWindowListener(WindowListener windowListener);
 
     void createBufferStrategy(int i);
@@ -91,6 +93,8 @@ public interface notSoSimpleWindow {
     void dispose();
 
     void setFullScreen(boolean isFullScreen);
+
+    boolean isDisplayable();
 
 }
 

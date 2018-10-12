@@ -54,6 +54,12 @@ class JframeRenderer extends AbstractRenderer {
 
             this.window.createBufferStrategy(Config.BUFFERING);
 
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Logger.err("Error waiting for buffer strategy");
+            }
+
         } else {
 
             this.canvas = new Canvas();
@@ -79,7 +85,7 @@ class JframeRenderer extends AbstractRenderer {
 
         ready = true;
 
-        notifyAll();
+        Logger.log("Renderer Ready");
     }
 
     public void render() {
@@ -94,8 +100,11 @@ class JframeRenderer extends AbstractRenderer {
 
                     Logger.log("Started Rendering");
                     g2d = (Graphics2D) bs.getDrawGraphics();
-                    g2d.setPaint(jcanvas.getBgColor());
-                    //g2d.fill(canvas.getBounds());
+
+                    if(bs.contentsLost() || bs.contentsRestored())
+                        continue;
+
+                    fillBackground(g2d);
 
                     objectManager.render(g2d);
 
@@ -110,14 +119,23 @@ class JframeRenderer extends AbstractRenderer {
                     }
                 }
 
-                Logger.log("BufferStrategy contents Restored " + bs.contentsRestored());
+                Logger.log("BufferStrategy contents Restored: " + bs.contentsRestored());
 
-            } while (!bs.contentsRestored());
+            } while (bs.contentsRestored());
 
-            bs.show();  //
+            Logger.log("BufferStrategy contents lost: " + bs.contentsLost());
+            bs.show();
+
 
         } while (bs.contentsLost());
 
+        Logger.log("Renderer painted to window");
+
+    }
+
+    private void fillBackground(Graphics2D g2d){
+        g2d.setPaint(jcanvas.getBgColor());
+        g2d.fillRect(0,0,jcanvas.getDimension().width,jcanvas.getDimension().height);
     }
 
     @Override

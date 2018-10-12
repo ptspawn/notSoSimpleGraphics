@@ -97,12 +97,11 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
                     Logger.log("Window Activated for the first Time " + windowEvent.paramString());
 
-
                     renderer.init(window);
 
                     while(!renderer.isReady()){
                         try {
-                            Logger.log("Renderer is ready");
+                            Logger.log("Waiting for renderer");
                             wait();
                         } catch (InterruptedException e) {
                             Logger.err("Problem waiting for renderer start");
@@ -118,7 +117,6 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
                     callBack.run();
 
-                    Logger.setLogging(false);
                 }
             }
 
@@ -139,14 +137,14 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         //final GraphicsContext gc = canvas.getGraphicsContext2D();
 
         setVisible(true);
-        requestFocus();
+        //requestFocus();
 
     }
 
     public void update() {
 
-        if (window == null || !window.isVisible())
-            return;
+        //if (window == null || !window.isVisible())
+            //return;
 
         renderer.render();
     }
@@ -182,7 +180,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
     public void setVisible(boolean visibility) {
         window.setVisible(visibility);
         if (visibility) {
-            window.requestFocus();
+            //window.requestFocus();
             Logger.log("Set window visibility on");
         }
     }

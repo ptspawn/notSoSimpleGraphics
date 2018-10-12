@@ -5,7 +5,6 @@ import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.ThreadBehaviour;
 import org.herebdragons.graphics.objects.Rectangle;
 import org.herebdragons.utils.Logger;
-import org.herebdragons.utils.SystemManager;
 
 import java.awt.*;
 
