@@ -33,7 +33,7 @@ class JFrameCanvas extends AbstractCanvas {
     @Override
     public void run() {
         Logger.log("creating new window");
-        Jwindow window = new Jwindow();
+        Jwindow window = new Jwindow(SystemManager.getGc());
         super.setWindow(window);
         super.run();
     }

@@ -51,6 +51,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
     private Manager objectManager;
     protected notSoSimpleRenderer renderer;
+    private notSoSimpleRunnable callBack;
 
     AbstractCanvas(Dimension size) {
         dimension = size;
@@ -92,14 +93,9 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
             @Override
             public void windowActivated(WindowEvent windowEvent) {
                 super.windowActivated(windowEvent);
-                if (!isReady) {
 
-                    Logger.log("Window Activated for the first Time " + windowEvent.paramString());
+                update();
 
-                    renderer.init(window);
-                    update();
-                    isReady = true;
-                }
             }
 
             @Override
@@ -114,26 +110,29 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
             }
         });
 
-
         //JUST FOR JAVAFX
 
         //final GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        //
+        if (!window.isFullscreen()){
+            setVisible(true);
+            requestFocus();
+        }
 
-        //canvas.createBufferStrategy(Config.BUFFERING);
-        //bs = canvas.getBufferStrategy();
+        renderer.init(window);
 
+        Logger.log("Going for canvas update");
 
-        setVisible(true);
-        requestFocus();
+        isReady = true;
+
+        callBack.run();
 
     }
 
     public void update() {
 
-        if (window == null || !window.isVisible())
-            return;
+        //if (window == null || !window.isVisible())
+            //return;
 
         renderer.render();
     }
@@ -162,14 +161,14 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         }
     }
 
-    public void setReadyCallback(notSoSimpleRunnable callBack){
-        SwingUtilities.invokeLater(callBack);
+    public void setReadyCallback(notSoSimpleRunnable callBack) {
+        this.callBack = callBack;
     }
 
     public void setVisible(boolean visibility) {
         window.setVisible(visibility);
         if (visibility) {
-            window.requestFocus();
+            //window.requestFocus();
             Logger.log("Set window visibility on");
         }
     }
@@ -300,7 +299,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
     }
 
-    private void shutDown(){
+    private void shutDown() {
 
         window.dispose();
         Logger.err("Exiting notSoSimpleGraphics");

@@ -26,15 +26,20 @@ public class Jwindow extends JFrame implements notSoSimpleWindow {
     private notSoSimpleRenderer renderer;
     private boolean isFullscreen;
 
+    Jwindow(GraphicsConfiguration gc){
+        super(gc);
+    }
+
     @Override
     public void repaint(long l, int i, int i1, int i2, int i3) {
         Logger.log("Entering complex repaint");
         //super.repaint(l,i,i1,i2,i3);
 
-        if (renderer != null) {
+
+        /*if (renderer != null) {
             Logger.err("Calling Render from complex repaint");
             renderer.render();
-        }
+        }*/
     }
 
     @Override
@@ -80,12 +85,12 @@ public class Jwindow extends JFrame implements notSoSimpleWindow {
 
     }
 
-    public boolean isFullscreen() {
-        return isFullscreen;
+    public void setFullScreen(boolean isFullscreen){
+        this.isFullscreen=isFullscreen;
     }
 
-    public void setFullscreen(boolean isFullscreen){
-        this.isFullscreen=isFullscreen;
+    public boolean isFullscreen(){
+        return isFullscreen;
     }
 
     @Override

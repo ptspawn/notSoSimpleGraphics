@@ -32,4 +32,6 @@ public interface notSoSimpleRenderer {
 
     void close();
 
+    boolean isReady();
+
    }

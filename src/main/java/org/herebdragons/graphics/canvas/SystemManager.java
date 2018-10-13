@@ -1,10 +1,7 @@
 package org.herebdragons.graphics.canvas;
 
-import org.herebdragons.graphics.canvas.Jwindow;
-import org.herebdragons.graphics.canvas.notSoSimpleWindow;
 import org.herebdragons.utils.Logger;
 
-import javax.swing.*;
 import java.awt.*;
 
 class SystemManager {
@@ -16,7 +13,8 @@ class SystemManager {
 
     private static int screenWidth, screenHeight;
 
-    private SystemManager(){}
+    private SystemManager() {
+    }
 
     private static void getDevices() {
         if (ge == null)
@@ -79,6 +77,8 @@ class SystemManager {
 
     public static void printGraphicsCfg(GraphicsConfiguration gc) {
 
+        boolean previousLogging = Logger.isIsLogging();
+
         Logger.setLogging(true);
         Logger.log("Backbuffer accel: " + gc.getBufferCapabilities().getBackBufferCapabilities().isAccelerated());
         Logger.log("Backbuffer volat: " + gc.getBufferCapabilities().getBackBufferCapabilities().isTrueVolatile());
@@ -87,26 +87,66 @@ class SystemManager {
         Logger.log("MultiBuffer avail: " + gc.getBufferCapabilities().isMultiBufferAvailable());
         Logger.log("Page Flipping: " + gc.getBufferCapabilities().isPageFlipping());
         Logger.log("Requires Full Screen: " + gc.getBufferCapabilities().isFullScreenRequired());
+        Logger.log("Flip Contents: " + getFlipText(gc.getBufferCapabilities().getFlipContents()));
 
         Logger.log("Img Volatile: " + gc.getImageCapabilities().isTrueVolatile());
         Logger.log("Img Accelerated: " + gc.getImageCapabilities().isAccelerated());
 
         Logger.log("Available Accel Mem: " + gc.getDevice().getAvailableAcceleratedMemory());
-        Logger.setLogging(false);
+        Logger.setLogging(previousLogging);
 
     }
 
-    public static void goFullScreen(notSoSimpleWindow window) throws IllegalStateException{
-        if (gd==null)
+    private static String getFlipText(BufferCapabilities.FlipContents flip) {
+        if (flip == null)
+            return "false";
+        else if (flip == BufferCapabilities.FlipContents.UNDEFINED)
+            return "Undefined";
+        else if (flip == BufferCapabilities.FlipContents.BACKGROUND)
+            return "Background";
+        else if (flip == BufferCapabilities.FlipContents.PRIOR)
+            return "Prior";
+        else // if (flip == BufferCapabilities.FlipContents.COPIED)
+            return "Copied";
+    } // end of getFlipTest()
+
+    public static void goFullScreen(notSoSimpleWindow window) throws IllegalStateException {
+
+        if (gd == null)
             getDevices();
 
-        if(!gd.isFullScreenSupported())
+        if (!gd.isFullScreenSupported())
             throw new IllegalStateException("Full-screen exclusive mode not supported by the current Graphics Device");
+
+        if (!window.isUndecorated()) {
+            window.setUndecorated(true);
+        }
+
+        window.setResizable(false);
+
+        /*Logger.err("Pre-Fullscreen cfg:");
+        if (Logger.isIsLogging()) {
+            printGraphicsCfg(gd.getDefaultConfiguration());
+            Logger.log("\n");
+        }*/
 
         if (window instanceof Jwindow) {
             gd.setFullScreenWindow(((Jwindow) window));
-            //window.setFullscreen(true);
+            ((Jwindow) window).validate();
+            window.setFullScreen(true);
         }
+
+       /* try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Logger.err("Problem waiting for FullScreen");
+        }*/
+
+        /*Logger.err("Post-Fullscreen cfg:");
+        if (Logger.isIsLogging()) {
+            printGraphicsCfg(gd.getDefaultConfiguration());
+            Logger.log("\n");
+        }*/
     }
 
 

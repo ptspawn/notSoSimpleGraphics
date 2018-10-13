@@ -5,7 +5,6 @@ import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.ThreadBehaviour;
 import org.herebdragons.graphics.objects.Rectangle;
 import org.herebdragons.utils.Logger;
-import org.herebdragons.utils.SystemManager;
 
 import java.awt.*;
 
@@ -33,12 +32,19 @@ public class test implements notSoSimpleRunnable {
 
         CanvasFactory.setDefaultThreading(ThreadBehaviour.AUTO);
 
+        boolean fullScreen = true;
+
         CanvasFactory.setDecorated(true);
 
-        canvas = CanvasFactory.createCanvas("teste", new Dimension(1280, 720),
-                RendererType.JAVA_2D);
+        if (fullScreen) {
+            canvas = CanvasFactory.createCanvas("teste", RendererType.JAVA_2D);
+        } else {
+            canvas = CanvasFactory.createCanvas("teste", new Dimension(1280, 720),
+                    RendererType.JAVA_2D);
+        }
 
-        Rectangle rect = new Rectangle(50, 50, 720-150, 1280 - 150);
+
+        Rectangle rect = new Rectangle(50, 50, 720 - 150, 1280 - 150);
 
         rect.setFill(Color.RED);
 
@@ -52,7 +58,7 @@ public class test implements notSoSimpleRunnable {
     @Override
     public void run() {
 
-        Rectangle rectangle = new Rectangle(200,200,100,100);
+        Rectangle rectangle = new Rectangle(200, 200, 100, 100);
         rectangle.setStroke(Color.BLACK, new BasicStroke(2));
         rectangle.setFill(Color.BLUE);
 

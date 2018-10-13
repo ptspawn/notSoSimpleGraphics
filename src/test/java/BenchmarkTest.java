@@ -12,7 +12,6 @@ import org.herebdragons.input.notSoSimpleKeyboardListener;
 import org.herebdragons.input.notSoSimpleMouseListener;
 import org.herebdragons.utils.FrameRate;
 import org.herebdragons.utils.Logger;
-import org.herebdragons.utils.SystemManager;
 
 import javax.swing.*;
 import java.awt.*;

@@ -32,12 +32,14 @@ class JframeRenderer extends AbstractRenderer {
     private Canvas canvas;
     private BufferStrategy bs;
 
-    public JframeRenderer(notSoSimpleCanvas jcanvas) {
+    private boolean ready;
+
+    JframeRenderer(notSoSimpleCanvas jcanvas) {
         this.jcanvas = jcanvas;
     }
 
     @Override
-    public void init(notSoSimpleWindow window) {
+    public synchronized void init(notSoSimpleWindow window) {
 
         if (!(window instanceof Jwindow))
             throw new IllegalArgumentException("Window not instance of Jwindow");
@@ -48,61 +50,31 @@ class JframeRenderer extends AbstractRenderer {
 
         if (jcanvas.isFullscreen()) {
 
-        }
+            SystemManager.goFullScreen(this.window);
 
-        this.canvas = new Canvas();
-
-        canvas.setIgnoreRepaint(true);
-
-        this.window.add(canvas);
-
-        canvas.setSize(this.window.getSize());
-
-        canvas.createBufferStrategy(Config.BUFFERING);
-
-        do {
-            Logger.log("Waiting for buffer");
-            bs = canvas.getBufferStrategy();
-        } while (bs == null);
-
-        Logger.log("Got a Buffering Strategy - " + bs);
-
-    }
-
-    public void setFullscreen(boolean fullscreen) {
-
-
-
-      /*  DisplayMode dispMode = null;
-
-        if (!fullscreen) {
-            //setDecorated(isDecorated);
-            //setResizable(isResizable);
-            //setLocationRelativeTo(null);
-
-            graphicsDevice.setFullScreenWindow(null);
-            dispMode = currentDisplayMode;
+            this.window.createBufferStrategy(Config.BUFFERING);
 
         } else {
 
-            if (!graphicsDevice.isFullScreenSupported()) {
-                Logger.err("ERROR: Not Supported!!!");
-            }
+            this.canvas = new Canvas();
 
-            //setDecorated(false);
-            //setResizable(false);
-            //graphicsDevice.setFullScreenWindow(window);
-            dispMode = gameDisplayMode;
+            canvas.setIgnoreRepaint(true);
+
+            this.window.add(canvas);
+
+            canvas.setSize(this.window.getSize());
+
+            canvas.createBufferStrategy(Config.BUFFERING);
+
         }
 
+        bs = jcanvas.isFullscreen() ? this.window.getBufferStrategy() : canvas.getBufferStrategy();
 
-        if (graphicsDevice != null && graphicsDevice.isDisplayChangeSupported()) {
-            try {
-                graphicsDevice.setDisplayMode(dispMode);
-            } catch (Exception ex) {
-                Logger.err("Problem setting the display mode\n" + ex.getMessage());
-            }
-        }*/
+        Logger.log("Got a Buffering Strategy - " + bs);
+
+        ready = true;
+
+        Logger.log("Renderer Ready");
     }
 
     public void render() {
@@ -115,9 +87,11 @@ class JframeRenderer extends AbstractRenderer {
 
                     Logger.log("Started Rendering");
                     g2d = (Graphics2D) bs.getDrawGraphics();
-                    //g2d = (Graphics2D) canvas.getGraphics();
-                    g2d.setPaint(jcanvas.getBgColor());
-                    g2d.fill(canvas.getBounds());
+
+                    if (bs.contentsLost() || bs.contentsRestored())
+                        continue;
+
+                    fillBackground(g2d);
 
                     objectManager.render(g2d);
 
@@ -132,12 +106,23 @@ class JframeRenderer extends AbstractRenderer {
                     }
                 }
 
-            } while (!bs.contentsRestored());
+                Logger.log("BufferStrategy contents Restored: " + bs.contentsRestored());
 
-            bs.show();  //
+            } while (bs.contentsRestored());
+
+            Logger.log("BufferStrategy contents lost: " + bs.contentsLost());
+
+            bs.show();
 
         } while (bs.contentsLost());
 
+        Logger.log("Renderer painted to window");
+
+    }
+
+    private void fillBackground(Graphics2D g2d) {
+        g2d.setPaint(jcanvas.getBgColor());
+        g2d.fillRect(0, 0, jcanvas.getDimension().width, jcanvas.getDimension().height);
     }
 
     @Override
@@ -145,5 +130,9 @@ class JframeRenderer extends AbstractRenderer {
         Logger.log("Called JFrame Renderer Close");
         //Finish up
         super.close();
+    }
+
+    public boolean isReady() {
+        return ready;
     }
 }
