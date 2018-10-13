@@ -23,7 +23,6 @@ import java.awt.*;
 public class Jwindow extends JFrame implements notSoSimpleWindow {
 
     private boolean isReady = false;
-    private notSoSimpleRenderer renderer;
     private boolean isFullscreen;
 
     Jwindow(GraphicsConfiguration gc){
@@ -33,56 +32,27 @@ public class Jwindow extends JFrame implements notSoSimpleWindow {
     @Override
     public void repaint(long l, int i, int i1, int i2, int i3) {
         Logger.log("Entering complex repaint");
-        //super.repaint(l,i,i1,i2,i3);
-
-
-        /*if (renderer != null) {
-            Logger.err("Calling Render from complex repaint");
-            renderer.render();
-        }*/
     }
 
     @Override
     public void repaint() {
         Logger.log("Entering repaint");
-        super.repaint();
-        if (renderer != null) {
-            Logger.err("Calling Render from simple repaint");
-            renderer.render();
-        }
     }
 
     @Override
     public void repaint(long l) {
         Logger.log("Entering long Repaint");
-        super.repaint(l);
-        if (renderer != null) {
-            Logger.err("Calling Render from long repaint");
-            renderer.render();
-        }
     }
 
     @Override
     public void paint(Graphics graphics) {
         Logger.log("Entering Paint");
-        super.paint(graphics);
-        if (renderer != null) {
-            Logger.err("Calling Render from Paint");
-            renderer.render();
-        }
     }
 
     @Override
     public void addNotify() {
-        super.addNotify();
-
         Logger.log("Entering Notify");
         isReady = true;
-        if (renderer !=null){
-            Logger.err("Calling Render from Notify");
-            renderer.render();
-        }
-
     }
 
     public void setFullScreen(boolean isFullscreen){
@@ -95,25 +65,12 @@ public class Jwindow extends JFrame implements notSoSimpleWindow {
 
     @Override
     public void paintAll(Graphics graphics) {
-
         Logger.log("Entering PaintAll");
-
-        if (renderer != null) {
-            Logger.err("Calling Render from paintAll");
-            renderer.render();
-        }
     }
 
     public boolean isReady() {
         return isReady;
     }
 
-    public notSoSimpleRenderer getRenderer() {
-        return renderer;
-    }
-
-    public void setRenderer(notSoSimpleRenderer renderer) {
-        this.renderer = renderer;
-    }
 }
 
