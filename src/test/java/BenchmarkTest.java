@@ -34,7 +34,7 @@ public class BenchmarkTest implements notSoSimpleRunnable {
     private static Rectangle rotatingRectangle;
 
 
-    private static final FrameRate frameRate = new FrameRate(-1);
+    private static final FrameRate frameRate = new ImpFrameRate(60);
     private static notSoSimpleKeyboardListener keyInput;
     private static notSoSimpleMouseListener mouseInput;
 
@@ -52,14 +52,7 @@ public class BenchmarkTest implements notSoSimpleRunnable {
         Logger.setLogging(false);
         frameRate.setDebug(true);
 
-        canvas = CanvasFactory.createCanvas(Config.LIBRARY_NAME +
-                " - Benchmark test", new Dimension(2000, 1000), RendererType.JAVA_2D);
-
-        canvas.setBgColor(Color.BLUE);
-
-        Rectangle rect = new Rectangle(50, 50, 300, 300);
-
-        canvas.addObject(rect);
+        canvas = createTestObjects(fullScreen);
 
         CanvasFactory.startCanvas(canvas, new BenchmarkTest());
 
@@ -67,84 +60,32 @@ public class BenchmarkTest implements notSoSimpleRunnable {
     }
 
     public void run(){
-        long beforeTime, afterTime, timeDiff, sleepTime;
-        long overSleepTime = 0L;
-        int noDelays = 0;
-        long excess = 0L;
-        Graphics g;
-
         frameRate.initialize();
-        /*gameStartTime = System.nanoTime();
-        prevStatsTime = gameStartTime;
-        beforeTime = gameStartTime;*/
 
         Logger.log("Starting game loop");
 
         running = true;
 
-        while(running) {
-            //gameUpdate();
-            //gameRender();   // render the game to a buffer
-            //paintScreen();  // draw the buffer on-screen
+        while (running) {
 
             //Input Phase
             getuserInput(canvas);
 
             //update Cycle
-            slidingRectangle.move(1, 0);
+            //slidingRectangle.move(1, 0);
             if (slidingRectangle.getPosition().x > canvas.getDimension().width) {
-                slidingRectangle.moveTo(slidingRectangle.getDimension().width * -1, slidingRectangle.getPosition().y);
+                slidingRectangle.moveTo(0, slidingRectangle.getPosition().y);
             }
 
             canvas.update();
-
             frameRate.calculate();
 
-            /*afterTime = System.nanoTime();
-            timeDiff = afterTime - beforeTime;
-            sleepTime = (frameRate.getCycleDuration() - timeDiff) - overSleepTime;*/
-
-            //if (sleepTime > 0) {   // some time left in this cycle
-            if (frameRate.getRemainingInCyle()>0){
-                try {
-                    //Thread.sleep(sleepTime/1000000L);  // nano -> ms
-                    Thread.sleep(frameRate.getRemainingInCyle()/1000000L);  // nano -> ms
-                }
-                catch(InterruptedException ex){}
-                //overSleepTime = (System.nanoTime()- afterTime) - sleepTime;
-                frameRate.updateOverSleepTime();
-            }
-            else {    // sleepTime <= 0; the frame took longer than the period
-                //excess -= sleepTime;  // store excess time value
-                excess-=frameRate.getExcess();
-                frameRate.resetOverSleepTime();
-                //overSleepTime = 0L;
-
-                if (++noDelays >= NO_DELAYS_PER_YIELD) {
-                    Thread.yield();   // give another thread a chance to run
-                    noDelays = 0;
-                }
+            try {
+                Thread.sleep(frameRate.getRemainingInCyle());
+            } catch (InterruptedException e) {
+                Logger.err("Benchmark Test - Error in thread sleep");
             }
 
-            beforeTime = System.nanoTime();
-
-      /* If frame animation is taking too long, update the game state
-         without rendering it, to get the updates/sec nearer to
-         the required FPS. */
-            int skips = 0;
-            //while((excess > period) && (skips < MAX_FRAME_SKIPS)) {
-            while((excess > frameRate.getCycleDuration()) && (skips < MAX_FRAME_SKIPS)) {
-                excess -= frameRate.getCycleDuration();
-
-
-                //gameUpdate();    // update state but don't render
-
-
-                skips++;
-            }
-            framesSkipped += skips;
-
-            //storeStats();
         }
 
     }
@@ -191,43 +132,6 @@ public class BenchmarkTest implements notSoSimpleRunnable {
 
     }
 
-    private static Thread launchGameThread(final notSoSimpleCanvas canvas) {
-        Thread gameThread = new Thread(new Runnable() {
-            public void run() {
-
-                frameRate.initialize();
-
-                Logger.log("Starting game loop");
-
-                running = true;
-
-                while (running) {
-
-                    //Input Phase
-                    getuserInput(canvas);
-
-                    //update Cycle
-                    slidingRectangle.move(1, 0);
-                    if (slidingRectangle.getPosition().x > canvas.getDimension().width) {
-                        slidingRectangle.moveTo(slidingRectangle.getDimension().width * -1, slidingRectangle.getPosition().y);
-                    }
-
-                    canvas.update();
-                    frameRate.calculate();
-
-                    try {
-                        Thread.sleep(frameRate.getRemainingInCyle());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        });
-
-        return gameThread;
-    }
-
     private static void getuserInput(notSoSimpleCanvas canvas) {
 
         if (keyInput != null) {
@@ -271,21 +175,14 @@ public class BenchmarkTest implements notSoSimpleRunnable {
         results.put(dm.toString(), results.get(dm.toString()) / (PASSES - PASSES_TO_IGNORE));
     }
 
-    private static void close(Thread gameThread, Thread threadCanvas) {
-        try {
-            gameThread.join();
-            threadCanvas.join();
-        } catch (InterruptedException e) {
-            Logger.err("Caught Interrupted Exception " + e.getMessage());
-        }
-    }
+
 
     private static void tick(int fps) {
         text.setText("FPS: " + fps);
     }
 
-   /* private static class impFrameRate extends FrameRate {
-        private impFrameRate(int targetFPS) {
+   private static class ImpFrameRate extends FrameRate {
+        private ImpFrameRate(int targetFPS) {
             super(targetFPS);
         }
 
@@ -308,6 +205,6 @@ public class BenchmarkTest implements notSoSimpleRunnable {
                 }
             }
         }
-    }*/
+    }
 
 }

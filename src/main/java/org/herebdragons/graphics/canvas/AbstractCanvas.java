@@ -122,7 +122,6 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
         renderer.init(window);
 
-
         isReady = true;
 
         callBack.run();

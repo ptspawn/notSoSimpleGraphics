@@ -40,7 +40,7 @@ public class FrameRate {
         lastTime = System.nanoTime();
         framesPerSecond = 0;
         updatesPerSecond = 0;
-        overSleepTime = 0;
+
     }
 
     public void incrementUpdate() {
@@ -51,7 +51,7 @@ public class FrameRate {
     public void calculate() {
         currentTime = System.nanoTime();
         delta = currentTime - lastTime;
-        sleepTime = cycleDuration - delta - overSleepTime;
+        sleepTime = cycleDuration - delta; // - overSleepTime;
         lastTime = currentTime;
 
         frameCount++;
@@ -75,12 +75,14 @@ public class FrameRate {
             Logger.log("No FPS restrictions in place");
             return 0L;
         }
-/*
+
         long remaining = (lastTime + cycleDuration - currentTime) / 1000000L;
 
-        Logger.log(remaining + " miliseconds free");*/
-        Logger.log(sleepTime + " miliseconds free");
-        return sleepTime;
+        Logger.log(remaining + " miliseconds free");
+        return remaining;
+//
+// Logger.log(sleepTime + " miliseconds free");
+//        return sleepTime;
     }
 
     public long getExcess() {
@@ -121,10 +123,6 @@ public class FrameRate {
 
     public boolean isLimited() {
         return limited;
-    }
-
-    public void setLimited(boolean limited) {
-        this.limited = limited;
     }
 
     @Override
