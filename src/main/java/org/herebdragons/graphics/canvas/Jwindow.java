@@ -51,8 +51,8 @@ public class Jwindow extends JFrame implements notSoSimpleWindow {
 
     @Override
     public void addNotify() {
+        super.addNotify();
         Logger.log("Entering Notify");
-        isReady = true;
     }
 
     public void setFullScreen(boolean isFullscreen){

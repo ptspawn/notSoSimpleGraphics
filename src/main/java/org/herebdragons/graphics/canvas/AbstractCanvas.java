@@ -93,7 +93,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
             @Override
             public void windowActivated(WindowEvent windowEvent) {
                 super.windowActivated(windowEvent);
-
+                Logger.log("Going for canvas update");
                 update();
 
             }
@@ -110,6 +110,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
             }
         });
 
+
         //JUST FOR JAVAFX
 
         //final GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -121,7 +122,6 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
         renderer.init(window);
 
-        Logger.log("Going for canvas update");
 
         isReady = true;
 
@@ -130,9 +130,6 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
     }
 
     public void update() {
-
-        //if (window == null || !window.isVisible())
-            //return;
 
         renderer.render();
     }
