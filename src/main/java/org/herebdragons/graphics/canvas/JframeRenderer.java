@@ -54,11 +54,11 @@ class JframeRenderer extends AbstractRenderer {
 
             this.window.createBufferStrategy(Config.BUFFERING);
 
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                Logger.err("Error waiting for buffer strategy");
-            }
+//            try {
+//                Thread.sleep(2000);
+//            } catch (InterruptedException e) {
+//                Logger.err("Error waiting for buffer strategy");
+//            }
 
         } else {
 
@@ -74,12 +74,12 @@ class JframeRenderer extends AbstractRenderer {
 
         }
 
-        do {
-            Logger.log("Waiting for buffer");
+//        do {
+//            Logger.log("Waiting for buffer");
 
             bs = jcanvas.isFullscreen() ? this.window.getBufferStrategy() : canvas.getBufferStrategy();
 
-        } while (bs == null);
+//        } while (bs == null);
 
         Logger.log("Got a Buffering Strategy - " + bs);
 

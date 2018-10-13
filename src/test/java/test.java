@@ -32,7 +32,7 @@ public class test implements notSoSimpleRunnable {
 
         CanvasFactory.setDefaultThreading(ThreadBehaviour.AUTO);
 
-        boolean fullScreen = true;
+        boolean fullScreen = false;
 
         CanvasFactory.setDecorated(true);
 

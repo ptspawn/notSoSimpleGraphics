@@ -93,29 +93,31 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
             @Override
             public void windowActivated(WindowEvent windowEvent) {
                 super.windowActivated(windowEvent);
+
+                update();
                 if (!isReady) {
 
                     Logger.log("Window Activated for the first Time " + windowEvent.paramString());
 
-                    renderer.init(window);
-
-                    while(!renderer.isReady()){
-                        try {
-                            Logger.log("Waiting for renderer");
-                            wait();
-                        } catch (InterruptedException e) {
-                            Logger.err("Problem waiting for renderer start");
-                        }
-
-                    }
-
-                    Logger.log("Going for canvas update");
-
-                    update();
-
-                    isReady = true;
-
-                    callBack.run();
+//                    renderer.init(window);
+//
+//                    while(!renderer.isReady()){
+//                        try {
+//                            Logger.log("Waiting for renderer");
+//                            wait();
+//                        } catch (InterruptedException e) {
+//                            Logger.err("Problem waiting for renderer start");
+//                        }
+//
+//                    }
+//
+//                    Logger.log("Going for canvas update");
+//
+//                    update();
+//
+//                    isReady = true;
+//
+//                    callBack.run();
 
                 }
             }
@@ -136,8 +138,30 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
         //final GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        setVisible(true);
-        //requestFocus();
+        if (!window.isFullscreen()){
+            setVisible(true);
+            requestFocus();
+        }
+
+        renderer.init(window);
+
+//        while(!renderer.isReady()){
+//            try {
+//                Logger.log("Waiting for renderer");
+//                wait();
+//            } catch (InterruptedException e) {
+//                Logger.err("Problem waiting for renderer start");
+//            }
+//
+//        }
+
+        Logger.log("Going for canvas update");
+
+        update();
+
+        isReady = true;
+
+        callBack.run();
 
     }
 
