@@ -95,31 +95,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
                 super.windowActivated(windowEvent);
 
                 update();
-                if (!isReady) {
 
-                    Logger.log("Window Activated for the first Time " + windowEvent.paramString());
-
-//                    renderer.init(window);
-//
-//                    while(!renderer.isReady()){
-//                        try {
-//                            Logger.log("Waiting for renderer");
-//                            wait();
-//                        } catch (InterruptedException e) {
-//                            Logger.err("Problem waiting for renderer start");
-//                        }
-//
-//                    }
-//
-//                    Logger.log("Going for canvas update");
-//
-//                    update();
-//
-//                    isReady = true;
-//
-//                    callBack.run();
-
-                }
             }
 
             @Override
@@ -145,19 +121,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
         renderer.init(window);
 
-//        while(!renderer.isReady()){
-//            try {
-//                Logger.log("Waiting for renderer");
-//                wait();
-//            } catch (InterruptedException e) {
-//                Logger.err("Problem waiting for renderer start");
-//            }
-//
-//        }
-
         Logger.log("Going for canvas update");
-
-        update();
 
         isReady = true;
 

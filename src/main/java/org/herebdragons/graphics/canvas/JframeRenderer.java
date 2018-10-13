@@ -34,7 +34,7 @@ class JframeRenderer extends AbstractRenderer {
 
     private boolean ready;
 
-    public JframeRenderer(notSoSimpleCanvas jcanvas) {
+    JframeRenderer(notSoSimpleCanvas jcanvas) {
         this.jcanvas = jcanvas;
     }
 
@@ -54,12 +54,6 @@ class JframeRenderer extends AbstractRenderer {
 
             this.window.createBufferStrategy(Config.BUFFERING);
 
-//            try {
-//                Thread.sleep(2000);
-//            } catch (InterruptedException e) {
-//                Logger.err("Error waiting for buffer strategy");
-//            }
-
         } else {
 
             this.canvas = new Canvas();
@@ -74,12 +68,7 @@ class JframeRenderer extends AbstractRenderer {
 
         }
 
-//        do {
-//            Logger.log("Waiting for buffer");
-
-            bs = jcanvas.isFullscreen() ? this.window.getBufferStrategy() : canvas.getBufferStrategy();
-
-//        } while (bs == null);
+        bs = jcanvas.isFullscreen() ? this.window.getBufferStrategy() : canvas.getBufferStrategy();
 
         Logger.log("Got a Buffering Strategy - " + bs);
 
@@ -91,8 +80,6 @@ class JframeRenderer extends AbstractRenderer {
     public void render() {
         Logger.log("Entering Update method from Canvas");
 
-        final int MAX_DRAW_ATTEMPTS;
-
         do {
             do {
                 Graphics2D g2d = null;
@@ -101,7 +88,7 @@ class JframeRenderer extends AbstractRenderer {
                     Logger.log("Started Rendering");
                     g2d = (Graphics2D) bs.getDrawGraphics();
 
-                    if(bs.contentsLost() || bs.contentsRestored())
+                    if (bs.contentsLost() || bs.contentsRestored())
                         continue;
 
                     fillBackground(g2d);
@@ -124,8 +111,8 @@ class JframeRenderer extends AbstractRenderer {
             } while (bs.contentsRestored());
 
             Logger.log("BufferStrategy contents lost: " + bs.contentsLost());
-            bs.show();
 
+            bs.show();
 
         } while (bs.contentsLost());
 
@@ -133,9 +120,9 @@ class JframeRenderer extends AbstractRenderer {
 
     }
 
-    private void fillBackground(Graphics2D g2d){
+    private void fillBackground(Graphics2D g2d) {
         g2d.setPaint(jcanvas.getBgColor());
-        g2d.fillRect(0,0,jcanvas.getDimension().width,jcanvas.getDimension().height);
+        g2d.fillRect(0, 0, jcanvas.getDimension().width, jcanvas.getDimension().height);
     }
 
     @Override
@@ -145,7 +132,7 @@ class JframeRenderer extends AbstractRenderer {
         super.close();
     }
 
-    public boolean isReady(){
+    public boolean isReady() {
         return ready;
     }
 }
