@@ -26,6 +26,10 @@ public class Jwindow extends JFrame implements notSoSimpleWindow {
     private notSoSimpleRenderer renderer;
     private boolean isFullscreen;
 
+    Jwindow(GraphicsConfiguration gc){
+        super(gc);
+    }
+
     @Override
     public void repaint(long l, int i, int i1, int i2, int i3) {
         Logger.log("Entering complex repaint");

@@ -19,7 +19,7 @@ public class MultiBufferTest {
     public MultiBufferTest(int numBuffers, GraphicsDevice device) {
         try {
             GraphicsConfiguration gc = device.getDefaultConfiguration();
-            mainFrame = new JFrame(gc);
+            mainFrame = new JFrame();
             mainFrame.setUndecorated(true);
             mainFrame.setIgnoreRepaint(true);
             device.setFullScreenWindow(mainFrame);
@@ -90,6 +90,6 @@ public class MultiBufferTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //System.exit(0);
+        System.exit(0);
     }
 }
