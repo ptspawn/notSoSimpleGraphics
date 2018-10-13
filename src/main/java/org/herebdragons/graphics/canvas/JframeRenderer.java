@@ -46,8 +46,6 @@ class JframeRenderer extends AbstractRenderer {
 
         this.window = (Jwindow) window;
 
-        this.window.setRenderer(this);
-
         if (jcanvas.isFullscreen()) {
 
             SystemManager.goFullScreen(this.window);
