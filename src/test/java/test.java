@@ -8,6 +8,7 @@ import org.herebdragons.input.notSoSimpleKeyboardListener;
 import org.herebdragons.utils.Logger;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 /**
  * <center><h1><strong>test class</strong></h1></center><br>
@@ -71,7 +72,22 @@ public class test implements notSoSimpleRunnable {
 
         canvas.update();
 
-        keyInput.poll();
+
+        while (true) {
+            keyInput.poll();
+
+            canvas.update();
+
+            if (keyInput.keyDown(KeyEvent.VK_ESCAPE))
+                System.exit(0);
+
+
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 }
