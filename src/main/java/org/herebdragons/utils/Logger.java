@@ -10,7 +10,7 @@ public class Logger {
     }
 
     public static void err(String msg) {
-        if (isLogging)
+       // if (isLogging)
             System.err.println(Thread.currentThread().getName() + " - " + msg + "\n");
     }
 

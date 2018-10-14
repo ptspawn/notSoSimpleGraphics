@@ -4,6 +4,7 @@ import org.herebdragons.utils.Logger;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 
 
 /**
@@ -25,7 +26,7 @@ public class Jwindow extends JFrame implements notSoSimpleWindow {
     private boolean isReady = false;
     private boolean isFullscreen;
 
-    Jwindow(GraphicsConfiguration gc){
+    public Jwindow(GraphicsConfiguration gc){
         super(gc);
     }
 
@@ -72,5 +73,10 @@ public class Jwindow extends JFrame implements notSoSimpleWindow {
         return isReady;
     }
 
+    @Override
+    public synchronized void addKeyListener(KeyListener l) {
+        System.err.println("Adding keylinstener");
+        super.addKeyListener(l);
+    }
 }
 

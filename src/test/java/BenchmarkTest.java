@@ -73,9 +73,9 @@ public class BenchmarkTest implements notSoSimpleRunnable {
 
             //update Cycle
             //slidingRectangle.move(1, 0);
-            if (slidingRectangle.getPosition().x > canvas.getDimension().width) {
-                slidingRectangle.moveTo(0, slidingRectangle.getPosition().y);
-            }
+//            if (slidingRectangle.getPosition().x > canvas.getDimension().width) {
+//                slidingRectangle.moveTo(0, slidingRectangle.getPosition().y);
+//            }
 
             canvas.update();
             frameRate.calculate();

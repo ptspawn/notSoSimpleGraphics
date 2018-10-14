@@ -4,6 +4,7 @@ import org.herebdragons.graphics.canvas.notSoSimpleRunnable;
 import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.ThreadBehaviour;
 import org.herebdragons.graphics.objects.Rectangle;
+import org.herebdragons.input.notSoSimpleKeyboardListener;
 import org.herebdragons.utils.Logger;
 
 import java.awt.*;
@@ -25,6 +26,7 @@ import java.awt.*;
 public class test implements notSoSimpleRunnable {
 
     private static notSoSimpleCanvas canvas;
+    private static notSoSimpleKeyboardListener keyInput;
 
     public static void main(String[] args) {
 
@@ -43,6 +45,9 @@ public class test implements notSoSimpleRunnable {
                     RendererType.JAVA_2D);
         }
 
+        keyInput = new notSoSimpleKeyboardListener();
+
+        canvas.addKeyListener(keyInput);
 
         Rectangle rect = new Rectangle(50, 50, 720 - 150, 1280 - 150);
 
@@ -65,6 +70,8 @@ public class test implements notSoSimpleRunnable {
         canvas.addObject(rectangle);
 
         canvas.update();
+
+        keyInput.poll();
 
     }
 }

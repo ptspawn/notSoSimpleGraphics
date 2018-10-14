@@ -1,5 +1,7 @@
 package org.herebdragons.input;
 
+import org.herebdragons.utils.Logger;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -9,7 +11,7 @@ public class notSoSimpleKeyboardListener implements KeyListener {
     private int[] polled;
 
     public notSoSimpleKeyboardListener() {
-        System.out.println("created keyboard listener");
+        Logger.log("created keyboard listener");
         keys = new boolean[256];
         polled = new int[256];
     }
@@ -25,6 +27,7 @@ public class notSoSimpleKeyboardListener implements KeyListener {
     public synchronized void poll() {
         for (int i = 0; i < keys.length; ++i) {
             if (keys[i]) {
+                System.err.println("Key press " + i);
                 polled[i]++;
             } else {
                 polled[i] = 0;
@@ -47,6 +50,6 @@ public class notSoSimpleKeyboardListener implements KeyListener {
     }
 
     public void keyTyped(KeyEvent e) {
-// Not needed
+        // Not needed
     }
 }

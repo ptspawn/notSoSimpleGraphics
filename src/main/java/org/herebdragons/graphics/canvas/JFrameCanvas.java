@@ -23,8 +23,6 @@ import java.awt.image.BufferedImage;
  */
 class JFrameCanvas extends AbstractCanvas {
 
-    private Canvas canvas = new Canvas();
-
     JFrameCanvas(Dimension size) {
         super(size);
         //Graphics2D g2g = ((Graphics2D)new BufferedImage(10,10).getGraphics())

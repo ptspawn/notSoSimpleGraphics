@@ -46,8 +46,8 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
     private boolean isReady = false;
     private Paint bgColor = Config.DEFAULT_BG_COLOR;
 
-    private KeyListener keyInput;
-    private MouseListener mouseInput;
+    protected KeyListener keyInput;
+    protected MouseListener mouseInput;
 
     private Manager objectManager;
     protected notSoSimpleRenderer renderer;
@@ -115,7 +115,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
         //final GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        if (!window.isFullscreen()){
+        if (!window.isFullscreen()) {
             setVisible(true);
             requestFocus();
         }
@@ -124,7 +124,8 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
         isReady = true;
 
-        callBack.run();
+        if (callBack != null)
+            callBack.run();
 
     }
 

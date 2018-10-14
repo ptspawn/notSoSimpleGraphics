@@ -4,7 +4,7 @@ import org.herebdragons.utils.Logger;
 
 import java.awt.*;
 
-class SystemManager {
+public class SystemManager {
 
     private static GraphicsDevice gd;
     private static GraphicsConfiguration gc;
