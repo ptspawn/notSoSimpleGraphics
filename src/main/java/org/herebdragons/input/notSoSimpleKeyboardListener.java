@@ -27,7 +27,7 @@ public class notSoSimpleKeyboardListener implements KeyListener {
     public synchronized void poll() {
         for (int i = 0; i < keys.length; ++i) {
             if (keys[i]) {
-                System.err.println("Key press " + i);
+                Logger.err("Key press " + i);
                 polled[i]++;
             } else {
                 polled[i] = 0;

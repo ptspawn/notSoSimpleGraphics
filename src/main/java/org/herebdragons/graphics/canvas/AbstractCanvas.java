@@ -125,7 +125,10 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         isReady = true;
 
         if (callBack != null)
-            callBack.run();
+            new Thread(callBack,Config.LIBRARY_NAME + " - Main Thread").start();
+            //callBack.run();
+
+        Logger.err("END OF THE CANVAS RUN METHOD");
 
     }
 

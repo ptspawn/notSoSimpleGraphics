@@ -67,15 +67,17 @@ public class CanvasFactory {
 
     public static void startCanvas(final notSoSimpleCanvas nssCanvas, final notSoSimpleRunnable callBack) {
 
-        if (nssCanvas == null)
+        if (nssCanvas == null) {
             throw new IllegalArgumentException("notSoSimpleCanvas can't be null!");
+        }
 
-        if (defaultThreading == ThreadBehaviour.USER_CONTROLED)
+        if (defaultThreading == ThreadBehaviour.USER_CONTROLED) {
             throw new IllegalStateException("Thread behaviour is set to Manual...\nIf you know what your'te doing then you invoke run!! .|.");
+        }
+
+        nssCanvas.setReadyCallback(callBack);
 
         try {
-
-            nssCanvas.setReadyCallback(callBack);
 
             SwingUtilities.invokeAndWait(nssCanvas);
 
