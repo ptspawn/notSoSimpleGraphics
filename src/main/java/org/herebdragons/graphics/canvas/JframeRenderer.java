@@ -78,7 +78,7 @@ class JframeRenderer extends AbstractRenderer {
     public void render() {
 
         Logger.log("Entering Update method from Canvas");
-
+        Logger.err("Rendering...");
         do {
             do {
                 Graphics2D g2d = null;

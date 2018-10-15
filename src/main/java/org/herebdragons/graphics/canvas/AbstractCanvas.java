@@ -14,6 +14,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
 
 /**
@@ -148,7 +149,20 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
     }
 
     public void update() {
-
+//        try {
+//            SwingUtilities.invokeAndWait(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    renderer.render();
+//                }
+//            });
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        }
+        Logger.log("Calling Render");
         renderer.render();
     }
 
