@@ -76,6 +76,7 @@ class JframeRenderer extends AbstractRenderer {
     }
 
     public void render() {
+
         Logger.log("Entering Update method from Canvas");
 
         do {
@@ -115,8 +116,8 @@ class JframeRenderer extends AbstractRenderer {
         } while (bs.contentsLost());
 
         Logger.log("Renderer painted to window");
-
     }
+
 
     private void fillBackground(Graphics2D g2d) {
         g2d.setPaint(jcanvas.getBgColor());

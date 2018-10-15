@@ -7,6 +7,7 @@ import org.herebdragons.graphics.objects.Rectangle;
 import org.herebdragons.input.notSoSimpleKeyboardListener;
 import org.herebdragons.utils.Logger;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -35,9 +36,7 @@ public class test implements notSoSimpleRunnable {
 
         CanvasFactory.setDefaultThreading(ThreadBehaviour.AUTO);
 
-        boolean fullScreen = true;
-
-        CanvasFactory.setDecorated(true);
+        boolean fullScreen = false;
 
         if (fullScreen) {
             canvas = CanvasFactory.createCanvas("teste", RendererType.JAVA_2D);

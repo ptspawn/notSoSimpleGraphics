@@ -34,7 +34,7 @@ public class BenchmarkTest implements notSoSimpleRunnable {
     private static Rectangle rotatingRectangle;
 
 
-    private static final FrameRate frameRate = new ImpFrameRate(60);
+    private static final FrameRate frameRate = new ImpFrameRate(-1);
     private static notSoSimpleKeyboardListener keyInput;
     private static notSoSimpleMouseListener mouseInput;
 
