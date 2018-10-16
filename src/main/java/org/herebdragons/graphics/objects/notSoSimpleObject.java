@@ -6,11 +6,11 @@ import java.awt.*;
 
 public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable, Movable {
 
-    protected Dimension dimension;
-    protected Point position;
+    volatile protected Dimension dimension;
+    volatile protected Point position;
 
 
-    protected float rotation;
+    volatile protected float rotation;
     private Graphics g;
 
     notSoSimpleObject(Dimension dimension, Point position) {
@@ -25,8 +25,8 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
     }
 
     public void moveTo(int x, int y) {
-        this.position.x = x;
-        this.position.y = y;
+        this.position.setLocation(x,y);
+
     }
 
     public void move(Dimension velocity) {
@@ -34,9 +34,8 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
     }
 
     public void move(int x, int y) {
-        position.x+=x;
-        position.y+=y;
-        //position.setLocation(position.x + x, position.y + y);
+
+        position.setLocation(position.x + x, position.y + y);
     }
 
     public void move(float x, float y) {

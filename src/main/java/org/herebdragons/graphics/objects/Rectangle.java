@@ -39,16 +39,26 @@ public class Rectangle extends notSoSimpleObject implements Fillable, Strokable 
 
     }
 
-
     public void setFill(Paint color) {
         Logger.log("Fill color of " + this + " to " + color);
+//        if (color instanceof GradientPaint){
+//            GradientPaint gradient = (GradientPaint)color; //new GradientPaint(0,0,Color.RED,100, 0,Color.WHITE);
+//
+//            fillColor=new GradientPaint(position.x + ((GradientPaint) color).getPoint1().getX(),
+//                    position.y+((GradientPaint) color).getPoint1().getY(),
+//                    ((GradientPaint) color).getColor1(),
+//                    position.x+((GradientPaint) color).getPoint2().getX(),
+//                    position.y+((GradientPaint) color).getPoint2().getY(),
+//                    ((GradientPaint) color).getColor2());
+//        }
+
         fillColor = color;
     }
-
 
     public void setStroke(Color color, BasicStroke stroke) {
         Logger.log("Stroke color of " + this + " to " + color);
         strokeColor = color;
+        this.stroke = stroke;
     }
 
     public Paint getFill() {

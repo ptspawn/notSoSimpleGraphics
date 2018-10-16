@@ -26,8 +26,9 @@ public class BenchmarkTest implements notSoSimpleRunnable {
     private static int framesSkipped;
 
     private static Text text;
-    private static Rectangle slidingRectangle;
     private static Rectangle rotatingRectangle;
+    private static Rectangle horzSlidingRect;
+    private static Rectangle vertSlidingRect;
 
 
     private static final FrameRate frameRate = new ImpFrameRate(-1);
@@ -70,10 +71,17 @@ public class BenchmarkTest implements notSoSimpleRunnable {
             getuserInput(canvas);
 
             //update Cycle
-            slidingRectangle.move(1, 0);
-            if (slidingRectangle.getPosition().x > canvas.getDimension().width) {
-                slidingRectangle.moveTo(0, slidingRectangle.getPosition().y);
+            horzSlidingRect.move(1, 0);
+            if (horzSlidingRect.getPosition().x >= canvas.getDimension().width) {
+                horzSlidingRect.moveTo(0 - horzSlidingRect.getDimension().height, horzSlidingRect.getPosition().y);
             }
+
+            vertSlidingRect.move(0, -1);
+            if (vertSlidingRect.getPosition().y + vertSlidingRect.getDimension().width <= 0) {
+                vertSlidingRect.moveTo(vertSlidingRect.getPosition().x, canvas.getDimension().height);
+            }
+
+            //rotatingRectangle.rotate((float) ((2 * Math.PI) / 360));
 
             canvas.update();
             frameRate.calculate();
@@ -119,10 +127,27 @@ public class BenchmarkTest implements notSoSimpleRunnable {
         canvas.addKeyListener(keyInput);
 
         text = new Text(new Dimension(100, 30), new Point(30, 30), Config.LIBRARY_NAME);
-        slidingRectangle = new Rectangle(new Dimension(100, 100), new Point(100, 100));
+        horzSlidingRect = new Rectangle(new Dimension(100, 100), new Point(100, canvas.getDimension().height/2-50));
+        horzSlidingRect.setFill(new Color(255,0,0,254/2));
+        float[] dash = {3,4};
+        BasicStroke stroke = new BasicStroke(2,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,10f,dash,10);
+        horzSlidingRect.setStroke(Color.black, stroke);
+
+
+        vertSlidingRect = new Rectangle(new Dimension(100, 100),
+                new Point(canvas.getDimension().width - 100, canvas.getDimension().height - 100));
+
+        rotatingRectangle = new Rectangle(new Dimension(300, 300),
+                new Point(canvas.getDimension().width / 2 - 150, canvas.getDimension().height / 2 - 150));
+        GradientPaint redtowhite = new GradientPaint(500,0,Color.RED,1280-500, 0,Color.WHITE);
+        rotatingRectangle.setFill(redtowhite);
+
+
 
         canvas.addObject(text);
-        canvas.addObject(slidingRectangle);
+        canvas.addObject(rotatingRectangle);
+        canvas.addObject(horzSlidingRect);
+        canvas.addObject(vertSlidingRect);
 
         return canvas;
 
