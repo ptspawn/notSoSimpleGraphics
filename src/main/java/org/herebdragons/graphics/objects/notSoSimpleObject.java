@@ -34,7 +34,9 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
     }
 
     public void move(int x, int y) {
-        position.setLocation(position.x + x, position.y + y);
+        position.x+=x;
+        position.y+=y;
+        //position.setLocation(position.x + x, position.y + y);
     }
 
     public void move(float x, float y) {

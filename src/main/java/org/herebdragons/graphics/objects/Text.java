@@ -17,6 +17,11 @@ public class Text extends notSoSimpleObject {
     public void render(Graphics2D g2d) {
         Logger.log("Rendering " + this);
         g2d.setColor(Color.GREEN);
+
+        g2d.setFont(new Font("Serif", Font.BOLD, 20));
+        FontMetrics fm = g2d.getFontMetrics();
+//        int x = img.getWidth() - fm.stringWidth(s) - 5;
+//        int y = fm.getHeight();
         g2d.drawString(text, position.x, position.y);
     }
 

@@ -127,18 +127,18 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
 
         if (callBack != null){
 
-            SwingWorker<Void,Void> heavyWorkerThread = new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    callBack.run();
-                    return null;
-                }
-            };
-
-            heavyWorkerThread.execute();
+//            SwingWorker<Void,Void> heavyWorkerThread = new SwingWorker<Void, Void>() {
+//                @Override
+//                protected Void doInBackground() throws Exception {
+//                    callBack.run();
+//                    return null;
+//                }
+//            };
+//
+//            heavyWorkerThread.execute();
 
             //This works, bu is against oracle recommendations - normal threads should not update graphical objects
-            //new Thread(callBack,Config.LIBRARY_NAME + " - Main Thread").start();
+            new Thread(callBack,Config.LIBRARY_NAME + " - Main Thread").start();
 
         }
 
@@ -149,19 +149,6 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
     }
 
     public void update() {
-//        try {
-//            SwingUtilities.invokeAndWait(new Runnable() {
-//                @Override
-//                public void run() {
-//
-//                    renderer.render();
-//                }
-//            });
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            e.printStackTrace();
-//        }
         Logger.log("Calling Render");
         renderer.render();
     }

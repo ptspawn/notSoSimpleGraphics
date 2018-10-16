@@ -3,7 +3,6 @@ package org.herebdragons.graphics.canvas;
 import org.herebdragons.Config;
 import org.herebdragons.graphics.objects.Manager;
 import org.herebdragons.graphics.objects.ObjectManager;
-import org.herebdragons.utils.SystemManager;
 
 import javax.swing.*;
 import java.awt.*;

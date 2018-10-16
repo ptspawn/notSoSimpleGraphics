@@ -50,6 +50,8 @@ public class BenchmarkTest implements notSoSimpleRunnable {
         boolean fullScreen = false;
 
         Logger.setLogging(false);
+        Logger.setDebugging(true);
+
         frameRate.setDebug(true);
 
         canvas = createTestObjects(fullScreen);
@@ -59,7 +61,7 @@ public class BenchmarkTest implements notSoSimpleRunnable {
 
     }
 
-    public void run(){
+    public void run() {
         frameRate.initialize();
 
         Logger.log("Starting game loop");
@@ -72,10 +74,10 @@ public class BenchmarkTest implements notSoSimpleRunnable {
             getuserInput(canvas);
 
             //update Cycle
-            //slidingRectangle.move(1, 0);
-//            if (slidingRectangle.getPosition().x > canvas.getDimension().width) {
-//                slidingRectangle.moveTo(0, slidingRectangle.getPosition().y);
-//            }
+            slidingRectangle.move(1, 0);
+            if (slidingRectangle.getPosition().x > canvas.getDimension().width) {
+                slidingRectangle.moveTo(0, slidingRectangle.getPosition().y);
+            }
 
             canvas.update();
             frameRate.calculate();
@@ -119,8 +121,6 @@ public class BenchmarkTest implements notSoSimpleRunnable {
         keyInput = new notSoSimpleKeyboardListener();
 
         canvas.addKeyListener(keyInput);
-
-        canvas.setObjectManager(new ObjectManager());
 
         text = new Text(new Dimension(100, 30), new Point(30, 30), Config.LIBRARY_NAME);
         slidingRectangle = new Rectangle(new Dimension(100, 100), new Point(100, 100));
@@ -176,12 +176,11 @@ public class BenchmarkTest implements notSoSimpleRunnable {
     }
 
 
-
     private static void tick(int fps) {
         text.setText("FPS: " + fps);
     }
 
-   private static class ImpFrameRate extends FrameRate {
+    private static class ImpFrameRate extends FrameRate {
         private ImpFrameRate(int targetFPS) {
             super(targetFPS);
         }

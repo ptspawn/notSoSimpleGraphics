@@ -25,9 +25,7 @@ public class Rectangle extends notSoSimpleObject implements Fillable, Strokable 
         Logger.log("Rendering rectangle" + this);
 
         rectangle = new java.awt.Rectangle(position.x, position.y,
-                position.x + dimension.width,
-                position.y + dimension.height);
-
+                dimension.width, dimension.height);
 
         if (fillColor != null) {
             g2d.setPaint(fillColor);

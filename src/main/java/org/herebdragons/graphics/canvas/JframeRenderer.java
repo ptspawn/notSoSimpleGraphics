@@ -77,45 +77,60 @@ class JframeRenderer extends AbstractRenderer {
 
     public void render() {
 
-        Logger.log("Entering Update method from Canvas");
-        Logger.err("Rendering...");
-        do {
-            do {
-                Graphics2D g2d = null;
-                try {
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    Logger.debug("Entered Render method");
+                    do {
+                        do {
 
-                    Logger.log("Started Rendering");
-                    g2d = (Graphics2D) bs.getDrawGraphics();
+                            Graphics2D g2d = null;
 
-                    if (bs.contentsLost() || bs.contentsRestored())
-                        continue;
+                            try {
 
-                    fillBackground(g2d);
+                                Logger.log("Started Rendering");
 
-                    objectManager.render(g2d);
+                                g2d = (Graphics2D) bs.getDrawGraphics();
 
-                    Logger.log("Finished Rendering");
+                                if (bs.contentsLost() || bs.contentsRestored())
+                                    continue;
 
-                } catch (Exception e) {
-                    Logger.err("Exception in Rendering" + e.getMessage());
-                } finally {
-                    if (g2d != null) {
-                        //Toolkit.getDefaultToolkit().sync();
-                        g2d.dispose();
-                    }
+                                fillBackground(g2d);
+
+                                objectManager.render(g2d);
+
+                                Logger.log("Finished Rendering");
+
+                            } catch (Exception e) {
+                                Logger.err("Exception in Rendering" + e.getMessage());
+                            } finally {
+                                if (g2d != null) {
+                                    //Toolkit.getDefaultToolkit().sync();
+                                    g2d.dispose();
+                                }
+                            }
+
+                            Logger.log("BufferStrategy contents Restored: " + bs.contentsRestored());
+
+                        } while (bs.contentsRestored());
+
+                        Logger.log("BufferStrategy contents lost: " + bs.contentsLost());
+
+                        bs.show();
+
+                    } while (bs.contentsLost());
+
+                    Logger.log("Renderer painted to window");
                 }
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
 
-                Logger.log("BufferStrategy contents Restored: " + bs.contentsRestored());
 
-            } while (bs.contentsRestored());
-
-            Logger.log("BufferStrategy contents lost: " + bs.contentsLost());
-
-            bs.show();
-
-        } while (bs.contentsLost());
-
-        Logger.log("Renderer painted to window");
     }
 
 
