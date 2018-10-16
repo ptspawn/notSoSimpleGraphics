@@ -36,7 +36,7 @@ public class test implements notSoSimpleRunnable {
 
         CanvasFactory.setDefaultThreading(ThreadBehaviour.AUTO);
 
-        boolean fullScreen = false;
+        boolean fullScreen = true;
 
         if (fullScreen) {
             canvas = CanvasFactory.createCanvas("teste", RendererType.JAVA_2D);
