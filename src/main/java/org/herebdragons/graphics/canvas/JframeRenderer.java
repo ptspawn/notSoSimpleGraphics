@@ -77,11 +77,11 @@ class JframeRenderer extends AbstractRenderer {
 
     public void render() {
 
-//        try {
-//            SwingUtilities.invokeAndWait(new Runnable() {
-//                @Override
-//                public void run() {
-                    Logger.debug("Entered Render method");
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    //Logger.debug("Entered Render method");
                     do {
                         do {
 
@@ -103,7 +103,7 @@ class JframeRenderer extends AbstractRenderer {
                                 Logger.log("Finished Rendering");
 
                             } catch (Exception e) {
-                                Logger.err("Exception in Rendering" + e.getMessage());
+                                Logger.err("Exception in Rendering " + e.getMessage());
                             } finally {
                                 if (g2d != null) {
                                     //Toolkit.getDefaultToolkit().sync();
@@ -122,14 +122,14 @@ class JframeRenderer extends AbstractRenderer {
                     } while (bs.contentsLost());
 
                     Logger.log("Renderer painted to window");
-//              }
-//            });
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            e.printStackTrace();
-//        }
-//
+              }
+            });
+        } catch (InterruptedException e) {
+            Logger.err("Interrupted Exception in render");
+        } catch (InvocationTargetException e) {
+            Logger.err("Invocation target Exception in render");
+        }
+
 
     }
 
