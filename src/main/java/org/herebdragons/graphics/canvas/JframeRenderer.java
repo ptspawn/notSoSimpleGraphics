@@ -77,10 +77,10 @@ class JframeRenderer extends AbstractRenderer {
 
     public void render() {
 
-        try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
+//        try {
+//            SwingUtilities.invokeAndWait(new Runnable() {
+//                @Override
+//                public void run() {
                     Logger.debug("Entered Render method");
                     do {
                         do {
@@ -122,14 +122,14 @@ class JframeRenderer extends AbstractRenderer {
                     } while (bs.contentsLost());
 
                     Logger.log("Renderer painted to window");
-                }
-            });
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
+//              }
+//            });
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        }
+//
 
     }
 
