@@ -1,19 +1,15 @@
 import org.herebdragons.Config;
 import org.herebdragons.graphics.canvas.CanvasFactory;
 import org.herebdragons.graphics.canvas.notSoSimpleCanvas;
-import org.herebdragons.graphics.canvas.notSoSimpleRenderer;
 import org.herebdragons.graphics.canvas.notSoSimpleRunnable;
 import org.herebdragons.graphics.enums.RendererType;
-import org.herebdragons.graphics.enums.WindowBehaviour;
-import org.herebdragons.graphics.objects.ObjectManager;
 import org.herebdragons.graphics.objects.Rectangle;
 import org.herebdragons.graphics.objects.Text;
 import org.herebdragons.input.notSoSimpleKeyboardListener;
 import org.herebdragons.input.notSoSimpleMouseListener;
-import org.herebdragons.utils.FrameRate;
+import org.herebdragons.utils.FrameRate.FrameRate;
 import org.herebdragons.utils.Logger;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;

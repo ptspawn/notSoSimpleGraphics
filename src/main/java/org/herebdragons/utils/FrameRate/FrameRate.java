@@ -1,4 +1,6 @@
-package org.herebdragons.utils;
+package org.herebdragons.utils.FrameRate;
+
+import org.herebdragons.utils.Logger;
 
 public class FrameRate {
 
