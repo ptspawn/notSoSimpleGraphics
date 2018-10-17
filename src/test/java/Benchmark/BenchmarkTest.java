@@ -1,3 +1,5 @@
+package Benchmark;
+
 import org.herebdragons.Config;
 import org.herebdragons.graphics.canvas.CanvasFactory;
 import org.herebdragons.graphics.canvas.SystemManager;
@@ -6,7 +8,6 @@ import org.herebdragons.graphics.canvas.notSoSimpleRunnable;
 import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.objects.Rectangle;
 import org.herebdragons.graphics.objects.Text;
-import org.herebdragons.graphics.objects.notSoSimpleObject;
 import org.herebdragons.input.notSoSimpleKeyboardListener;
 import org.herebdragons.input.notSoSimpleMouseListener;
 import org.herebdragons.utils.FrameRate.FrameRate;

@@ -1,12 +1,13 @@
-package org.herebdragons.utils.FrameRate;
+package Benchmark;
 
+import org.herebdragons.utils.FrameRate.FrameRate;
 import org.herebdragons.utils.Logger;
 
 import java.text.DecimalFormat;
 
 class ImprovedFrameRate extends FrameRate {
 
-    private long MAX_STATS_INTERVAL = 1000000000L;
+    private final long MAX_STATS_INTERVAL = 1000000000L;
     // record stats every 1 second (roughly)
 
     private int NO_DELAYS_PER_YIELD = 16;
@@ -17,7 +18,7 @@ class ImprovedFrameRate extends FrameRate {
     // no. of frames that can be skipped in any one animation loop
     // i.e the games state is updated but not rendered
 
-    private static int NUM_FPS = 10;
+    private static final int NUM_FPS = 10;
     // number of FPS values stored to get an average
 
     private long overSleepTime;
@@ -41,6 +42,10 @@ class ImprovedFrameRate extends FrameRate {
 
     public ImprovedFrameRate(int targetFPS) {
         super(targetFPS);
+
+        if (targetFPS <= 0)
+            throw new IllegalArgumentException("Target FPS must be grater than zero");
+
     }
 
     @Override
@@ -51,6 +56,14 @@ class ImprovedFrameRate extends FrameRate {
         noDelays = 0;
         overSleepTime = 0;
         excess = 0;
+
+        // initialise timing elements
+        fpsStore = new double[NUM_FPS];
+        upsStore = new double[NUM_FPS];
+        for (int i = 0; i < NUM_FPS; i++) {
+            fpsStore[i] = 0.0;
+            upsStore[i] = 0.0;
+        }
     }
 
     @Override
@@ -168,14 +181,29 @@ class ImprovedFrameRate extends FrameRate {
     }  // end of storeStats()
 
     private String printStats() {
-      
-      StringBuilder sb = new StringBuilder();
-        sb.append("Frame Count/Loss: " + frameCount + " / " + totalFramesSkipped+"\n");
-        sb.append("Average FPS: " + df.format(framesPerSecond)+"\n");
-        sb.append("Average UPS: " + df.format(updatesPerSecond)+"\n");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Frame Count/Loss: " + frameCount + " / " + totalFramesSkipped + "\n");
+        sb.append("Average FPS: " + df.format(framesPerSecond) + "\n");
+        sb.append("Average UPS: " + df.format(updatesPerSecond) + "\n");
         sb.append("Time Spent: " + timeSpent + " secs");
         return sb.toString();
 
-  }
-    
+    }
+
+    public int getNumDeplayerPerYield() {
+        return NO_DELAYS_PER_YIELD;
+    }
+
+    public void setNumDeplayerPerYield(int NO_DELAYS_PER_YIELD) {
+        this.NO_DELAYS_PER_YIELD = NO_DELAYS_PER_YIELD;
+    }
+
+    public int getMaxFrameSkips() {
+        return MAX_FRAME_SKIPS;
+    }
+
+    public void setMaxFrameSkips(int MAX_FRAME_SKIPS) {
+        this.MAX_FRAME_SKIPS = MAX_FRAME_SKIPS;
+    }
 }
