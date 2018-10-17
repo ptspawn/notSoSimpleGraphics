@@ -40,8 +40,11 @@ class ImprovedFrameRate extends FrameRate {
 
     private DecimalFormat df = new DecimalFormat("0.##");  // 2 dp
 
-    public ImprovedFrameRate(int targetFPS) {
+    private Updatable callBack;
+
+    public ImprovedFrameRate(int targetFPS, Updatable callBack) {
         super(targetFPS);
+        this.callBack = callBack;
 
         if (targetFPS <= 0)
             throw new IllegalArgumentException("Target FPS must be grater than zero");
@@ -80,7 +83,7 @@ class ImprovedFrameRate extends FrameRate {
 
     }
 
-    public void sleep() {
+    public synchronized void sleep() {
 
         if (sleepTime > 0) {
             try {
@@ -117,23 +120,7 @@ class ImprovedFrameRate extends FrameRate {
 
     }
 
-    private void storeStats()
-  /* The statistics:
-       - the summed periods for all the iterations in this interval
-         (period is the amount of time a single frame iteration should take), 
-         the actual elapsed time in this interval, 
-         the error between these two numbers;
-
-       - the total frame count, which is the total number of calls to run();
-
-       - the frames skipped in this interval, the total number of frames
-         skipped. A frame skip is a game update without a corresponding render;
-
-       - the FPS (frames/sec) and UPS (updates/sec) for this interval, 
-         the average FPS & UPS over the last NUM_FPSs intervals.
-
-     The data is collected every MAX_STATS_INTERVAL  (1 sec).
-  */ {
+    private void storeStats() {
 
         statsInterval += cycleDuration;
 
@@ -178,9 +165,10 @@ class ImprovedFrameRate extends FrameRate {
             prevStatsTime = timeNow;
             statsInterval = 0L;   // reset
         }
-    }  // end of storeStats()
+    }
 
-    private String printStats() {
+    @Override
+    public String getResult() {
 
         StringBuilder sb = new StringBuilder();
         sb.append("Frame Count/Loss: " + frameCount + " / " + totalFramesSkipped + "\n");
@@ -188,7 +176,6 @@ class ImprovedFrameRate extends FrameRate {
         sb.append("Average UPS: " + df.format(updatesPerSecond) + "\n");
         sb.append("Time Spent: " + timeSpent + " secs");
         return sb.toString();
-
     }
 
     public int getNumDeplayerPerYield() {

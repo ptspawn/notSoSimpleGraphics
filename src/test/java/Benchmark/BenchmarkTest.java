@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BenchmarkTest implements notSoSimpleRunnable {
+public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
 
     private static volatile boolean running;
 
@@ -36,7 +36,7 @@ public class BenchmarkTest implements notSoSimpleRunnable {
     private static Rectangle vertSlidingRect;
 
 
-    private static final FrameRate frameRate = new ImpFrameRate(-1);
+    private static ImpFrameRate frameRate;
     private static notSoSimpleKeyboardListener keyInput;
     private static notSoSimpleMouseListener mouseInput;
 
@@ -58,22 +58,27 @@ public class BenchmarkTest implements notSoSimpleRunnable {
         HARDCORE
     }
 
-    public static void main(String[] args) {
-
+    private BenchmarkTest() {
 
         DisplayMode[] dl = SystemManager.getAvailableGraphicsModes();
-
 
         boolean fullScreen = false;
 
         Logger.setLogging(false);
         Logger.setDebugging(true);
 
+        frameRate = new ImpFrameRate(60, this);
         frameRate.setDebug(true);
 
         canvas = createTestObjects(fullScreen);
 
-        CanvasFactory.startCanvas(canvas, new BenchmarkTest());
+        CanvasFactory.startCanvas(canvas, this);
+
+    }
+
+    public static void main(String[] args) {
+
+        new BenchmarkTest();
 
     }
 
@@ -90,39 +95,43 @@ public class BenchmarkTest implements notSoSimpleRunnable {
             getuserInput(canvas);
 
             //update Cycle
+            update();
 
-            for (int i = 0; i < NUM_OBJECTS; i++) {
-
-                (horzSlidingRect = horizontalList.get(i)).move(1, 0);
-                horzSlidingRect.rotate((float) ((2 * Math.PI) / 360));
-                if (horzSlidingRect.getPosition().x >= canvas.getDimension().width) {
-                    horzSlidingRect.moveTo(0 - horzSlidingRect.getDimension().height, horzSlidingRect.getPosition().y);
-                }
-
-                (vertSlidingRect = verticalList.get(i)).move(0, -1);
-                vertSlidingRect.rotate(-(float) ((2 * Math.PI) / 360));
-                if (vertSlidingRect.getPosition().y + vertSlidingRect.getDimension().width <= 0) {
-                    vertSlidingRect.moveTo(vertSlidingRect.getPosition().x, canvas.getDimension().height);
-                }
-
-            }
-
-            rotatingRectangle.rotate((float) ((2 * Math.PI) / 360));
-
+            //Render Cycle
             canvas.update();
+
             frameRate.calculate();
 
-            try {
-                Thread.sleep(frameRate.getRemainingInCyle());
-            } catch (InterruptedException e) {
-                Logger.err("Benchmark Test - Error in thread sleep");
+            frameRate.sleep();
+
+        }
+
+        canvas.close();
+
+    }
+
+    private void update() {
+        for (int i = 0; i < NUM_OBJECTS; i++) {
+
+            (horzSlidingRect = horizontalList.get(i)).move(1, 0);
+            horzSlidingRect.rotate((float) ((2 * Math.PI) / 360));
+            if (horzSlidingRect.getPosition().x >= canvas.getDimension().width) {
+                horzSlidingRect.moveTo(0 - horzSlidingRect.getDimension().height, horzSlidingRect.getPosition().y);
+            }
+
+            (vertSlidingRect = verticalList.get(i)).move(0, -1);
+            vertSlidingRect.rotate(-(float) ((2 * Math.PI) / 360));
+            if (vertSlidingRect.getPosition().y + vertSlidingRect.getDimension().width <= 0) {
+                vertSlidingRect.moveTo(vertSlidingRect.getPosition().x, canvas.getDimension().height);
             }
 
         }
 
+        rotatingRectangle.rotate((float) ((2 * Math.PI) / 360));
+
     }
 
-    private static void runTest(boolean fullScreen, Map<String, Integer> results, DisplayMode dm) {
+    private void runTest(boolean fullScreen, Map<String, Integer> results, DisplayMode dm) {
 
         Logger.log("Benchmark test started for\n" +
                 "Renderer: " + CanvasFactory.getRenderer().name() + "\n" +
@@ -133,12 +142,12 @@ public class BenchmarkTest implements notSoSimpleRunnable {
         notSoSimpleCanvas canvas = createTestObjects(fullScreen);
 
 
-        runBenchmark(results, dm);
+        //runBenchmark(results, dm);
 
         //close(gameThread, threadCanvas);
     }
 
-    private static notSoSimpleCanvas createTestObjects(boolean fullScreen) {
+    private notSoSimpleCanvas createTestObjects(boolean fullScreen) {
 
         notSoSimpleCanvas canvas;
 
@@ -186,7 +195,7 @@ public class BenchmarkTest implements notSoSimpleRunnable {
 
                 randomRectangle.setStroke(new Color((int) (Math.random() * 255), (int) (Math.random() * 255),
                         (int) (Math.random() * 255), (int) (Math.random() * 255) / 2), stroke);
-            }else{
+            } else {
                 randomRectangle.setFill(new Color((int) (Math.random() * 255), (int) (Math.random() * 255),
                         (int) (Math.random() * 255), 255));//(int) (Math.random() * 255) / 2));
             }
@@ -233,7 +242,7 @@ public class BenchmarkTest implements notSoSimpleRunnable {
             keyInput.poll();
 
             if (keyInput.keyDown(KeyEvent.VK_ESCAPE)) {
-                canvas.close();
+                running = false;
             }
         }
 
@@ -243,61 +252,51 @@ public class BenchmarkTest implements notSoSimpleRunnable {
 
     }
 
-    private static void runBenchmark(Map<String, Integer> results, DisplayMode dm) {
-        int correctedValue;
+//    private void runBenchmark(Map<String, Integer> results, DisplayMode dm) {
+//        int correctedValue;
+//
+//        for (int i = 0; i < PASSES; i++) {
+//
+//            try {
+//                Thread.sleep(1000);
+//                if (i >= PASSES_TO_IGNORE - 1) {
+//                    correctedValue = frameRate.getFramesPerSecond();
+//                    results.put(dm.toString(),
+//                            (correctedValue + results.get(dm.toString())));
+//                    continue;
+//                }
+//
+//                //puts the PASSES_TO_IGNORE in the map for reference
+//                results.put(dm.toString(), frameRate.getFramesPerSecond());
+//
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        //Averaging
+//        results.put(dm.toString(), results.get(dm.toString()) / (PASSES - PASSES_TO_IGNORE));
+//    }
 
-        for (int i = 0; i < PASSES; i++) {
 
-            try {
-                Thread.sleep(1000);
-                if (i >= PASSES_TO_IGNORE - 1) {
-                    correctedValue = frameRate.getFramesPerSecond();
-                    results.put(dm.toString(),
-                            (correctedValue + results.get(dm.toString())));
-                    continue;
-                }
-
-                //puts the PASSES_TO_IGNORE in the map for reference
-                results.put(dm.toString(), frameRate.getFramesPerSecond());
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //Averaging
-        results.put(dm.toString(), results.get(dm.toString()) / (PASSES - PASSES_TO_IGNORE));
+    private void tick(int fps) {
+        text.setText(frameRate.getResult());
     }
 
+    private class ImpFrameRate extends ImprovedFrameRate {
 
-    private static void tick(int fps) {
-        text.setText("FPS: " + fps);
-    }
-
-    private static class ImpFrameRate extends FrameRate {
-        private ImpFrameRate(int targetFPS) {
-            super(targetFPS);
+        private ImpFrameRate(int targetFPS, Updatable callBack) {
+            super(targetFPS, callBack);
         }
 
         @Override
         public void calculate() {
-            currentTime = System.nanoTime();
-            delta += currentTime - lastTime;
-            lastTime = currentTime;
-            frameCount++;
-            incrementUpdate();
-            if (delta > 1e9) {
-                delta -= 1e9;
-                framesPerSecond = frameCount;
-                updatesPerSecond = updateCount;
-                frameCount = updateCount = 0;
-
-                if (debug) {
-                    System.out.println(getResult());
-                    tick(getFramesPerSecond());
-                }
+            super.calculate();
+            if (debug) {
+                tick(getFramesPerSecond());
             }
         }
     }
-
 }
+
+

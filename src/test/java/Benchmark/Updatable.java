@@ -1,0 +1,4 @@
+package Benchmark;
+
+interface Updatable {
+}
