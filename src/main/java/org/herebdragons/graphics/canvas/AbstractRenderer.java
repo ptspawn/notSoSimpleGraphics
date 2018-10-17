@@ -1,12 +1,8 @@
 package org.herebdragons.graphics.canvas;
 
-import org.herebdragons.Config;
-import org.herebdragons.graphics.objects.Manager;
-import org.herebdragons.graphics.objects.ObjectManager;
+import org.herebdragons.graphics.objects.notSoSimpleObjectManager;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferStrategy;
 
 /**
  * <center><h1><strong>AbstractRenderer class</strong></h1></center><br>
@@ -29,7 +25,7 @@ import java.awt.image.BufferStrategy;
 abstract class AbstractRenderer implements notSoSimpleRenderer {
 
     protected Dimension dimension;
-    protected Manager objectManager;
+    protected notSoSimpleObjectManager objectManager;
 
 
     protected AbstractRenderer() {
@@ -46,7 +42,7 @@ abstract class AbstractRenderer implements notSoSimpleRenderer {
         //testing
     }
 
-    public void setObjectManager(Manager objManager) {
+    public void setObjectManager(notSoSimpleObjectManager objManager) {
         this.objectManager = objManager;
     }
 

@@ -1,9 +1,6 @@
 package org.herebdragons.graphics.canvas;
 
-import org.herebdragons.graphics.objects.Manager;
-import org.herebdragons.graphics.objects.ObjectManager;
-
-import java.awt.*;
+import org.herebdragons.graphics.objects.notSoSimpleObjectManager;
 
 /**
  * <center><h1><strong>Renderer interface</strong></h1></center><br>
@@ -26,7 +23,7 @@ public interface notSoSimpleRenderer {
 
     void init(notSoSimpleWindow window);
 
-    void setObjectManager(Manager objManager);
+    void setObjectManager(notSoSimpleObjectManager objManager);
 
     void render();
 

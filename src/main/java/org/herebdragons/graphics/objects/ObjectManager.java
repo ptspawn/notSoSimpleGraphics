@@ -1,14 +1,12 @@
 package org.herebdragons.graphics.objects;
 
-import org.herebdragons.graphics.canvas.notSoSimpleCanvas;
-import org.herebdragons.graphics.objects.notSoSimpleObject;
 import org.herebdragons.utils.Logger;
 
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ObjectManager implements Manager {
+public class ObjectManager implements notSoSimpleObjectManager {
 
     protected List<notSoSimpleObject> objects = new LinkedList<notSoSimpleObject>();
 

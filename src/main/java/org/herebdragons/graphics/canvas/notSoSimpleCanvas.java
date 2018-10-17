@@ -1,14 +1,12 @@
 package org.herebdragons.graphics.canvas;
 
 import org.herebdragons.graphics.enums.WindowBehaviour;
-import org.herebdragons.graphics.objects.Manager;
+import org.herebdragons.graphics.objects.notSoSimpleObjectManager;
 import org.herebdragons.graphics.objects.notSoSimpleObject;
 import org.herebdragons.input.notSoSimpleKeyboardListener;
 import org.herebdragons.input.notSoSimpleMouseListener;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseListener;
 
 /**
  * <center><h1><strong>notSoSimpleCanvas interface</strong></h1></center><br>
@@ -78,7 +76,7 @@ public interface notSoSimpleCanvas extends Runnable {
 
     void addMouseListener(notSoSimpleMouseListener mouseInput);
 
-    void setObjectManager(Manager objectManager);
+    void setObjectManager(notSoSimpleObjectManager objectManager);
 
     notSoSimpleRenderer getRenderer();
 

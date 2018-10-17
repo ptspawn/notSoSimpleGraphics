@@ -73,10 +73,5 @@ public class Jwindow extends JFrame implements notSoSimpleWindow {
         return isReady;
     }
 
-    @Override
-    public synchronized void addKeyListener(KeyListener l) {
-        System.err.println("Adding keylinstener");
-        super.addKeyListener(l);
-    }
 }
 

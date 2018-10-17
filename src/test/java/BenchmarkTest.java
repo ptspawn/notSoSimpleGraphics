@@ -1,5 +1,6 @@
 import org.herebdragons.Config;
 import org.herebdragons.graphics.canvas.CanvasFactory;
+import org.herebdragons.graphics.canvas.SystemManager;
 import org.herebdragons.graphics.canvas.notSoSimpleCanvas;
 import org.herebdragons.graphics.canvas.notSoSimpleRunnable;
 import org.herebdragons.graphics.enums.RendererType;
@@ -37,12 +38,15 @@ public class BenchmarkTest implements notSoSimpleRunnable {
 
     private static notSoSimpleCanvas canvas;
 
+    private static DisplayMode currentDisplayMode;
+    Map<String, Integer> overallResults = new HashMap<String, Integer>();
+    Map<Integer,Integer> results = new HashMap<>();
 
     public static void main(String[] args) {
 
-        //DisplayMode[] dl = SystemManager.getAvailableGraphicsMode();
 
-        Map<String, Integer> results = new HashMap<String, Integer>();
+        DisplayMode[] dl = SystemManager.getAvailableGraphicsModes();
+
 
         boolean fullScreen = false;
 
@@ -54,7 +58,6 @@ public class BenchmarkTest implements notSoSimpleRunnable {
         canvas = createTestObjects(fullScreen);
 
         CanvasFactory.startCanvas(canvas, new BenchmarkTest());
-
 
     }
 
@@ -130,7 +133,7 @@ public class BenchmarkTest implements notSoSimpleRunnable {
         horzSlidingRect = new Rectangle(new Dimension(100, 100), new Point(100, canvas.getDimension().height/2-50));
         horzSlidingRect.setFill(new Color(255,0,0,254/2));
         float[] dash = {3,4};
-        BasicStroke stroke = new BasicStroke(2,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,10f,dash,10);
+        BasicStroke stroke = new BasicStroke(2,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,10f,dash,100);
         horzSlidingRect.setStroke(Color.black, stroke);
 
 
@@ -141,8 +144,9 @@ public class BenchmarkTest implements notSoSimpleRunnable {
                 new Point(canvas.getDimension().width / 2 - 150, canvas.getDimension().height / 2 - 150));
         GradientPaint redtowhite = new GradientPaint(500,0,Color.RED,1280-500, 0,Color.WHITE);
         rotatingRectangle.setFill(redtowhite);
-
-
+        float[] dash2 = {3f,4f,10f};
+        BasicStroke stroke2 = new BasicStroke(2,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,20f,dash2,10);
+        rotatingRectangle.setStroke(Color.black, stroke2);
 
         canvas.addObject(text);
         canvas.addObject(rotatingRectangle);

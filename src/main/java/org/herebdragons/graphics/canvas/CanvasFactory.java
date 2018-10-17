@@ -4,7 +4,7 @@ import org.herebdragons.Config;
 import org.herebdragons.graphics.enums.RendererType;
 import org.herebdragons.graphics.enums.ThreadBehaviour;
 import org.herebdragons.graphics.enums.WindowBehaviour;
-import org.herebdragons.graphics.objects.Manager;
+import org.herebdragons.graphics.objects.notSoSimpleObjectManager;
 import org.herebdragons.graphics.objects.ObjectManager;
 import org.herebdragons.utils.Logger;
 
@@ -24,7 +24,7 @@ public class CanvasFactory {
 
     private static WindowBehaviour behaviourOnExit = Config.DEFAULT_BEHAVIOUR_ON_EXIT;
 
-    private static Manager objectManager;
+    private static notSoSimpleObjectManager objectManager;
 
 
     public static notSoSimpleCanvas createCanvas(String Title, Dimension size, RendererType rendererType) {
@@ -90,7 +90,7 @@ public class CanvasFactory {
     }
 
 
-    public static void setObjectManager(Manager objManager) {
+    public static void setObjectManager(notSoSimpleObjectManager objManager) {
         objectManager = objManager;
     }
 

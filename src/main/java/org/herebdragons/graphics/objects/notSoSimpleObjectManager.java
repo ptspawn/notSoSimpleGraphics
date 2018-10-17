@@ -2,7 +2,7 @@ package org.herebdragons.graphics.objects;
 
 import java.awt.*;
 
-public interface Manager {
+public interface notSoSimpleObjectManager {
 
     void addObject(notSoSimpleObject object);
 

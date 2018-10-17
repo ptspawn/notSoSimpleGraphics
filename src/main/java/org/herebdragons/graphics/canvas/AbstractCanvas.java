@@ -2,7 +2,7 @@ package org.herebdragons.graphics.canvas;
 
 import org.herebdragons.Config;
 import org.herebdragons.graphics.enums.WindowBehaviour;
-import org.herebdragons.graphics.objects.Manager;
+import org.herebdragons.graphics.objects.notSoSimpleObjectManager;
 import org.herebdragons.graphics.objects.notSoSimpleObject;
 import org.herebdragons.input.notSoSimpleKeyboardListener;
 import org.herebdragons.input.notSoSimpleMouseListener;
@@ -14,7 +14,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
 
 /**
@@ -50,7 +49,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
     protected KeyListener keyInput;
     protected MouseListener mouseInput;
 
-    private Manager objectManager;
+    private notSoSimpleObjectManager objectManager;
     protected notSoSimpleRenderer renderer;
     private notSoSimpleRunnable callBack;
 
@@ -287,7 +286,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         window.requestFocus();
     }
 
-    public void setObjectManager(Manager objectManager) {
+    public void setObjectManager(notSoSimpleObjectManager objectManager) {
         this.objectManager = objectManager;
     }
 
@@ -353,7 +352,7 @@ public abstract class AbstractCanvas implements notSoSimpleCanvas {
         return renderer;
     }
 
-    public Manager getObjectManager() {
+    public notSoSimpleObjectManager getObjectManager() {
         return objectManager;
     }
 
