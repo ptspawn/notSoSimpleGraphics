@@ -9,22 +9,18 @@ public class FrameRate {
     // private static long MAX_STATS_INTERVAL = 1000L;
     // record stats every 1 second (roughly)
 
-    protected int framesPerSecond;
-    protected int updatesPerSecond;
+    protected double framesPerSecond;
+    protected double updatesPerSecond;
     protected long lastTime;
     protected long delta;
     protected long cycleDuration;
     protected long currentTime;
-    protected long overSleepTime;
     protected long sleepTime;
-
 
     protected int frameCount;
     protected int updateCount;
 
     protected boolean debug;
-
-
     protected boolean limited;
 
     public FrameRate(int targetFPS) {
@@ -53,7 +49,7 @@ public class FrameRate {
     public void calculate() {
         currentTime = System.nanoTime();
         delta = currentTime - lastTime;
-        sleepTime = cycleDuration - delta; // - overSleepTime;
+        sleepTime = cycleDuration - delta;
         lastTime = currentTime;
 
         frameCount++;
@@ -69,40 +65,23 @@ public class FrameRate {
         }
     }
 
-    public void updateOverSleepTime(){
-        overSleepTime=(System.nanoTime()-currentTime)-sleepTime;
-    }
-    public long getRemainingInCyle() {
+    public final long getRemainingInCyle() {
         if (!limited) {
             Logger.log("No FPS restrictions in place");
             return 0L;
         }
 
-        long remaining = (lastTime + cycleDuration - currentTime) / 1000000L;
-
-        Logger.log(remaining + " miliseconds free");
-        return remaining;
-//
-// Logger.log(sleepTime + " miliseconds free");
-//        return sleepTime;
+        Logger.log(sleepTime + " miliseconds free");
+        return sleepTime;
     }
 
-    public long getExcess() {
-        if (sleepTime>0)
-            throw new IllegalStateException("The usage of this function requires remaining in cycle to be negative");
-        return getRemainingInCyle();
-    }
 
     public long getCycleDuration() {
         return cycleDuration;
     }
 
     public int getUpdatesPerSecond() {
-        return updatesPerSecond;
-    }
-
-    public void resetOverSleepTime(){
-        overSleepTime=0;
+        return (int)updatesPerSecond;
     }
 
     public String getResult() {
@@ -111,7 +90,7 @@ public class FrameRate {
     }
 
     public int getFramesPerSecond() {
-        return framesPerSecond;
+        return (int)framesPerSecond;
     }
 
     public void setTargetFPS(int targetFPS) {
