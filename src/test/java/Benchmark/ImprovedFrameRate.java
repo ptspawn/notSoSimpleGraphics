@@ -79,7 +79,7 @@ class ImprovedFrameRate extends FrameRate {
         lastTime = currentTime;
 
         frameCount++;
-        incrementUpdate();
+        updateCount++;
 
     }
 

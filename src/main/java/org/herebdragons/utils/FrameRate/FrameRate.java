@@ -41,7 +41,7 @@ public class FrameRate {
 
     }
 
-    public void incrementUpdate() {
+    public final void incrementUpdate() {
         updateCount++;
     }
 
@@ -53,7 +53,7 @@ public class FrameRate {
         lastTime = currentTime;
 
         frameCount++;
-        incrementUpdate();
+        updateCount++;
         if (delta > recordingInterval) {
             delta -= recordingInterval;
             framesPerSecond = frameCount;
