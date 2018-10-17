@@ -93,8 +93,9 @@ class JframeRenderer extends AbstractRenderer {
 
                                 g2d = (Graphics2D) bs.getDrawGraphics();
 
-                                if (bs.contentsLost() || bs.contentsRestored())
+                                if (bs.contentsLost() || bs.contentsRestored()) {
                                     continue;
+                                }
 
                                 fillBackground(g2d);
 

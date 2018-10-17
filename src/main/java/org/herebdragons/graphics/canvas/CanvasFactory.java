@@ -60,7 +60,7 @@ public class CanvasFactory {
 
         canvas.setBehaviorOnExit(behaviourOnExit);
         canvas.setTitle(title);
-
+        //-Dsun.java2d.d3d=false
         return canvas;
 
     }
