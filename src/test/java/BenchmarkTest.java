@@ -84,7 +84,7 @@ public class BenchmarkTest implements notSoSimpleRunnable {
                 vertSlidingRect.moveTo(vertSlidingRect.getPosition().x, canvas.getDimension().height);
             }
 
-            //rotatingRectangle.rotate((float) ((2 * Math.PI) / 360));
+            rotatingRectangle.rotate((float) ((2 * Math.PI) / 360));
 
             canvas.update();
             frameRate.calculate();

@@ -24,21 +24,26 @@ public class Rectangle extends notSoSimpleObject implements Fillable, Strokable 
     public void render(Graphics2D g2d) {
         Logger.log("Rendering rectangle" + this);
 
+        Graphics2D g2 = (Graphics2D)g2d.create();
+
         rectangle = new java.awt.Rectangle(position.x, position.y,
                 dimension.width, dimension.height);
-
-        if (rotation!=0)
-            g2d.rotate(rotation, position.x + dimension.width/2, position.y + dimension.height/2);
-
+        if (rotation != 0) {
+            g2.rotate(rotation, position.x + dimension.width / 2, position.y + dimension.height / 2);
+        } else {
+            g2.rotate(0,position.x,position.y);
+        }
         if (fillColor != null) {
-            g2d.setPaint(fillColor);
-            g2d.fill(rectangle);
+            g2.setPaint(fillColor);
+            g2.fill(rectangle);
         }
         if (stroke != null) {
-            g2d.setPaint(strokeColor);
-            g2d.setStroke(stroke);
-            g2d.draw(rectangle);
+            g2.setPaint(strokeColor);
+            g2.setStroke(stroke);
+            g2.draw(rectangle);
         }
+
+        g2.dispose();
 
     }
 
