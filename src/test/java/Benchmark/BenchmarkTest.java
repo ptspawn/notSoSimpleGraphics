@@ -50,12 +50,16 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
     private final static List<Rectangle> verticalList = new ArrayList<Rectangle>();
 
 
-    private static final int NUM_OBJECTS = 1000;
-    private static final TestMode MODE = TestMode.HARDCORE;
+    private static int NUM_OBJECTS = 100;
+    private static final TestMode MODE = TestMode.NORMAL;
 
     private enum TestMode {
-        NORMAL,
-        HARDCORE
+        NORMAL(500),
+        HARDCORE(500);
+
+        TestMode(int halfObjects) {
+            NUM_OBJECTS = halfObjects;
+        }
     }
 
     private BenchmarkTest() {
@@ -110,7 +114,7 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
 
     }
 
-    private void update() {
+    public void update() {
         for (int i = 0; i < NUM_OBJECTS; i++) {
 
             (horzSlidingRect = horizontalList.get(i)).move(1, 0);

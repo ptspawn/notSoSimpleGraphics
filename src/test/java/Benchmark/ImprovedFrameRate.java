@@ -46,6 +46,8 @@ class ImprovedFrameRate extends FrameRate {
         super(targetFPS);
         this.callBack = callBack;
 
+        Logger.debug("Creating FrameRate Object");
+
         if (targetFPS <= 0)
             throw new IllegalArgumentException("Target FPS must be grater than zero");
 
@@ -54,6 +56,8 @@ class ImprovedFrameRate extends FrameRate {
     @Override
     public void initialize() {
         super.initialize();
+        Logger.debug("Initializinf FrameRate");
+
         prevStatsTime = lastTime;
         startTime = lastTime;
         noDelays = 0;
@@ -81,22 +85,39 @@ class ImprovedFrameRate extends FrameRate {
         frameCount++;
         updateCount++;
 
+        Logger.debug("FrameRate calculating:\n" +
+                "Current time:  " + currentTime + "\n" +
+                "Delta:         " + delta + "\n" +
+                "OverSleepTime: " + overSleepTime + "\n" +
+                "Sleep time:    " + sleepTime + "\n" +
+                "Lastime:       " + lastTime + "\n" +
+                "FrameCOunt:    " + frameCount + "\n" +
+                "UpdateCount:   " + updateCount + "\n");
+
     }
 
     public synchronized void sleep() {
 
         if (sleepTime > 0) {
+            Logger.debug("Going to sleep for " + sleepTime);
             try {
                 Thread.sleep(sleepTime / 1000000L);  // nano -> ms
             } catch (InterruptedException ex) {
                 Logger.err("Problem Sleeping");
             }
             overSleepTime = (System.nanoTime() - currentTime) - sleepTime;
+            Logger.debug("Updated OversleepTime: " + overSleepTime);
         } else {
             excess -= sleepTime;
             overSleepTime = 0L;
 
+            Logger.debug("Not enough time to sleep\n" +
+                    "Excess: " + excess + "\n");
+
             if (++noDelays >= NO_DELAYS_PER_YIELD) {
+                Logger.debug("Yielding Thread\n" +
+                        "DelayVount: " + noDelays);
+
                 Thread.yield();
                 noDelays = 0;
             }
@@ -105,19 +126,32 @@ class ImprovedFrameRate extends FrameRate {
 
         lastTime = System.nanoTime();
 
+        Logger.debug("Updating lasttime to " + lastTime);
+
         int skips = 0;
         while ((excess > cycleDuration) && (skips < MAX_FRAME_SKIPS)) {
+
             excess -= cycleDuration;
+
+            Logger.debug("Skipping frames\n" +
+                    "excess: " + excess + "\n" +
+                    "and updating!");
             //call to gameupdate;
+            callBack.update();
+
             skips++;
+            frameCount++;
+
+            Logger.debug("skips: " + skips);
+
         }
         framesSkipped += skips;
 
-        frameCount++;
 
-        if (debug)
+        if (debug) {
+            Logger.debug("Storing Stats");
             storeStats();
-
+        }
     }
 
     private void storeStats() {
