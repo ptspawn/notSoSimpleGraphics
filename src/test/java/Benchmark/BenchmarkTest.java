@@ -50,15 +50,20 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
     private final static List<Rectangle> verticalList = new ArrayList<Rectangle>();
 
 
-    private static int NUM_OBJECTS = 100;
-    private static final TestMode MODE = TestMode.NORMAL;
+    private static final TestMode MODE = TestMode.HARDCORE;
 
     private enum TestMode {
-        NORMAL(500),
-        HARDCORE(500);
+        NORMAL(100),
+        HARDCORE(300);
+
+        private int NUM_OBJECTS;
 
         TestMode(int halfObjects) {
             NUM_OBJECTS = halfObjects;
+        }
+
+        public int getNumObjects(){
+            return NUM_OBJECTS;
         }
     }
 
@@ -110,12 +115,14 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
 
         }
 
+        System.out.println(frameRate.getResult());
+
         canvas.close();
 
     }
 
     public void update() {
-        for (int i = 0; i < NUM_OBJECTS; i++) {
+        for (int i = 0; i < MODE.getNumObjects(); i++) {
 
             (horzSlidingRect = horizontalList.get(i)).move(1, 0);
             horzSlidingRect.rotate((float) ((2 * Math.PI) / 360));
@@ -182,7 +189,7 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
         float[] dash;
         BasicStroke stroke;
 
-        for (int i = 0; i < NUM_OBJECTS; i++) {
+        for (int i = 0; i < MODE.getNumObjects(); i++) {
 
             randomRectangle = new Rectangle(new Dimension(100, 100),
                     new Point((int) (Math.random() * canvas.getDimension().width), (int) (Math.random() * canvas.getDimension().height)));
@@ -297,7 +304,7 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
         public void calculate() {
             super.calculate();
             if (debug) {
-                tick(getFramesPerSecond());
+                tick(super.getFramesPerSecond());
             }
         }
     }

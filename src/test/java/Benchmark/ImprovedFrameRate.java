@@ -49,14 +49,14 @@ class ImprovedFrameRate extends FrameRate {
         Logger.debug("Creating FrameRate Object");
 
         if (targetFPS <= 0)
-            throw new IllegalArgumentException("Target FPS must be grater than zero");
+            throw new IllegalArgumentException("Target FPS must be greater than zero");
 
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        Logger.debug("Initializinf FrameRate");
+        Logger.debug("Initializing FrameRate");
 
         prevStatsTime = lastTime;
         startTime = lastTime;
@@ -85,14 +85,14 @@ class ImprovedFrameRate extends FrameRate {
         frameCount++;
         updateCount++;
 
-        Logger.debug("FrameRate calculating:\n" +
-                "Current time:  " + currentTime + "\n" +
-                "Delta:         " + delta + "\n" +
-                "OverSleepTime: " + overSleepTime + "\n" +
-                "Sleep time:    " + sleepTime + "\n" +
-                "Lastime:       " + lastTime + "\n" +
-                "FrameCOunt:    " + frameCount + "\n" +
-                "UpdateCount:   " + updateCount + "\n");
+//        //Logger.debug("FrameRate calculating:\n" +
+//                "Current time:  " + currentTime + "\n" +
+//                "Delta:         " + delta + "\n" +
+//                "OverSleepTime: " + overSleepTime + "\n" +
+//                "Sleep time:    " + sleepTime + "\n" +
+//                "Lastime:       " + lastTime + "\n" +
+//                "FrameCOunt:    " + frameCount + "\n" +
+//                "UpdateCount:   " + updateCount + "\n");
 
     }
 

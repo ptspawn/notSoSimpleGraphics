@@ -25,7 +25,6 @@ public class Text extends notSoSimpleObject {
         g2d.drawString(text, position.x, position.y);
     }
 
-
     public String getText() {
         return text;
     }

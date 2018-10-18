@@ -81,7 +81,7 @@ class JframeRenderer extends AbstractRenderer {
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override
                 public void run() {
-                    //Logger.debug("Entered Render method");
+                    Logger.debug("Entered Render method");
                     do {
                         do {
 

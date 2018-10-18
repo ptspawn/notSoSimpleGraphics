@@ -8,9 +8,11 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
 
     volatile protected Dimension dimension;
     volatile protected Point position;
-
-
     volatile protected float rotation;
+
+    //TODO
+    protected notSoSimpleRenderingHints[] renderingHints;
+
     private Graphics g;
 
     notSoSimpleObject(Dimension dimension, Point position) {
@@ -69,6 +71,17 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
     public void scale(float scaleFactor) {
         dimension = UtilMath.vectorTimesScalar(dimension, scaleFactor);
 
+    }
+
+    @Override
+    public void setRenderingHints(notSoSimpleRenderingHints[] hints) {
+        //TODO
+    }
+
+    @Override
+    public notSoSimpleRenderingHints[] getRenderingHints() {
+        //TODO
+        return new notSoSimpleRenderingHints[0];
     }
 
     @Override
