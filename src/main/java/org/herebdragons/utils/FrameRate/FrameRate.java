@@ -5,7 +5,7 @@ import org.herebdragons.utils.Logger;
 public class FrameRate {
 
 
-    private static long recordingInterval = 1000000000L;
+    protected static long recordingInterval = 1000000000L;
     // private static long MAX_STATS_INTERVAL = 1000L;
     // record stats every 1 second (roughly)
 
@@ -17,16 +17,20 @@ public class FrameRate {
     protected long currentTime;
     protected long sleepTime;
 
+    protected long lastRecordime;
+
     protected int frameCount;
     protected int updateCount;
 
+
     protected boolean debug;
-    protected boolean limited;
+    private boolean limited;
 
     public FrameRate(int targetFPS) {
 
         if (targetFPS <= 0) {
             limited = false;
+            cycleDuration = 0;
             return;
         }
 
@@ -35,7 +39,7 @@ public class FrameRate {
     }
 
     public void initialize() {
-        lastTime = System.nanoTime();
+        lastTime = lastRecordime = System.nanoTime();
         framesPerSecond = 0;
         updatesPerSecond = 0;
 
@@ -47,21 +51,25 @@ public class FrameRate {
 
 
     public void calculate() {
-        currentTime = System.nanoTime();
+        currentTime = lastRecordime = System.nanoTime();
         delta = currentTime - lastTime;
+
+        System.out.println("FR delta " + delta);
         sleepTime = cycleDuration - delta;
+        System.out.println("FR sleeptime " + sleepTime);
         lastTime = currentTime;
 
         frameCount++;
         updateCount++;
-        if (delta > recordingInterval) {
+        if (lastRecordime + recordingInterval < currentTime) {
             delta -= recordingInterval;
             framesPerSecond = frameCount;
             updatesPerSecond = updateCount;
             frameCount = updateCount = 0;
 
-            if (debug)
+            if (debug) {
                 System.out.println(getResult());
+            }
         }
     }
 
@@ -72,7 +80,7 @@ public class FrameRate {
         }
 
         Logger.log(sleepTime + " miliseconds free");
-        return sleepTime;
+        return sleepTime > 0 ? (long) (sleepTime * 1e-6) : 0; //nano --> mili
     }
 
 
@@ -81,7 +89,7 @@ public class FrameRate {
     }
 
     public int getUpdatesPerSecond() {
-        return (int)updatesPerSecond;
+        return (int) updatesPerSecond;
     }
 
     public String getResult() {
@@ -90,10 +98,17 @@ public class FrameRate {
     }
 
     public int getFramesPerSecond() {
-        return (int)framesPerSecond;
+        return (int) framesPerSecond;
     }
 
     public void setTargetFPS(int targetFPS) {
+
+        if (targetFPS <= 0) {
+            cycleDuration = 0;
+            limited = false;
+            return;
+        }
+
         cycleDuration = 1000000000 / targetFPS;
         limited = true;
     }
@@ -102,7 +117,7 @@ public class FrameRate {
         this.debug = debug;
     }
 
-    public boolean isLimited() {
+    public final boolean isLimited() {
         return limited;
     }
 

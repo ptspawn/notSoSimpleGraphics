@@ -62,7 +62,7 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
             NUM_OBJECTS = halfObjects;
         }
 
-        public int getNumObjects(){
+        public int getNumObjects() {
             return NUM_OBJECTS;
         }
     }
@@ -74,9 +74,9 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
         boolean fullScreen = false;
 
         Logger.setLogging(false);
-        Logger.setDebugging(true);
+        Logger.setDebugging(false);
 
-        frameRate = new ImpFrameRate(60, this);
+        frameRate = new ImpFrameRate(10, this);
         frameRate.setDebug(true);
 
         canvas = createTestObjects(fullScreen);
@@ -111,7 +111,13 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
 
             frameRate.calculate();
 
-            frameRate.sleep();
+            try {
+                Thread.sleep(frameRate.getRemainingInCyle());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //frameRate.sleep();
 
         }
 
@@ -294,20 +300,36 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
         text.setText(frameRate.getResult());
     }
 
-    private class ImpFrameRate extends ImprovedFrameRate {
+    private class ImpFrameRate extends FrameRate {
 
         private ImpFrameRate(int targetFPS, Updatable callBack) {
-            super(targetFPS, callBack);
+            super(targetFPS);
         }
 
         @Override
         public void calculate() {
-            super.calculate();
-            if (debug) {
-                tick(super.getFramesPerSecond());
+            currentTime = System.nanoTime();
+            delta = currentTime - lastTime;
+            sleepTime = cycleDuration - delta;
+            lastTime = currentTime;
+
+            frameCount++;
+            updateCount++;
+            if (lastRecordime + recordingInterval < currentTime) {
+                lastRecordime = currentTime;
+                framesPerSecond = frameCount;
+                updatesPerSecond = updateCount;
+                frameCount = updateCount = 0;
+
+                tick(0);
+
+                if (debug) {
+                    System.out.println(getResult());
+                }
             }
         }
     }
 }
+
 
 

@@ -71,7 +71,6 @@ public class test implements notSoSimpleRunnable {
 
         canvas.update();
 
-
         while (true) {
             keyInput.poll();
 
