@@ -50,7 +50,7 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
     private final static List<Rectangle> verticalList = new ArrayList<Rectangle>();
 
 
-    private static final TestMode MODE = TestMode.HARDCORE;
+    private static final TestMode MODE = TestMode.NORMAL;
 
     private enum TestMode {
         NORMAL(100),
@@ -76,7 +76,7 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
         Logger.setLogging(false);
         Logger.setDebugging(false);
 
-        frameRate = new ImpFrameRate(10, this);
+        frameRate = new ImpFrameRate(60,this);
         frameRate.setDebug(true);
 
         canvas = createTestObjects(fullScreen);
@@ -308,15 +308,17 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
 
         @Override
         public void calculate() {
-            currentTime = System.nanoTime();
+            currentTime = lastRecordime = System.nanoTime();
             delta = currentTime - lastTime;
+            deltaMeasurements += delta;
+
             sleepTime = cycleDuration - delta;
             lastTime = currentTime;
 
             frameCount++;
             updateCount++;
-            if (lastRecordime + recordingInterval < currentTime) {
-                lastRecordime = currentTime;
+            if (deltaMeasurements>recordingInterval) {
+                deltaMeasurements -= recordingInterval;
                 framesPerSecond = frameCount;
                 updatesPerSecond = updateCount;
                 frameCount = updateCount = 0;
@@ -327,6 +329,7 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
                     System.out.println(getResult());
                 }
             }
+
         }
     }
 }

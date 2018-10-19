@@ -16,6 +16,7 @@ public class FrameRate {
     protected long cycleDuration;
     protected long currentTime;
     protected long sleepTime;
+    protected long deltaMeasurements;
 
     protected long lastRecordime;
 
@@ -53,6 +54,7 @@ public class FrameRate {
     public void calculate() {
         currentTime = lastRecordime = System.nanoTime();
         delta = currentTime - lastTime;
+        deltaMeasurements += delta;
 
         System.out.println("FR delta " + delta);
         sleepTime = cycleDuration - delta;
@@ -61,8 +63,8 @@ public class FrameRate {
 
         frameCount++;
         updateCount++;
-        if (lastRecordime + recordingInterval < currentTime) {
-            delta -= recordingInterval;
+        if (deltaMeasurements>recordingInterval) {
+            deltaMeasurements -= recordingInterval;
             framesPerSecond = frameCount;
             updatesPerSecond = updateCount;
             frameCount = updateCount = 0;

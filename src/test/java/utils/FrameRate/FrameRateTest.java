@@ -38,7 +38,7 @@ public class FrameRateTest {
     public void restrictedTest() {
 
         int TARGET_FPS = 60;
-        int ERROR_MARGIN = 5;
+        int ERROR_MARGIN = 0;
 
         fr.setTargetFPS(TARGET_FPS);
 
