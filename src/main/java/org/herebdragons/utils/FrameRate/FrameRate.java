@@ -6,6 +6,8 @@ public class FrameRate {
 
 
     protected static long recordingInterval = 1000000000L;
+
+    protected static final long NANO_TO_MILI = 1000000L;
     // private static long MAX_STATS_INTERVAL = 1000L;
     // record stats every 1 second (roughly)
 
@@ -27,6 +29,8 @@ public class FrameRate {
     protected boolean debug;
     private boolean limited;
 
+    protected long roundingError;
+
     public FrameRate(int targetFPS) {
 
         if (targetFPS <= 0) {
@@ -43,6 +47,7 @@ public class FrameRate {
         lastTime = lastRecordime = System.nanoTime();
         framesPerSecond = 0;
         updatesPerSecond = 0;
+        roundingError = 0;
 
     }
 
@@ -51,26 +56,34 @@ public class FrameRate {
     }
 
 
-    public void calculate() {
-        currentTime = lastRecordime = System.nanoTime();
+    public synchronized void calculate() {
+        currentTime = System.nanoTime();
         delta = currentTime - lastTime;
+        lastTime = currentTime;
+
         deltaMeasurements += delta;
 
-        System.out.println("FR delta " + delta);
-        sleepTime = cycleDuration - delta;
-        System.out.println("FR sleeptime " + sleepTime);
-        lastTime = currentTime;
+        sleepTime = cycleDuration - delta + roundingError;
+        roundingError = sleepTime % NANO_TO_MILI;
+
+        sleepTime = sleepTime / NANO_TO_MILI;                   //nano to mili
+
+        if (sleepTime < 0) {
+            sleepTime = 0;
+        }
 
         frameCount++;
         updateCount++;
-        if (deltaMeasurements>recordingInterval) {
+        if (deltaMeasurements > recordingInterval) {
             deltaMeasurements -= recordingInterval;
             framesPerSecond = frameCount;
             updatesPerSecond = updateCount;
             frameCount = updateCount = 0;
 
+
             if (debug) {
                 System.out.println(getResult());
+
             }
         }
     }
@@ -81,8 +94,7 @@ public class FrameRate {
             return 0L;
         }
 
-        Logger.log(sleepTime + " miliseconds free");
-        return sleepTime > 0 ? (long) (sleepTime * 1e-6) : 0; //nano --> mili
+        return sleepTime; //nano --> mili
     }
 
 

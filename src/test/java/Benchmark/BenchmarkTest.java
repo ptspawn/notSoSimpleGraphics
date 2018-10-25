@@ -308,25 +308,36 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
 
         @Override
         public void calculate() {
-            currentTime = lastRecordime = System.nanoTime();
+            currentTime = System.nanoTime();
             delta = currentTime - lastTime;
+            lastTime = currentTime;
+
             deltaMeasurements += delta;
 
-            sleepTime = cycleDuration - delta;
-            lastTime = currentTime;
+            System.out.println("Cycle duration: " + cycleDuration);
+
+            sleepTime = cycleDuration - delta + roundingError;
+            roundingError = sleepTime % NANO_TO_MILI;
+
+            sleepTime = sleepTime / NANO_TO_MILI;                   //nano to mili
+
+            System.out.println("sleepTime: " + sleepTime);
+
+            if (sleepTime < 0) {
+                sleepTime = 0;
+            }
 
             frameCount++;
             updateCount++;
-            if (deltaMeasurements>recordingInterval) {
+            if (deltaMeasurements > recordingInterval) {
                 deltaMeasurements -= recordingInterval;
                 framesPerSecond = frameCount;
                 updatesPerSecond = updateCount;
                 frameCount = updateCount = 0;
 
-                tick(0);
 
                 if (debug) {
-                    System.out.println(getResult());
+                    tick(0);
                 }
             }
 
