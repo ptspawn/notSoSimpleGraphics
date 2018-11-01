@@ -20,6 +20,8 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
         this.dimension = dimension;
     }
 
+    notSoSimpleObject(){};
+
     public abstract void render(Graphics2D g);
 
     public void moveTo(Point position) {
@@ -27,7 +29,7 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
     }
 
     public void moveTo(int x, int y) {
-        this.position.setLocation(x,y);
+        this.position.setLocation(x, y);
 
     }
 
@@ -52,8 +54,10 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
         return position;
     }
 
-    public Point getCenter(){
-        return new Point(position.x+dimension.width/2,position.y+dimension.height/2);
+    public Point getCenter() {
+
+        //TODO: doesnt account for rotation
+        return new Point(position.x + dimension.width / 2, position.y + dimension.height / 2);
     }
 
     public float getRotation() {

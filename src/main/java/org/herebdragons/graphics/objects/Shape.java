@@ -13,6 +13,10 @@ abstract class Shape extends notSoSimpleObject implements Fillable, Strokable{
 
     protected java.awt.Shape shape;
 
+    Shape(){
+        super();
+    }
+
     Shape(Dimension dimension, Point position) {
         super(dimension, position);
     }
