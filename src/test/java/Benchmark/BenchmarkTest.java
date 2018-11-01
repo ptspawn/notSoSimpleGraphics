@@ -50,7 +50,7 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
     private final static List<Rectangle> verticalList = new ArrayList<Rectangle>();
 
 
-    private static final TestMode MODE = TestMode.NORMAL;
+    private static final TestMode MODE = TestMode.HARDCORE;
 
     private enum TestMode {
         NORMAL(100),
