@@ -54,7 +54,7 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
 
     private enum TestMode {
         NORMAL(100),
-        HARDCORE(300);
+        HARDCORE(100);
 
         private int NUM_OBJECTS;
 

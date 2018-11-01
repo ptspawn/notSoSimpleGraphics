@@ -52,6 +52,10 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
         return position;
     }
 
+    public Point getCenter(){
+        return new Point(position.x+dimension.width/2,position.y+dimension.height/2);
+    }
+
     public float getRotation() {
         return rotation;
     }
