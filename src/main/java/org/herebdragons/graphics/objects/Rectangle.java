@@ -31,7 +31,6 @@ public class Rectangle extends Shape {
     @Override
     public void render(Graphics2D g2d) {
 
-        //OBSOLETE: shape = new java.awt.Rectangle(position.x, position.y, dimension.width, dimension.height);
         super.render(g2d);
 
     }
@@ -70,11 +69,6 @@ public class Rectangle extends Shape {
     }
 
     @Override
-    public void move(float x, float y) {
-
-    }
-
-    @Override
     public void move(double x, double y) {
         castShapeRef.setRect(getPosition().getX() + x, getPosition().getY() + y,
                 getDimension().getWidth(), getDimension().getHeight());
@@ -90,36 +84,13 @@ public class Rectangle extends Shape {
 
     @Override
     public java.awt.Rectangle getBounds() {
-        return (java.awt.Rectangle) castShapeRef.getBounds2D();
+
+        return shape.getBounds();
     }
 
     @Override
     public Point2D getPosition() {
         return new Point2D.Double(castShapeRef.getX(), castShapeRef.getY());
-    }
-
-    @Override
-    public Point2D getCenter() {
-        return new Point2D.Double(getPosition().getX() + getDimension().getWidth() / 2, getPosition().getY() + getDimension().getHeight() / 2);
-    }
-
-    @Override
-    public double getRotation() {
-        return rotation;
-    }
-
-    @Override
-    public void setRotation(double rotation) {
-
-    }
-
-    @Override
-    public void rotate(double radians) {
-        rotation = UtilMath.packRotation(rotation + radians);
-        AffineTransform at = new AffineTransform();
-        at.rotate(rotation, getPosition().getX() + anchor.getX(), getPosition().getY() + anchor.getY());
-        shape = at.createTransformedShape(castShapeRef.getBounds());
-
     }
 
     @Override
@@ -131,6 +102,25 @@ public class Rectangle extends Shape {
     @Override
     public void scale(float scaleFactor) {
         //TODO - REMEMBER WE HAVE ANCHOR POINTS NOW
+
+    }
+
+    @Override
+    public void setRotation(double rotation) {
+        super.setRotation(rotation);
+        applyRotation();
+    }
+
+    @Override
+    public void rotate(double radians) {
+        super.rotate(radians);
+        applyRotation();
+    }
+
+    private void applyRotation(){
+        AffineTransform at = new AffineTransform();
+        at.rotate(rotation, getPosition().getX() + anchor.getX(), getPosition().getY() + anchor.getY());
+        shape = at.createTransformedShape(shape.getBounds());
 
     }
 

@@ -10,7 +10,7 @@ public interface Movable {
 
     void move(int x, int y);
 
-    void move(float x, float y);
+    void move(double x, double y);
 
 
 }

@@ -23,6 +23,8 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
 
     public abstract void moveTo(Point2D position);
 
+    public abstract void moveTo(Point position);
+
     public abstract void moveTo(int x, int y);
 
     public abstract void moveTo(double x, double y);

@@ -62,11 +62,6 @@ public class Text extends notSoSimpleObject {
 
     }
 
-    @Override
-    public void move(float x, float y) {
-
-    }
-
     public String getText() {
         return text;
     }

@@ -5,6 +5,8 @@ import org.herebdragons.utils.Logger;
 
 import java.awt.*;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 
 abstract class Shape extends notSoSimpleObject implements Fillable, Strokable{
 
@@ -89,6 +91,31 @@ abstract class Shape extends notSoSimpleObject implements Fillable, Strokable{
     public Rectangle getBounds(){
         return shape.getBounds();
     }
+
+    @Override
+    public Point2D getCenter() {
+
+        return new Point2D.Double(shape.getBounds().getCenterX(),shape.getBounds().getCenterY());
+    }
+
+//    @Override
+//    public void setRotation(double rotation) {
+//        super.setRotation(rotation);
+//        applyRotation();
+//    }
+//
+//    @Override
+//    public void rotate(double radians) {
+//        super.rotate(radians);
+//        applyRotation();
+//    }
+//
+//    private void applyRotation(){
+//        AffineTransform at = new AffineTransform();
+//        at.rotate(rotation, getPosition().getX() + anchor.getX(), getPosition().getY() + anchor.getY());
+//        shape = at.createTransformedShape(shape.getBounds());
+//
+//    }
 
     @Override
     public void setRenderingHints(notSoSimpleRenderingHints[] hints) {
