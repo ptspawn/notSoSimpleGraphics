@@ -17,7 +17,7 @@ public class UtilMath {
 
     }
 
-    public static float packRotation(float rotation) {
+    public static double packRotation(double rotation) {
         if (rotation < 0) {
             rotation += 2 * Math.PI;
         }

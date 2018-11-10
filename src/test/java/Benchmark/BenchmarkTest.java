@@ -50,7 +50,7 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
     private final static List<Rectangle> verticalList = new ArrayList<Rectangle>();
 
 
-    private static final TestMode MODE = TestMode.HARDCORE;
+    private static final TestMode MODE = TestMode.NORMAL;
 
     private enum TestMode {
         NORMAL(100),
@@ -71,7 +71,7 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
 
         DisplayMode[] dl = SystemManager.getAvailableGraphicsModes();
 
-        boolean fullScreen = false;
+        boolean fullScreen = true;
 
         Logger.setLogging(false);
         Logger.setDebugging(false);
@@ -131,20 +131,20 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
         for (int i = 0; i < MODE.getNumObjects(); i++) {
 
             (horzSlidingRect = horizontalList.get(i)).move(1, 0);
-            horzSlidingRect.rotate((float) ((2 * Math.PI) / 360));
-            if (horzSlidingRect.getPosition().x >= canvas.getDimension().width) {
-                horzSlidingRect.moveTo(0 - horzSlidingRect.getDimension().height, horzSlidingRect.getPosition().y);
+            horzSlidingRect.rotate( (2 * Math.PI) / 360);
+            if (horzSlidingRect.getPosition().getX() >= canvas.getDimension().width) {
+                horzSlidingRect.moveTo(0 - horzSlidingRect.getDimension().height, horzSlidingRect.getPosition().getY());
             }
 
             (vertSlidingRect = verticalList.get(i)).move(0, -1);
-            vertSlidingRect.rotate(-(float) ((2 * Math.PI) / 360));
-            if (vertSlidingRect.getPosition().y + vertSlidingRect.getDimension().width <= 0) {
-                vertSlidingRect.moveTo(vertSlidingRect.getPosition().x, canvas.getDimension().height);
+            vertSlidingRect.rotate(-(2 * Math.PI) / 360);
+            if (vertSlidingRect.getPosition().getY() + vertSlidingRect.getDimension().height <= 0) {
+                vertSlidingRect.moveTo(vertSlidingRect.getPosition().getX(), canvas.getDimension().height);
             }
 
         }
 
-        rotatingRectangle.rotate((float) ((2 * Math.PI) / 360));
+        rotatingRectangle.rotate((2 * Math.PI) / 360);
 
     }
 
@@ -222,7 +222,6 @@ public class BenchmarkTest implements notSoSimpleRunnable, Updatable {
 
             randomRectangle = new Rectangle(new Dimension(100, 100),
                     new Point((int) (Math.random() * canvas.getDimension().width), (int) (Math.random() * canvas.getDimension().height)));
-
 
             if (MODE == TestMode.HARDCORE) {
 

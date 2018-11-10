@@ -3,83 +3,79 @@ package org.herebdragons.graphics.objects;
 import org.herebdragons.utils.UtilMath;
 
 import java.awt.*;
+import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 
 public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable, Movable {
 
-    volatile protected Dimension dimension;
-    volatile protected Point position;
-    volatile protected float rotation;
+    protected volatile double rotation;
+    protected volatile Point2D anchor = new Point2D.Double(0, 0);
 
     //TODO
     protected notSoSimpleRenderingHints[] renderingHints;
 
     private Graphics g;
 
-    notSoSimpleObject(Dimension dimension, Point position) {
-        this.position = position;
-        this.dimension = dimension;
+    notSoSimpleObject() {
     }
-
-    notSoSimpleObject(){};
 
     public abstract void render(Graphics2D g);
 
-    public void moveTo(Point position) {
-        this.position = position;
+    public abstract void moveTo(Point2D position);
+
+    public abstract void moveTo(int x, int y);
+
+    public abstract void moveTo(double x, double y);
+
+    public abstract void move(Dimension velocity);
+
+    public abstract void move(int x, int y);
+
+    public abstract void move(double x, double y);
+
+    public abstract Rectangle getBounds();
+
+    public abstract Dimension getDimension();
+
+    public abstract Point2D getPosition();
+
+    public abstract Point2D getCenter();
+
+    public Point2D getAnchor() {
+        return anchor;
     }
 
-    public void moveTo(int x, int y) {
-        this.position.setLocation(x, y);
-
+    public void setAnchor(Point2D anchor) {
+        this.anchor = anchor;
     }
 
-    public void move(Dimension velocity) {
-        position.move(velocity.width, velocity.height);
+    public void setAnchor(int x, int y){
+        anchor.setLocation(x,y);
     }
 
-    public void move(int x, int y) {
-
-        position.setLocation(position.x + x, position.y + y);
+    public void moveAnchor(Dimension movementVector) {
+        anchor.setLocation(anchor.getX() + movementVector.getHeight(), anchor.getY() + movementVector.getHeight());
     }
 
-    public void move(float x, float y) {
-        position.setLocation(position.getX() + x, position.getY() + y);
+    public void moveAnchor(int x, int y) {
+        anchor.setLocation(anchor.getX() + x, anchor.getY() + y);
     }
 
-    public Dimension getDimension() {
-        return dimension;
-    }
-
-    public Point getPosition() {
-        return position;
-    }
-
-    public Point getCenter() {
-
-        //TODO: doesnt account for rotation
-        return new Point(position.x + dimension.width / 2, position.y + dimension.height / 2);
-    }
-
-    public float getRotation() {
+    public double getRotation() {
         return rotation;
     }
 
-    public void setRotation(float rotation) {
-        this.rotation = UtilMath.packRotation(rotation);
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
     }
 
-    public void rotate(float radians) {
-        rotation = UtilMath.packRotation(rotation += radians);
+    public void rotate(double radians) {
+        rotation = UtilMath.packRotation(rotation + radians);
     }
 
-    public void setDimension(Dimension newDimension) {
-        dimension = newDimension;
-    }
+    public abstract void setDimension(Dimension newDimension);
 
-    public void scale(float scaleFactor) {
-        dimension = UtilMath.vectorTimesScalar(dimension, scaleFactor);
-
-    }
+    public abstract void scale(float scaleFactor);
 
     @Override
     public void setRenderingHints(notSoSimpleRenderingHints[] hints) {
@@ -95,10 +91,7 @@ public abstract class notSoSimpleObject implements Drawable, Scalable, Rotatable
     @Override
     public String toString() {
         return "notSoSimpleObject{" +
-                "dimension=" + dimension +
-                ", position=" + position +
-                ", rotation=" + rotation +
-                ", g=" + g +
+
                 '}';
     }
 }

@@ -2,7 +2,9 @@ package org.herebdragons.graphics.objects;
 
 public interface Rotatable {
 
-    void rotate(float radians);
+    void rotate(double radians);
 
-    void setRotation(float radians);
+    void setRotation(double radians);
+
+    double getRotation();
 }

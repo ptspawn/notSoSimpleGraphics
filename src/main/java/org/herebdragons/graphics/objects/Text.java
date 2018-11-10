@@ -3,13 +3,15 @@ package org.herebdragons.graphics.objects;
 import org.herebdragons.utils.Logger;
 
 import java.awt.*;
+import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 
 public class Text extends notSoSimpleObject {
 
     private String text;
 
     public Text(Dimension dimension, Point position, String text) {
-        super(dimension, position);
+        super();
         this.text = text;
         Logger.log("created this");
     }
@@ -22,7 +24,47 @@ public class Text extends notSoSimpleObject {
         FontMetrics fm = g2d.getFontMetrics();
 //        int x = img.getWidth() - fm.stringWidth(s) - 5;
 //        int y = fm.getHeight();
-        g2d.drawString(text, position.x, position.y);
+        //g2d.drawString(text, position.x, position.y);
+    }
+
+    @Override
+    public void moveTo(Point2D position) {
+
+    }
+
+    @Override
+    public void moveTo(Point position) {
+
+    }
+
+    @Override
+    public void moveTo(int x, int y) {
+
+    }
+
+    @Override
+    public void moveTo(double x, double y) {
+
+    }
+
+    @Override
+    public void move(Dimension velocity) {
+
+    }
+
+    @Override
+    public void move(int x, int y) {
+
+    }
+
+    @Override
+    public void move(double x, double y) {
+
+    }
+
+    @Override
+    public void move(float x, float y) {
+
     }
 
     public String getText() {
@@ -35,11 +77,40 @@ public class Text extends notSoSimpleObject {
     }
 
     @Override
+    public Rectangle getBounds() {
+        return null; //new Rectangle(position.x,position.y,dimension.width,dimension.height);
+    }
+
+    @Override
+    public Dimension getDimension() {
+        return null;
+    }
+
+    @Override
+    public Point getPosition() {
+        return null;
+    }
+
+    @Override
+    public Point getCenter() {
+        return null;
+    }
+
+    @Override
+    public void setDimension(Dimension newDimension) {
+
+    }
+
+    @Override
+    public void scale(float scaleFactor) {
+
+    }
+
+    @Override
     public String toString() {
         return "Text{" +
                 "text='" + text + '\'' +
-                ", dimension=" + dimension +
-                ", position=" + position +
+
                 ", rotation=" + rotation +
                 '}';
     }

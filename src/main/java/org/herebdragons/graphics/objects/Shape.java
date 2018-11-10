@@ -4,6 +4,7 @@ import org.herebdragons.Config;
 import org.herebdragons.utils.Logger;
 
 import java.awt.*;
+import java.awt.Rectangle;
 
 abstract class Shape extends notSoSimpleObject implements Fillable, Strokable{
 
@@ -17,21 +18,18 @@ abstract class Shape extends notSoSimpleObject implements Fillable, Strokable{
         super();
     }
 
-    Shape(Dimension dimension, Point position) {
-        super(dimension, position);
-    }
-
     @Override
     public void render(Graphics2D g) {
         Logger.log("Rendering rectangle" + this);
 
         Graphics2D g2 = (Graphics2D)g.create();
 
-        if (rotation != 0) {
+       /* if (rotation != 0) {
             g2.rotate(rotation, position.x + dimension.width / 2, position.y + dimension.height / 2);
         } else {
             g2.rotate(0,position.x,position.y);
-        }
+        }*/
+
         if (fillColor != null) {
             g2.setPaint(fillColor);
             g2.fill(shape);
@@ -86,6 +84,10 @@ abstract class Shape extends notSoSimpleObject implements Fillable, Strokable{
 
     public void setStroke(BasicStroke stroke) {
         this.stroke = stroke;
+    }
+
+    public Rectangle getBounds(){
+        return shape.getBounds();
     }
 
     @Override
