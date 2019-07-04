@@ -41,40 +41,6 @@ public class SystemManager {
         return ge.getAvailableFontFamilyNames();
     }
 
-    public static GraphicsConfiguration getBestGraphicsConfiguration() {
-        ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        gd = ge.getDefaultScreenDevice();
-        return gd.getBestConfiguration(new GraphicsConfigTemplate() {
-            @Override
-            public GraphicsConfiguration getBestConfiguration(GraphicsConfiguration[] graphicsConfigurations) {
-                for (GraphicsConfiguration gc : graphicsConfigurations) {
-
-                    int result = 0;
-                    if (gc.getBufferCapabilities().isMultiBufferAvailable())
-                        result++;
-
-
-                }
-
-                return null; ///////////////
-            }
-
-            @Override
-            public boolean isGraphicsConfigSupported(GraphicsConfiguration graphicsConfiguration) {
-                boolean result = false;
-
-                if (!graphicsConfiguration.getBufferCapabilities().getBackBufferCapabilities().isAccelerated())
-                    return false;
-                if (!graphicsConfiguration.getBufferCapabilities().getBackBufferCapabilities().isTrueVolatile())
-                    return false;
-
-
-                return result;
-            }
-
-        });
-    }
-
     public static void printGraphicsCfg(GraphicsConfiguration gc) {
 
         boolean previousLogging = Logger.isIsLogging();
